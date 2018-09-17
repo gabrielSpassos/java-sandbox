@@ -39,9 +39,19 @@ public class AnalisisRoute extends RouteBuilder {
 
     private void getMostExpensiveSale(Exchange exchange) {
         Relatory relatory = getRelatory(exchange);
-        List<Item> items = relatory.getSales().stream()
+        Item item = relatory.getSales().stream()
                 .map(Sale::getItems)
-                .map(items1 -> new ArrayList<>(items1));
+                .flatMap(List::stream)
+                .max(Comparator.comparingDouble(Item::getPrice))
+                .get();
+
+        Long idSaleMostExpensive = relatory.getSales().stream()
+                .filter(sale -> {
+                    return sale.getItems().stream()
+                            .filter(saleItem -> saleItem.equals(item));
+                }).map(Sale::getId);
+
+        exchange.setProperty("idSaleMostExpensive", idSaleMostExpensive);
     }
 
     private Relatory getRelatory(Exchange exchange) {
