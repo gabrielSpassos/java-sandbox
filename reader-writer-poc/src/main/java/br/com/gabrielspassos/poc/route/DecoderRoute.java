@@ -8,137 +8,100 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.math.NumberUtils.isCreatable;
 
 public class DecoderRoute extends RouteBuilder {
 
+    private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z á]+)ç([-+]?[0-9]*\\.?[0-9]*)";
+    private static final String CUSTOMER_REGEX = "002ç([0-9]+)ç([ a-zA-Z á]+)ç([ a-zA-Z á]+)";
+    private static final String SALE_REGEX = "003ç([0-9]+)ç(.*)ç(.*)";
     @Override
     public void configure() throws Exception {
         from("file://data/in/?fileName=relatory.dat&charset=utf-8")
                 .routeId("decoder")
+                .to("file://data/processed/?fileName=relatory.dat&charset=utf-8")
                 .convertBodyTo(String.class)
-                .process(this::extractMessageByInitialId)
                 .process(this::createSalesmanList)
                 .process(this::createCustomerList)
                 .process(this::createSaleList)
-                .process(this::decodeMessage)
                 .process(this::buildRelatory)
                 .to("direct:analisisRelatory")
                 .end();
     }
 
-    private void extractMessageByInitialId(Exchange exchange) {
-        String message = exchange.getIn().getBody(String.class);
-        String[] messagesArray = message.split("001|002|003");
-        exchange.setProperty("messagesArray", messagesArray);
-    }
-
     private void createSalesmanList(Exchange exchange) {
-        List<Salesman> salesmenList = new ArrayList<>();
+        String message = getBody(exchange);
+        Pattern salesmanPattern = Pattern.compile(SALESMAN_REGEX);
+        Matcher salesmanMatcher = salesmanPattern.matcher(message);
+        List<Salesman> salesmenList = Stream.of(salesmanMatcher)
+                .filter(Matcher::find)
+                .map(this::buildSalesman)
+                .collect(Collectors.toList());
         exchange.setProperty("salesmanList", salesmenList);
     }
 
     private void createCustomerList(Exchange exchange) {
-        List<Customer> customerList = new ArrayList<>();
+        String message = getBody(exchange);
+        Pattern customerPattern = Pattern.compile(CUSTOMER_REGEX);
+        Matcher customerMatcher = customerPattern.matcher(message);
+        List<Customer> customerList = Stream.of(customerMatcher)
+                .filter(Matcher::find)
+                .map(this::buildCustomer)
+                .collect(Collectors.toList());
         exchange.setProperty("customerList", customerList);
     }
 
     private void createSaleList(Exchange exchange) {
-        List<Sale> saleList = new ArrayList<>();
+        String message = getBody(exchange);
+        Pattern salePattern = Pattern.compile(SALE_REGEX);
+        Matcher saleMatcher = salePattern.matcher(message);
+        List<Sale> saleList = Stream.of(saleMatcher)
+                .filter(Matcher::find)
+                .map(this::buildSale)
+                .collect(Collectors.toList());
         exchange.setProperty("saleList", saleList);
     }
 
-    private void decodeMessage(Exchange exchange) {
-        String[] messagesArrays = (String[]) exchange.getProperty("messagesArray");
-        for (String messagesArray : messagesArrays) {
-            String[] infos = messagesArray.split("ç");
-            factory(infos, exchange);
-        }
+    private String getBody(Exchange exchange) {
+        return exchange.getIn().getBody(String.class);
     }
 
-    private void factory(String[] infos, Exchange exchange) {
-        if(isSalesman(infos)) {
-            Salesman salesman = buildSalesman(infos);
-            List<Salesman> salesmanList = exchange.getProperty("salesmanList", List.class);
-            salesmanList.add(salesman);
-            exchange.setProperty("salesmanList", salesmanList);
-        } else if (isSale(infos)) {
-            Sale sale = buildSale(infos);
-            List<Sale> saleList = exchange.getProperty("saleList", List.class);
-            saleList.add(sale);
-            exchange.setProperty("saleList", saleList);
-        } else if (isCustomer(infos)) {
-            Customer customer = buildCustomer(infos);
-            List<Customer> customerList = exchange.getProperty("customerList", List.class);
-            customerList.add(customer);
-            exchange.setProperty("customerList", customerList);
-        }
-    }
-
-    private Boolean isSalesman(String[] infos) {
-        return infos.length == 4 && isCreatable(StringUtils.trim(infos[infos.length-1]));
-    }
-
-    private Salesman buildSalesman(String[] infos) {
+    private Salesman buildSalesman(Matcher salesmanMatcher) {
         Salesman salesman = new Salesman();
-        salesman.setCpf(infos[1]);
-        salesman.setName(infos[2]);
-        salesman.setSalary(new BigDecimal(infos[3].trim()));
+        salesman.setCpf(salesmanMatcher.group(1));
+        salesman.setName(salesmanMatcher.group(2));
+        salesman.setSalary(new BigDecimal(salesmanMatcher.group(3)));
         return salesman;
     }
 
-    private Boolean isSale(String[] infos) {
-        return infos.length == 4 && infos[2].contains("[");
-    }
-
-    private Sale buildSale(String[] infos) {
-        Sale sale = new Sale();
-        sale.setId(Long.valueOf(infos[1]));
-        sale.setItems(buildItensList(infos[2]));
-        sale.setSalesmanName(infos[3]);
-        return sale;
-    }
-
-    private List<Item> buildItensList(String info) {
-        List<Item> itemList =  new ArrayList<>();
-        String[] result = info.split("\\[|,|]");
-        for (String res : result) {
-            String[] itemInfos = res.split("-");
-            if(isItem(itemInfos)){
-                Item item = buildItem(itemInfos);
-                itemList.add(item);
-            }
-        }
-        return itemList;
-    }
-
-    private Boolean isItem(String[] itemInfos) {
-        return itemInfos.length == 3
-                && isCreatable(itemInfos[0])
-                && isCreatable(itemInfos[1])
-                && isCreatable(itemInfos[2]);
-    }
-
-    private Item buildItem(String[] itemInfos) {
-        Item item = new Item();
-        item.setId(Long.valueOf(itemInfos[0]));
-        item.setQuantity(Integer.valueOf(itemInfos[1]));
-        item.setPrice(Double.valueOf(itemInfos[2]));
-        return item;
-    }
-
-    private Boolean isCustomer(String[] infos) {
-        return infos.length == 4;
-    }
-
-    private Customer buildCustomer(String[] infos) {
+    private Customer buildCustomer(Matcher customerMatcher) {
         Customer customer = new Customer();
-        customer.setCnpj(infos[1]);
-        customer.setName(infos[2]);
-        customer.setBusinessArea(infos[3]);
+        customer.setCnpj(customerMatcher.group(1));
+        customer.setName(customerMatcher.group(2));
+        customer.setBusinessArea(customerMatcher.group(3));
         return customer;
     }
+
+    private Sale buildSale(Matcher saleMatcher) {
+        Sale sale = new Sale();
+        sale.setId(Long.valueOf(saleMatcher.group(1)));
+        //sale.setItems(buildItensList(infos[2]));
+        sale.setSalesmanName(saleMatcher.group(3));
+        return sale;
+    }
+//
+//    private Item buildItem(String[] itemInfos) {
+//        Item item = new Item();
+//        item.setId(Long.valueOf(itemInfos[0]));
+//        item.setQuantity(Integer.valueOf(itemInfos[1]));
+//        item.setPrice(Double.valueOf(itemInfos[2]));
+//        return item;
+//    }
 
     private void buildRelatory(Exchange exchange) {
         List<Sale> saleList = exchange.getProperty("saleList", List.class);

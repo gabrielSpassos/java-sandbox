@@ -18,7 +18,7 @@ public class AnalisisRoute extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:analisisRelatory")
                 .routeId("analisisRelatory")
-                .to("file://data/out/?fileName=result.dat&charset=utf-8")
+                .to("file://data/out/?fileName=result.done.dat&charset=utf-8")
                 .process(this::calculateCustumersNumber)
                 .process(this::calculateSalesmanNumber)
                 //.process(this::getMostExpensiveSale)
@@ -45,13 +45,13 @@ public class AnalisisRoute extends RouteBuilder {
                 .max(Comparator.comparingDouble(Item::getPrice))
                 .get();
 
-        Long idSaleMostExpensive = relatory.getSales().stream()
-                .filter(sale -> {
-                    return sale.getItems().stream()
-                            .filter(saleItem -> saleItem.equals(item));
-                }).map(Sale::getId);
+//        Long idSaleMostExpensive = relatory.getSales().stream()
+//                .filter(sale -> {
+//                    return sale.getItems().stream()
+//                            .filter(saleItem -> saleItem.equals(item));
+//                }).map(Sale::getId);
 
-        exchange.setProperty("idSaleMostExpensive", idSaleMostExpensive);
+        //exchange.setProperty("idSaleMostExpensive", idSaleMostExpensive);
     }
 
     private Relatory getRelatory(Exchange exchange) {
