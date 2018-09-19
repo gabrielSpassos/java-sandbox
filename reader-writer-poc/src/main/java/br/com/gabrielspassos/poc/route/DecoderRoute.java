@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +21,7 @@ public class DecoderRoute extends RouteBuilder {
     private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z á]+)ç([-+]?[0-9]*\\.?[0-9]*)";
     private static final String CUSTOMER_REGEX = "002ç([0-9]+)ç([ a-zA-Z á]+)ç([ a-zA-Z á]+)";
     private static final String SALE_REGEX = "003ç([0-9]+)ç(.*)ç(.*)";
+
     @Override
     public void configure() throws Exception {
         from("file://data/in/?fileName=relatory.dat&charset=utf-8")
@@ -37,10 +39,10 @@ public class DecoderRoute extends RouteBuilder {
     private void createSalesmanList(Exchange exchange) {
         String message = getBody(exchange);
         Pattern salesmanPattern = Pattern.compile(SALESMAN_REGEX);
-        Matcher salesmanMatcher = salesmanPattern.matcher(message);
-        List<Salesman> salesmenList = Stream.of(salesmanMatcher)
-                .filter(Matcher::find)
-                .map(this::buildSalesman)
+        List<Salesman> salesmenList = Stream.of(message)
+                .flatMap((m) -> Arrays.stream(m.split("\n")))
+                .filter((s) -> salesmanPattern.matcher(s).matches())
+                .map((m) -> buildSalesman(salesmanPattern.matcher(m)))
                 .collect(Collectors.toList());
         exchange.setProperty("salesmanList", salesmenList);
     }
