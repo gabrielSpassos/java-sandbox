@@ -20,10 +20,10 @@ public class DecoderRoute extends RouteBuilder {
     private static final String ITEM_REGEX = "([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)";
 
     @Override
-    public void configure() throws Exception {
-        from("file://data/in/?fileName=relatory.dat&charset=utf-8&noop=true")
+    public void configure() {
+        from("file://data/in/?fileName=relatory.dat&charset=utf-8&noop=true&delete=true")
                 .routeId("decoder")
-                .to("file://data/processed/?fileName=relatory.dat&charset=utf-8")
+                .to("file://data/processed/?fileName=relatory.${date:now:yyyy-MM-dd}.dat&charset=utf-8")
                 .convertBodyTo(String.class)
                 .process(this::createSalesmanList)
                 .process(this::createCustomerList)

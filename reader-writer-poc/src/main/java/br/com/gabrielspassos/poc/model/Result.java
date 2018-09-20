@@ -5,16 +5,16 @@ public class Result {
     private Integer custumersNumber;
     private Integer sellersNumber;
     private Long idMostExpensiveSale;
-    private String getWorstSalesmanName;
+    private String worstSalesmanName;
 
     public Result() {
     }
 
-    public Result(Integer custumersNumber, Integer sellersNumber, Long idMostExpensiveSale, String getWorstSalesmanName) {
+    public Result(Integer custumersNumber, Integer sellersNumber, Long idMostExpensiveSale, String worstSalesmanName) {
         this.custumersNumber = custumersNumber;
         this.sellersNumber = sellersNumber;
         this.idMostExpensiveSale = idMostExpensiveSale;
-        this.getWorstSalesmanName = getWorstSalesmanName;
+        this.worstSalesmanName = worstSalesmanName;
     }
 
     public Integer getCustumersNumber() {
@@ -41,12 +41,12 @@ public class Result {
         this.idMostExpensiveSale = idMostExpensiveSale;
     }
 
-    public String getGetWorstSalesmanName() {
-        return getWorstSalesmanName;
+    public String getWorstSalesmanName() {
+        return worstSalesmanName;
     }
 
-    public void setGetWorstSalesmanName(String getWorstSalesmanName) {
-        this.getWorstSalesmanName = getWorstSalesmanName;
+    public void setWorstSalesmanName(String worstSalesmanName) {
+        this.worstSalesmanName = worstSalesmanName;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Result {
                 "custumersNumber=" + custumersNumber +
                 ", sellersNumber=" + sellersNumber +
                 ", idMostExpensiveSale=" + idMostExpensiveSale +
-                ", getWorstSalesmanName='" + getWorstSalesmanName + '\'' +
+                ", worstSalesmanName='" + worstSalesmanName + '\'' +
                 '}';
     }
 }

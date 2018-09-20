@@ -11,7 +11,7 @@ import java.util.List;
 public class AnalisisRoute extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("direct:analisisRelatory")
                 .routeId("analisisRelatory")
                 .process(this::calculateCustumersNumber)
@@ -20,7 +20,7 @@ public class AnalisisRoute extends RouteBuilder {
                 .process(this::getWorstSalesmanName)
                 .process(this::buildResult)
                 .convertBodyTo(String.class)
-                .to("file://data/out/?fileName=result.done.dat&charset=utf-8")
+                .to("file://data/out/?fileName=result.${date:now:yyyy-MM-dd}.done.dat&charset=utf-8")
                 .end();
     }
 

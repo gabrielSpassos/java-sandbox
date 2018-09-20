@@ -1,5 +1,6 @@
 package br.com.gabrielspassos.poc;
 
+import org.apache.camel.Exchange;
 import org.junit.Test;
 
 import java.util.regex.Matcher;
@@ -30,16 +31,8 @@ public class ReaderWriterPocApplicationTests {
 		}
 	}
 
-	//003ç([0-9]+)ç(.*)ç(.*)
-	//002ç([0-9]+)ç([ a-zA-Z á]+)ç([ a-zA-Z á]+)
-	//001ç([0-9]+)ç([ a-zA-Z á]+)ç([-+]?[0-9]*\.?[0-9]*)
-
 	@Test
 	public void test() {
-		String msg = "[1-10-100,2-30-2.50,3-40-3.10]";
-		String[] result = msg.split("\\[|,|]");
-		for (int i = 0; i < result.length; i++) {
-			System.out.println(result[i]);
-		}
+
 	}
 }
