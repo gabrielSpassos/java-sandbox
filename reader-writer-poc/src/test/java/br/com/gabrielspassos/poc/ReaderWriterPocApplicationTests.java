@@ -1,6 +1,5 @@
 package br.com.gabrielspassos.poc;
 
-import org.apache.camel.Exchange;
 import org.junit.Test;
 
 import java.util.regex.Matcher;
@@ -31,8 +30,4 @@ public class ReaderWriterPocApplicationTests {
 		}
 	}
 
-	@Test
-	public void test() {
-
-	}
 }

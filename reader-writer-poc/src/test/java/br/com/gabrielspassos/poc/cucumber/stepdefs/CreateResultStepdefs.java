@@ -1,6 +1,5 @@
 package br.com.gabrielspassos.poc.cucumber.stepdefs;
 
-import br.com.gabrielspassos.poc.ReaderWriterPocApplication;
 import cucumber.api.java8.En;
 import org.junit.Assert;
 
