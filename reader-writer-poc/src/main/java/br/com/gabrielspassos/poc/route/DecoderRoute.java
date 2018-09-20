@@ -1,9 +1,6 @@
 package br.com.gabrielspassos.poc.route;
 
-import br.com.gabrielspassos.poc.model.Customer;
-import br.com.gabrielspassos.poc.model.Relatory;
-import br.com.gabrielspassos.poc.model.Sale;
-import br.com.gabrielspassos.poc.model.Salesman;
+import br.com.gabrielspassos.poc.model.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -20,6 +17,7 @@ public class DecoderRoute extends RouteBuilder {
     private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z á]+)ç([-+]?[0-9]*\\.?[0-9]*)";
     private static final String CUSTOMER_REGEX = "002ç([0-9]+)ç([ a-zA-Z á]+)ç([ a-zA-Z á]+)";
     private static final String SALE_REGEX = "003ç([0-9]+)ç(.*)ç(.*)";
+    private static final String ITEM_REGEX = "([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)";
 
     @Override
     public void configure() throws Exception {
@@ -99,18 +97,28 @@ public class DecoderRoute extends RouteBuilder {
     private Sale buildSale(Matcher saleMatcher) {
         Sale sale = new Sale();
         sale.setId(Long.valueOf(saleMatcher.group(1)));
-        //sale.setItems(buildItensList(infos[2]));
+        sale.setItems(buildItensList(saleMatcher.group(2)));
         sale.setSalesmanName(saleMatcher.group(3));
         return sale;
     }
-//
-//    private Item buildItem(String[] itemInfos) {
-//        Item item = new Item();
-//        item.setId(Long.valueOf(itemInfos[0]));
-//        item.setQuantity(Integer.valueOf(itemInfos[1]));
-//        item.setPrice(Double.valueOf(itemInfos[2]));
-//        return item;
-//    }
+
+    private List<Item> buildItensList(String itemMessage) {
+        Pattern itemPattern = Pattern.compile(ITEM_REGEX);
+        return Stream.of(itemMessage)
+                .flatMap(msg -> Arrays.stream(msg.split(",")))
+                .map(line -> buildMatcher(line, itemPattern))
+                .filter(Matcher::find)
+                .map(this::buildItem)
+                .collect(Collectors.toList());
+    }
+
+    private Item buildItem(Matcher itemMatcher) {
+        Item item = new Item();
+        item.setId(Long.valueOf(itemMatcher.group(1)));
+        item.setQuantity(Integer.valueOf(itemMatcher.group(2)));
+        item.setPrice(Double.valueOf(itemMatcher.group(3)));
+        return item;
+    }
 
     private void buildRelatory(Exchange exchange) {
         List<Sale> saleList = exchange.getProperty("saleList", List.class);

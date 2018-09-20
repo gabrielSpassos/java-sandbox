@@ -1,16 +1,12 @@
 package br.com.gabrielspassos.poc.route;
 
-import br.com.gabrielspassos.poc.model.Item;
 import br.com.gabrielspassos.poc.model.Relatory;
+import br.com.gabrielspassos.poc.model.Result;
 import br.com.gabrielspassos.poc.model.Sale;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 public class AnalisisRoute extends RouteBuilder {
 
@@ -18,10 +14,13 @@ public class AnalisisRoute extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:analisisRelatory")
                 .routeId("analisisRelatory")
-                .to("file://data/out/?fileName=result.done.dat&charset=utf-8")
                 .process(this::calculateCustumersNumber)
-                .process(this::calculateSalesmanNumber)
-                //.process(this::getMostExpensiveSale)
+                .process(this::calculateSellersNumber)
+                .process(this::getMostExpensiveSale)
+                .process(this::getWorstSalesmanName)
+                .process(this::buildResult)
+                .convertBodyTo(String.class)
+                .to("file://data/out/?fileName=result.done.dat&charset=utf-8")
                 .end();
     }
 
@@ -31,27 +30,62 @@ public class AnalisisRoute extends RouteBuilder {
         exchange.setProperty("custumersNumber", custumersNumber);
     }
 
-    private void calculateSalesmanNumber(Exchange exchange) {
+    private void calculateSellersNumber(Exchange exchange) {
         Relatory relatory = getRelatory(exchange);
-        Integer salesmanNumber = relatory.getSalesmens().size();
-        exchange.setProperty("salesmanNumber", salesmanNumber);
+        Integer sellersNumber = relatory.getSalesmens().size();
+        exchange.setProperty("sellersNumber", sellersNumber);
     }
 
     private void getMostExpensiveSale(Exchange exchange) {
         Relatory relatory = getRelatory(exchange);
-        Item item = relatory.getSales().stream()
-                .map(Sale::getItems)
-                .flatMap(List::stream)
-                .max(Comparator.comparingDouble(Item::getPrice))
+        List<Sale> saleList = relatory.getSales();
+        Double mostExpensiveSaleCost = saleList.stream()
+                .map(this::getSaleCost)
+                .max(Double::compare)
                 .get();
 
-//        Long idSaleMostExpensive = relatory.getSales().stream()
-//                .filter(sale -> {
-//                    return sale.getItems().stream()
-//                            .filter(saleItem -> saleItem.equals(item));
-//                }).map(Sale::getId);
+        Sale mostExpensiveSale = getSaleByTotalCost(mostExpensiveSaleCost, saleList);
+        exchange.setProperty("idMostExpensiveSale", mostExpensiveSale.getId());
+    }
 
-        //exchange.setProperty("idSaleMostExpensive", idSaleMostExpensive);
+    private void getWorstSalesmanName(Exchange exchange) {
+        Relatory relatory = getRelatory(exchange);
+        List<Sale> saleList = relatory.getSales();
+        Double cheapestSale = saleList.stream()
+                .map(this::getSaleCost)
+                .min(Double::compare)
+                .get();
+
+        Sale sale = getSaleByTotalCost(cheapestSale, saleList);
+        exchange.setProperty("worstSalesmanName", sale.getSalesmanName());
+    }
+
+    private void buildResult(Exchange exchange) {
+        Integer custumersNumber = exchange.getProperty("custumersNumber", Integer.class);
+        Integer sellersNumber = exchange.getProperty("sellersNumber", Integer.class);
+        Long idMostExpensiveSale = exchange.getProperty("idMostExpensiveSale", Long.class);
+        String worstSalesmanName = exchange.getProperty("worstSalesmanName", String.class);
+
+        Result result = new Result(custumersNumber, sellersNumber, idMostExpensiveSale, worstSalesmanName);
+        exchange.getIn().setBody(result, Result.class);
+    }
+
+    private Sale getSaleByTotalCost(Double cost, List<Sale> sales) {
+        return sales.stream()
+                .filter(sale -> getSaleCost(sale).equals(cost))
+                .findFirst()
+                .get();
+    }
+
+    private Double getSaleCost(Sale sale) {
+        return sale.getItems().stream()
+                .map(item -> calculateCost(item.getQuantity(), item.getPrice()))
+                .reduce((itemCost, total) -> total += itemCost)
+                .get();
+    }
+
+    private Double calculateCost(Integer quantity, Double price) {
+        return quantity * price;
     }
 
     private Relatory getRelatory(Exchange exchange) {
