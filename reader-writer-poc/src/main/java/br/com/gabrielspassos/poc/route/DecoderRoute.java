@@ -1,20 +1,19 @@
 package br.com.gabrielspassos.poc.route;
 
-import br.com.gabrielspassos.poc.model.*;
+import br.com.gabrielspassos.poc.model.Customer;
+import br.com.gabrielspassos.poc.model.Relatory;
+import br.com.gabrielspassos.poc.model.Sale;
+import br.com.gabrielspassos.poc.model.Salesman;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.apache.commons.lang3.math.NumberUtils.isCreatable;
 
 public class DecoderRoute extends RouteBuilder {
 
@@ -24,7 +23,7 @@ public class DecoderRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("file://data/in/?fileName=relatory.dat&charset=utf-8")
+        from("file://data/in/?fileName=relatory.dat&charset=utf-8&noop=true")
                 .routeId("decoder")
                 .to("file://data/processed/?fileName=relatory.dat&charset=utf-8")
                 .convertBodyTo(String.class)
@@ -40,18 +39,21 @@ public class DecoderRoute extends RouteBuilder {
         String message = getBody(exchange);
         Pattern salesmanPattern = Pattern.compile(SALESMAN_REGEX);
         List<Salesman> salesmenList = Stream.of(message)
-                .flatMap((m) -> Arrays.stream(m.split("\n")))
-                .filter((s) -> salesmanPattern.matcher(s).matches())
-                .map((m) -> buildSalesman(salesmanPattern.matcher(m)))
+                .flatMap(msg -> Arrays.stream(msg.split("\n")))
+                .map(line -> buildMatcher(line, salesmanPattern))
+                .filter(Matcher::find)
+                .map(this::buildSalesman)
                 .collect(Collectors.toList());
+
         exchange.setProperty("salesmanList", salesmenList);
     }
 
     private void createCustomerList(Exchange exchange) {
         String message = getBody(exchange);
         Pattern customerPattern = Pattern.compile(CUSTOMER_REGEX);
-        Matcher customerMatcher = customerPattern.matcher(message);
-        List<Customer> customerList = Stream.of(customerMatcher)
+        List<Customer> customerList = Stream.of(message)
+                .flatMap(msg -> Arrays.stream(msg.split("\n")))
+                .map(line -> buildMatcher(line, customerPattern))
                 .filter(Matcher::find)
                 .map(this::buildCustomer)
                 .collect(Collectors.toList());
@@ -61,8 +63,9 @@ public class DecoderRoute extends RouteBuilder {
     private void createSaleList(Exchange exchange) {
         String message = getBody(exchange);
         Pattern salePattern = Pattern.compile(SALE_REGEX);
-        Matcher saleMatcher = salePattern.matcher(message);
-        List<Sale> saleList = Stream.of(saleMatcher)
+        List<Sale> saleList = Stream.of(message)
+                .flatMap(msg -> Arrays.stream(msg.split("\n")))
+                .map(line -> buildMatcher(line, salePattern))
                 .filter(Matcher::find)
                 .map(this::buildSale)
                 .collect(Collectors.toList());
@@ -71,6 +74,10 @@ public class DecoderRoute extends RouteBuilder {
 
     private String getBody(Exchange exchange) {
         return exchange.getIn().getBody(String.class);
+    }
+
+    private Matcher buildMatcher(String message, Pattern pattern) {
+        return pattern.matcher(message);
     }
 
     private Salesman buildSalesman(Matcher salesmanMatcher) {
