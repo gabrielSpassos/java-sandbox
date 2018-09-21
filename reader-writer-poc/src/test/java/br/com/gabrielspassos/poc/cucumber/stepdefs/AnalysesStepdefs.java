@@ -3,39 +3,41 @@ package br.com.gabrielspassos.poc.cucumber.stepdefs;
 import br.com.gabrielspassos.poc.model.*;
 import br.com.gabrielspassos.poc.route.AnalyzesRoute;
 import cucumber.api.java8.En;
-import org.apache.camel.Exchange;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.test.junit4.CamelTestSupport;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+public class AnalysesStepdefs extends CamelTestSupport implements En {
 
-public class AnalysesStepdefs implements En {
-
-    @Autowired
-    @MockBean
-    private Exchange exchange;
-    private AnalyzesRoute analyzesRoute;
+    @Override
+    public RouteBuilder createRouteBuilder() {
+        return new AnalyzesRoute();
+    }
 
     public AnalysesStepdefs() {
 
-        Before(new String[]{"@Analyses"}, () -> {
-            analyzesRoute = new AnalyzesRoute();
-        });
+        Before(new String[]{"@Analyses"}, this::createRouteBuilder);
 
         Given("^a relatory$", () -> {
-            when(exchange.getProperty("relatory", Relatory.class)).thenReturn(buildRelatory());
+            producerTemplate.sendBodyAndProperty(
+                    "direct:analysesRelatory",
+                    null,
+                    "relatory",
+                    buildRelatory()
+            );
         });
 
         When("^the analyses are made$", () -> {
-            analyzesRoute.configure();
+            createRouteBuilder()
+                    .onCompletion()
+                    .end();
         });
 
         Then("^should create a correct result$", () -> {
-            Result result = exchange.getIn().getBody(Result.class);
+            Result result = consumer.receiveBody("direct:analysesRelatory", Result.class);
             System.out.println(result);
         });
     }

@@ -42,12 +42,14 @@ task cucumber() {
 dependencies {
 	compile('org.apache.camel:camel-spring-boot-starter:2.21.2')
 	compile('org.apache.commons:commons-lang3:3.7')
-	compile('org.apache.camel:camel-core:2.22.1')
+	compile('org.apache.camel:camel-core:2.19.1')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.cucumber:cucumber-java8:2.3.1')
 	testCompile('info.cukes:gherkin:2.12.2')
 	testCompile('io.cucumber:cucumber-spring:2.3.1')
 	testCompile('io.cucumber:cucumber-junit:2.3.1')
 	testCompile('org.mockito:mockito-core:2.22.0')
+	testCompile('org.apache.camel:camel-test:2.19.1')
+
 
 }

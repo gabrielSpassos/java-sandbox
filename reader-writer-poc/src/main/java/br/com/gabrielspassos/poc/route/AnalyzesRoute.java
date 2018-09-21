@@ -12,8 +12,8 @@ public class AnalyzesRoute extends RouteBuilder {
 
     @Override
     public void configure() {
-        from("direct:analisisRelatory")
-                .routeId("analisisRelatory")
+        from("direct:analysesRelatory")
+                .routeId("analysesRelatory")
                 .process(this::calculateCustumersNumber)
                 .process(this::calculateSellersNumber)
                 .process(this::getMostExpensiveSale)

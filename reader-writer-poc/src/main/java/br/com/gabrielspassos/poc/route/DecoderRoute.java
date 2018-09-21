@@ -29,7 +29,7 @@ public class DecoderRoute extends RouteBuilder {
                 .process(this::createCustomerList)
                 .process(this::createSaleList)
                 .process(this::buildRelatory)
-                .to("direct:analisisRelatory")
+                .to("direct:analysesRelatory")
                 .end();
     }
 
