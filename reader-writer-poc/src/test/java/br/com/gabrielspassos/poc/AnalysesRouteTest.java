@@ -1,47 +1,45 @@
-package br.com.gabrielspassos.poc.cucumber.stepdefs;
+package br.com.gabrielspassos.poc;
 
 import br.com.gabrielspassos.poc.model.*;
 import br.com.gabrielspassos.poc.route.AnalyzesRoute;
-import cucumber.api.java8.En;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-public class AnalysesStepdefs extends CamelTestSupport implements En {
+public class AnalysesRouteTest extends CamelTestSupport {
 
     @Override
     public RouteBuilder createRouteBuilder() {
         return new AnalyzesRoute();
     }
 
-    @Autowired
-    public AnalysesStepdefs() {
+    @Test
+    public void shouldCreateOutputFile() throws InterruptedException {
+        template.sendBodyAndProperty(
+                "direct:analysesRelatory",
+                null,
+                "relatory",
+                buildRelatory()
+        );
 
-        Before(new String[]{"@Analyses"}, this::createRouteBuilder);
+        Exchange exchange = consumer.receive("file://data/out/?fileName=result.${date:now:yyyy-MM-dd}.done.dat&charset=utf-8");
+        String expectedFileOutputFileName = String.format("result.%s.done.dat", getCurrentDate());
+        GenericFile file = (GenericFile) exchange.getIn().getBody();
 
-        Given("^a relatory$", () -> {
-            template.sendBodyAndProperty(
-                    "direct:analysesRelatory",
-                    null,
-                    "relatory",
-                    buildRelatory()
-            );
-        });
+        assertEquals(expectedFileOutputFileName, file.getFileName());
+        assertEquals("data/out", file.getEndpointPath());
+    }
 
-        When("^the analyses are made$", () -> {
-            createRouteBuilder()
-                    .onCompletion()
-                    .end();
-        });
-
-        Then("^should create a correct result$", () -> {
-            Result result = consumer.receiveBody("direct:analysesRelatory", Result.class);
-            System.out.println(result);
-        });
+    private String getCurrentDate() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     private Relatory buildRelatory() {

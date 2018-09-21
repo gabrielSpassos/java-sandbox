@@ -1,4 +1,4 @@
-package br.com.gabrielspassos.poc.cucumber.stepdefs;
+package br.com.gabrielspassos.poc.cucumber;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
