@@ -6,14 +6,10 @@ import org.junit.Assert;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
 public class CreateResultStepdefs implements En {
-
-    Map<String, Object> map = new HashMap<>();
 
     public CreateResultStepdefs() {
 

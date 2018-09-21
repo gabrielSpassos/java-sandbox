@@ -8,7 +8,7 @@ import org.apache.camel.builder.RouteBuilder;
 
 import java.util.List;
 
-public class AnalisisRoute extends RouteBuilder {
+public class AnalyzesRoute extends RouteBuilder {
 
     @Override
     public void configure() {
