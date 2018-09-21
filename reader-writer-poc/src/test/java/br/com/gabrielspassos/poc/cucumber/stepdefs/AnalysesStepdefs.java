@@ -5,6 +5,7 @@ import br.com.gabrielspassos.poc.route.AnalyzesRoute;
 import cucumber.api.java8.En;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -17,12 +18,13 @@ public class AnalysesStepdefs extends CamelTestSupport implements En {
         return new AnalyzesRoute();
     }
 
+    @Autowired
     public AnalysesStepdefs() {
 
         Before(new String[]{"@Analyses"}, this::createRouteBuilder);
 
         Given("^a relatory$", () -> {
-            producerTemplate.sendBodyAndProperty(
+            template.sendBodyAndProperty(
                     "direct:analysesRelatory",
                     null,
                     "relatory",
