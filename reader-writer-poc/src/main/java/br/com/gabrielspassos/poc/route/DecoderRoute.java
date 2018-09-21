@@ -14,8 +14,8 @@ import java.util.stream.Stream;
 
 public class DecoderRoute extends RouteBuilder {
 
-    private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z á]+)ç([-+]?[0-9]*\\.?[0-9]*)";
-    private static final String CUSTOMER_REGEX = "002ç([0-9]+)ç([ a-zA-Z á]+)ç([ a-zA-Z á]+)";
+    private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z áç]+)ç([-+]?[0-9]*\\.?[0-9]*)";
+    private static final String CUSTOMER_REGEX = "002ç([0-9]+)ç([ a-zA-Z áç]+)ç([ a-zA-Z áç]+)";
     private static final String SALE_REGEX = "003ç([0-9]+)ç(.*)ç(.*)";
     private static final String ITEM_REGEX = "([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)";
 
