@@ -1,5 +1,7 @@
 package br.com.gabrielspassos.poc.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.List;
 
 public class Relatory {
@@ -30,5 +32,10 @@ public class Relatory {
 
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

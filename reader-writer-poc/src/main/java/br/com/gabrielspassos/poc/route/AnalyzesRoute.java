@@ -5,6 +5,7 @@ import br.com.gabrielspassos.poc.model.Result;
 import br.com.gabrielspassos.poc.model.Sale;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,8 +20,7 @@ public class AnalyzesRoute extends RouteBuilder {
                 .process(this::getMostExpensiveSale)
                 .process(this::getWorstSalesmanName)
                 .process(this::buildResult)
-                .convertBodyTo(String.class)
-                .to("file://data/out/?fileName=result.${date:now:yyyy-MM-dd}.done.dat&charset=utf-8")
+                .to("direct:writer")
                 .end();
     }
 

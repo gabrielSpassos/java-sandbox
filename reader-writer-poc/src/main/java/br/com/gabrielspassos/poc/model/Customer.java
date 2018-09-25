@@ -1,5 +1,7 @@
 package br.com.gabrielspassos.poc.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Customer {
 
     private String cnpj;
@@ -28,5 +30,10 @@ public class Customer {
 
     public void setBusinessArea(String businessArea) {
         this.businessArea = businessArea;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

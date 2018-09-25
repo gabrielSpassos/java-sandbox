@@ -1,5 +1,7 @@
 package br.com.gabrielspassos.poc.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Result {
 
     private Integer custumersNumber;

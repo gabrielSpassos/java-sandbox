@@ -1,5 +1,7 @@
 package br.com.gabrielspassos.poc.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Item {
 
     private Long id;
@@ -28,5 +30,10 @@ public class Item {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

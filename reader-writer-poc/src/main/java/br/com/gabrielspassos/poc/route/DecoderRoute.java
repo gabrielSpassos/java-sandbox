@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 public class DecoderRoute extends RouteBuilder {
 
     private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z áç]+)ç([-+]?[0-9]*\\.?[0-9]*)";
@@ -21,10 +22,8 @@ public class DecoderRoute extends RouteBuilder {
 
     @Override
     public void configure() {
-        from("file://data/in/?fileName=relatory.dat&charset=utf-8&noop=true&delete=true")
+        from("direct:decoder")
                 .routeId("decoder")
-                .to("file://data/processed/?fileName=relatory.${date:now:yyyy-MM-dd}.dat&charset=utf-8")
-                .convertBodyTo(String.class)
                 .process(this::createSalesmanList)
                 .process(this::createCustomerList)
                 .process(this::createSaleList)

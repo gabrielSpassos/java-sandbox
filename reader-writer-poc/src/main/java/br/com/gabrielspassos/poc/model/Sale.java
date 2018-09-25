@@ -1,5 +1,7 @@
 package br.com.gabrielspassos.poc.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.List;
 
 public class Sale {
@@ -30,5 +32,10 @@ public class Sale {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }
