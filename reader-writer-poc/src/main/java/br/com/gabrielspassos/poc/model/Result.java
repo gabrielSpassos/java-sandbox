@@ -53,11 +53,11 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Result{" +
-                "custumersNumber=" + custumersNumber +
-                ", sellersNumber=" + sellersNumber +
-                ", idMostExpensiveSale=" + idMostExpensiveSale +
-                ", worstSalesmanName='" + worstSalesmanName + '\'' +
-                '}';
+        return "{\n" +
+                "\tcustumersNumber=" + custumersNumber + "," +
+                "\n\tsellersNumber=" + sellersNumber + "," +
+                "\n\tidMostExpensiveSale=" + idMostExpensiveSale + "," +
+                "\n\tworstSalesmanName='" + worstSalesmanName + '\'' +
+                "\n}";
     }
 }

@@ -8,8 +8,9 @@ public class PropertiesReader {
 
     private Properties properties;
     private static PropertiesReader propertiesReader;
+    private static final String PROPERTIES_FILE_NAME = "application.properties";
 
-    public PropertiesReader() {
+    private PropertiesReader() {
         properties = new Properties();
         loadProperties();
     }
@@ -28,7 +29,7 @@ public class PropertiesReader {
 
     private void loadProperties() {
         try {
-            InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties");
+            InputStream input = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
             properties.load(input);
         } catch (Exception e) {
             System.out.println(e);

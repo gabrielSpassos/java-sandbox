@@ -3,39 +3,100 @@ package br.com.gabrielspassos.poc.route;
 import br.com.gabrielspassos.poc.config.PropertiesReader;
 import org.apache.camel.builder.RouteBuilder;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class ReaderRoute extends RouteBuilder {
 
     private PropertiesReader propertiesReader;
 
     public ReaderRoute() {
-        propertiesReader = PropertiesReader.getInstance();
+        this.propertiesReader = PropertiesReader.getInstance();
     }
 
     @Override
     public void configure() throws Exception {
-        from(buildFilePath())
+        from(buildInputFilePath())
                 .routeId("reader")
-                .to("file://data/processed/?fileName=relatory.${date:now:yyyy-MM-dd}.dat&charset=utf-8")
+                .to(buildProcessedFilePath())
                 .convertBodyTo(String.class)
                 .to("direct:decoder")
                 .end();
     }
 
-    private String buildFilePath() {
+    private String buildInputFilePath() {
         return new StringBuilder()
                 .append("file://")
                 .append(getInputPath())
                 .append("?fileName=")
-                .append(getFileName())
-                .append("&charset=utf-8&noop=true&delete=true")
+                .append(getInputFileName())
+                .append("&charset=")
+                .append(getCharset())
+                .append("&noop=")
+                .append(getNoop())
+                .append("&delete=")
+                .append(getDelete())
+                .toString();
+    }
+
+    private String buildProcessedFilePath() {
+        return new StringBuilder()
+                .append("file://")
+                .append(getProcessedPath())
+                .append("?fileName=")
+                .append(getProcessedFileName())
+                .append("&charset=")
+                .append(getCharset())
                 .toString();
     }
 
     private String getInputPath() {
-        return propertiesReader.getApplicationProperties().getProperty("reader.input.path");
+        return propertiesReader.getApplicationProperties().getProperty("file.input.path");
     }
 
-    private String getFileName() {
-        return propertiesReader.getApplicationProperties().getProperty("reader.filename");
+    private String getProcessedPath() {
+        return propertiesReader.getApplicationProperties().getProperty("file.processed.path");
     }
+
+    private String getInputFileName() {
+        return getInputFileNameWithoutExtension().concat(getFileExtension());
+    }
+
+    private String getProcessedFileName() {
+        return new StringBuilder()
+                .append(getProcessedFileNameWithoutExtension())
+                .append(".")
+                .append(getCurrentDate())
+                .append(getFileExtension())
+                .toString();
+    }
+
+    private String getInputFileNameWithoutExtension() {
+        return propertiesReader.getApplicationProperties().getProperty("file.input.filename");
+    }
+
+    private String getProcessedFileNameWithoutExtension() {
+        return propertiesReader.getApplicationProperties().getProperty("file.processed.filename");
+    }
+
+    private String getFileExtension() {
+        return propertiesReader.getApplicationProperties().getProperty("file.file-extension");
+    }
+
+    private String getCharset() {
+        return propertiesReader.getApplicationProperties().getProperty("file.charset");
+    }
+
+    private String getNoop() {
+        return propertiesReader.getApplicationProperties().getProperty("file.noop");
+    }
+
+    private String getDelete() {
+        return propertiesReader.getApplicationProperties().getProperty("file.delete");
+    }
+
+    private String getCurrentDate() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
 }

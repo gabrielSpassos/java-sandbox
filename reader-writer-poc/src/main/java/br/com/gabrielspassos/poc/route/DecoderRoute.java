@@ -1,5 +1,6 @@
 package br.com.gabrielspassos.poc.route;
 
+import br.com.gabrielspassos.poc.config.PropertiesReader;
 import br.com.gabrielspassos.poc.model.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -15,10 +16,11 @@ import java.util.stream.Stream;
 
 public class DecoderRoute extends RouteBuilder {
 
-    private static final String SALESMAN_REGEX = "001ç([0-9]+)ç([ a-zA-Z áç]+)ç([-+]?[0-9]*\\.?[0-9]*)";
-    private static final String CUSTOMER_REGEX = "002ç([0-9]+)ç([ a-zA-Z áç]+)ç([ a-zA-Z áç]+)";
-    private static final String SALE_REGEX = "003ç([0-9]+)ç(.*)ç(.*)";
-    private static final String ITEM_REGEX = "([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)-([-+]?[0-9]*\\.?[0-9]*)";
+    private PropertiesReader propertiesReader;
+
+    public DecoderRoute() {
+        this.propertiesReader = PropertiesReader.getInstance();
+    }
 
     @Override
     public void configure() {
@@ -34,9 +36,9 @@ public class DecoderRoute extends RouteBuilder {
 
     private void createSalesmanList(Exchange exchange) {
         String message = getBody(exchange);
-        Pattern salesmanPattern = Pattern.compile(SALESMAN_REGEX);
+        Pattern salesmanPattern = Pattern.compile(getSalesmanRegex());
         List<Salesman> salesmenList = Stream.of(message)
-                .flatMap(msg -> Arrays.stream(msg.split("\n")))
+                .flatMap(msg -> Arrays.stream(msg.split(getLineBreaker())))
                 .map(line -> buildMatcher(line, salesmanPattern))
                 .filter(Matcher::find)
                 .map(this::buildSalesman)
@@ -47,9 +49,9 @@ public class DecoderRoute extends RouteBuilder {
 
     private void createCustomerList(Exchange exchange) {
         String message = getBody(exchange);
-        Pattern customerPattern = Pattern.compile(CUSTOMER_REGEX);
+        Pattern customerPattern = Pattern.compile(getCustomerRegex());
         List<Customer> customerList = Stream.of(message)
-                .flatMap(msg -> Arrays.stream(msg.split("\n")))
+                .flatMap(msg -> Arrays.stream(msg.split(getLineBreaker())))
                 .map(line -> buildMatcher(line, customerPattern))
                 .filter(Matcher::find)
                 .map(this::buildCustomer)
@@ -59,9 +61,9 @@ public class DecoderRoute extends RouteBuilder {
 
     private void createSaleList(Exchange exchange) {
         String message = getBody(exchange);
-        Pattern salePattern = Pattern.compile(SALE_REGEX);
+        Pattern salePattern = Pattern.compile(getSalesRegex());
         List<Sale> saleList = Stream.of(message)
-                .flatMap(msg -> Arrays.stream(msg.split("\n")))
+                .flatMap(msg -> Arrays.stream(msg.split(getLineBreaker())))
                 .map(line -> buildMatcher(line, salePattern))
                 .filter(Matcher::find)
                 .map(this::buildSale)
@@ -102,9 +104,9 @@ public class DecoderRoute extends RouteBuilder {
     }
 
     private List<Item> buildItensList(String itemMessage) {
-        Pattern itemPattern = Pattern.compile(ITEM_REGEX);
+        Pattern itemPattern = Pattern.compile(getItemRegex());
         return Stream.of(itemMessage)
-                .flatMap(msg -> Arrays.stream(msg.split(",")))
+                .flatMap(msg -> Arrays.stream(msg.split(getItemLineBreaker())))
                 .map(line -> buildMatcher(line, itemPattern))
                 .filter(Matcher::find)
                 .map(this::buildItem)
@@ -130,5 +132,29 @@ public class DecoderRoute extends RouteBuilder {
         relatory.setCustomers(customerList);
 
         exchange.setProperty("relatory", relatory);
+    }
+
+    private String getLineBreaker() {
+        return propertiesReader.getApplicationProperties().getProperty("decoder.line-breaker");
+    }
+
+    private String getSalesmanRegex() {
+        return propertiesReader.getApplicationProperties().getProperty("decoder.salesman-regex");
+    }
+
+    private String getCustomerRegex() {
+        return propertiesReader.getApplicationProperties().getProperty("decoder.customer-regex");
+    }
+
+    private String getSalesRegex() {
+        return propertiesReader.getApplicationProperties().getProperty("decoder.sales-regex");
+    }
+
+    private String getItemLineBreaker() {
+        return propertiesReader.getApplicationProperties().getProperty("decoder.item.line-breaker");
+    }
+
+    private String getItemRegex() {
+        return propertiesReader.getApplicationProperties().getProperty("decoder.item-regex");
     }
 }

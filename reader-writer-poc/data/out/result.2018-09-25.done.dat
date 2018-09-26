@@ -1,1 +1,6 @@
-br.com.gabrielspassos.poc.model.Result@423a421f[custumersNumber=2,sellersNumber=3,idMostExpensiveSale=10,worstSalesmanName=Renato]
+{
+	custumersNumber=2,
+	sellersNumber=2,
+	idMostExpensiveSale=10,
+	worstSalesmanName='Renato'
+}
