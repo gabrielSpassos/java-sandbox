@@ -1,32 +1,28 @@
 package br.com.gabrielspassos.poc;
 
-import br.com.gabrielspassos.poc.model.Relatory;
-import br.com.gabrielspassos.poc.route.FlatFileDecoderRoute;
+import br.com.gabrielspassos.poc.route.ReaderRoute;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-public class DecoderRouteTest extends CamelTestSupport {
+public class ReaderRouteTest extends CamelTestSupport {
 
     @Override
     public RouteBuilder createRouteBuilder() {
-        return new FlatFileDecoderRoute();
+        return new ReaderRoute();
     }
 
     @Test
-    public void shouldCreateRelatory() {
+    public void mustPutInformationAtExchangeBody() {
         template.sendBody(
-                "direct:decoder",
+                "file://data/in/?fileName=relatory.dat&charset=utf-8&noop=true&delete=true",
                 Resources.MESSAGE
         );
 
-        Exchange exchange = consumer.receive("direct:analysesRelatory");
-        Relatory relatory = exchange.getProperty("relatory", Relatory.class);
-        assertEquals(3, relatory.getSalesmens().size());
-        assertEquals(3, relatory.getSales().size());
-        assertEquals(2, relatory.getCustomers().size());
-
+        Exchange exchange = consumer.receive("direct:decoder");
+        String body = exchange.getIn().getBody(String.class);
+        assertNotNull(body);
     }
 
     private class Resources {

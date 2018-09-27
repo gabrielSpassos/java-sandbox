@@ -11,14 +11,14 @@ import org.apache.camel.builder.RouteBuilder;
 import java.util.List;
 
 
-public class DecoderRoute extends RouteBuilder {
+public class FlatFileDecoderRoute extends RouteBuilder {
 
     @Override
     public void configure() {
         onException(Exception.class)
                 .maximumRedeliveries(3)
                 .handled(true)
-                .log("Tem um erro aqui");
+                .log("Error decoding file");
 
         from("direct:decoder")
                 .routeId("decoder")

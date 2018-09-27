@@ -19,7 +19,7 @@ public class WriterRoute extends RouteBuilder {
         onException(Exception.class)
                 .maximumRedeliveries(3)
                 .handled(true)
-                .log("Tem um erro aqui");
+                .log("Error writing new file");
 
         from("direct:writer")
                 .routeId("writer")

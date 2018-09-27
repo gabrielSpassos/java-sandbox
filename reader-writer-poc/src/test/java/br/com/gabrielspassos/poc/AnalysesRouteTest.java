@@ -30,17 +30,9 @@ public class AnalysesRouteTest extends CamelTestSupport {
                 buildRelatory()
         );
 
-        Exchange exchange = consumer.receive("file://data/out/?fileName=result.${date:now:yyyy-MM-dd}.done.dat&charset=utf-8");
-        String expectedFileOutputFileName = String.format("result.%s.done.dat", getCurrentDate());
-        GenericFile file = (GenericFile) exchange.getIn().getBody();
-
-        assertEquals(expectedFileOutputFileName, file.getFileName());
-        assertEquals("data/out", file.getEndpointPath());
     }
 
-    private String getCurrentDate() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
+
 
     private Relatory buildRelatory() {
         Relatory relatory = new Relatory();

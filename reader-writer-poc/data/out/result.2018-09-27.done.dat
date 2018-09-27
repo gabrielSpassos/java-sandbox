@@ -1,0 +1,6 @@
+{
+	custumersNumber=5,
+	sellersNumber=2,
+	idMostExpensiveSale=1,
+	worstSalesmanName='Gabriel'
+}

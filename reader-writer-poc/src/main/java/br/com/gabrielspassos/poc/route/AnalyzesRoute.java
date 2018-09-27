@@ -15,7 +15,7 @@ public class AnalyzesRoute extends RouteBuilder {
         onException(Exception.class)
                 .maximumRedeliveries(3)
                 .handled(true)
-                .log("Tem um erro aqui");
+                .log("Error analyzing the file");
 
         from("direct:analysesRelatory")
                 .routeId("analysesRelatory")

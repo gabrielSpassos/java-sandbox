@@ -19,7 +19,7 @@ public class ReaderRoute extends RouteBuilder {
         onException(Exception.class)
                 .maximumRedeliveries(3)
                 .handled(true)
-                .log("Tem um erro aqui");
+                .log("Error reading file");
 
         from(buildInputFilePath())
                 .routeId("reader")
