@@ -1,6 +1,6 @@
 package br.com.gabrielspassos.poc.config;
 
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -32,8 +32,11 @@ public class PropertiesReader {
 
     private void loadProperties() {
         try {
-            InputStream input = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
-            properties.load(input);
+            properties.load(
+                    new InputStreamReader(
+                            getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME),
+                            "UTF-8")
+            );
         } catch (Exception e) {
             throw new IllegalArgumentException("There isn't a properties file");
         }
