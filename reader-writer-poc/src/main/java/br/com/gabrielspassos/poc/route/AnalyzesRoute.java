@@ -5,7 +5,6 @@ import br.com.gabrielspassos.poc.model.Result;
 import br.com.gabrielspassos.poc.model.Sale;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +12,11 @@ public class AnalyzesRoute extends RouteBuilder {
 
     @Override
     public void configure() {
+        onException(Exception.class)
+                .maximumRedeliveries(3)
+                .handled(true)
+                .log("Tem um erro aqui");
+
         from("direct:analysesRelatory")
                 .routeId("analysesRelatory")
                 .process(this::calculateCustumersNumber)

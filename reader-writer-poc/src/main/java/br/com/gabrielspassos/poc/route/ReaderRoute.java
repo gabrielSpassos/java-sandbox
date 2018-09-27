@@ -16,6 +16,11 @@ public class ReaderRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        onException(Exception.class)
+                .maximumRedeliveries(3)
+                .handled(true)
+                .log("Tem um erro aqui");
+
         from(buildInputFilePath())
                 .routeId("reader")
                 .to(buildProcessedFilePath())

@@ -35,7 +35,7 @@ public class PropertiesReader {
             InputStream input = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
             properties.load(input);
         } catch (Exception e) {
-            System.out.println(e);
+            throw new IllegalArgumentException("There isn't a properties file");
         }
     }
 }
