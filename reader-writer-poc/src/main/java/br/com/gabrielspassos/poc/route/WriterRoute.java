@@ -35,7 +35,7 @@ public class WriterRoute extends RouteBuilder {
     }
 
     private String getOutputPath() {
-        return propertiesReader.getApplicationProperties().getProperty("file.output.path");
+        return propertiesReader.getProperty("file.output.path");
     }
 
     private String getFileName() {
@@ -52,14 +52,14 @@ public class WriterRoute extends RouteBuilder {
     }
 
     private String getFileNameWithoutExtension() {
-        return propertiesReader.getApplicationProperties().getProperty("file.output.filename");
+        return propertiesReader.getProperty("file.output.filename");
     }
 
     private String getFileExtension() {
-        return propertiesReader.getApplicationProperties().getProperty("file.output.file-extension");
+        return propertiesReader.getProperty("file.output.file-extension");
     }
 
     private String getCharset() {
-        return propertiesReader.getApplicationProperties().getProperty("file.charset");
+        return propertiesReader.getProperty("file.charset");
     }
 }

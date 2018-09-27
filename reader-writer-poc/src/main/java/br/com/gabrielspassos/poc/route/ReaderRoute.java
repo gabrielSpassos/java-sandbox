@@ -51,11 +51,11 @@ public class ReaderRoute extends RouteBuilder {
     }
 
     private String getInputPath() {
-        return propertiesReader.getApplicationProperties().getProperty("file.input.path");
+        return propertiesReader.getProperty("file.input.path");
     }
 
     private String getProcessedPath() {
-        return propertiesReader.getApplicationProperties().getProperty("file.processed.path");
+        return propertiesReader.getProperty("file.processed.path");
     }
 
     private String getInputFileName() {
@@ -72,27 +72,27 @@ public class ReaderRoute extends RouteBuilder {
     }
 
     private String getInputFileNameWithoutExtension() {
-        return propertiesReader.getApplicationProperties().getProperty("file.input.filename");
+        return propertiesReader.getProperty("file.input.filename");
     }
 
     private String getProcessedFileNameWithoutExtension() {
-        return propertiesReader.getApplicationProperties().getProperty("file.processed.filename");
+        return propertiesReader.getProperty("file.processed.filename");
     }
 
     private String getFileExtension() {
-        return propertiesReader.getApplicationProperties().getProperty("file.file-extension");
+        return propertiesReader.getProperty("file.file-extension");
     }
 
     private String getCharset() {
-        return propertiesReader.getApplicationProperties().getProperty("file.charset");
+        return propertiesReader.getProperty("file.charset");
     }
 
     private String getNoop() {
-        return propertiesReader.getApplicationProperties().getProperty("file.noop");
+        return propertiesReader.getProperty("file.noop");
     }
 
     private String getDelete() {
-        return propertiesReader.getApplicationProperties().getProperty("file.delete");
+        return propertiesReader.getProperty("file.delete");
     }
 
     private String getCurrentDate() {

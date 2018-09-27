@@ -8,6 +8,7 @@ public class PropertiesReader {
 
     private Properties properties;
     private static PropertiesReader propertiesReader;
+    private static final Object lock = new Object();
     private static final String PROPERTIES_FILE_NAME = "application.properties";
 
     private PropertiesReader() {
@@ -15,16 +16,18 @@ public class PropertiesReader {
         loadProperties();
     }
 
-    public static synchronized PropertiesReader getInstance() {
-        if(Objects.isNull(propertiesReader)) {
-            propertiesReader = new PropertiesReader();
+    public static PropertiesReader getInstance() {
+        synchronized (lock){
+            if(Objects.isNull(propertiesReader)) {
+                propertiesReader = new PropertiesReader();
+            }
         }
-
         return propertiesReader;
+
     }
 
-    public Properties getApplicationProperties(){
-        return properties;
+    public String getProperty(String key){
+        return properties.getProperty(key);
     }
 
     private void loadProperties() {

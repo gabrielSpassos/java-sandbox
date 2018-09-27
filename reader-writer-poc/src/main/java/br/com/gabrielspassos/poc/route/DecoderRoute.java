@@ -135,26 +135,26 @@ public class DecoderRoute extends RouteBuilder {
     }
 
     private String getLineBreaker() {
-        return propertiesReader.getApplicationProperties().getProperty("decoder.line-breaker");
+        return propertiesReader.getProperty("decoder.line-breaker");
     }
 
     private String getSalesmanRegex() {
-        return propertiesReader.getApplicationProperties().getProperty("decoder.salesman-regex");
+        return propertiesReader.getProperty("decoder.salesman-regex");
     }
 
     private String getCustomerRegex() {
-        return propertiesReader.getApplicationProperties().getProperty("decoder.customer-regex");
+        return propertiesReader.getProperty("decoder.customer-regex");
     }
 
     private String getSalesRegex() {
-        return propertiesReader.getApplicationProperties().getProperty("decoder.sales-regex");
+        return propertiesReader.getProperty("decoder.sales-regex");
     }
 
     private String getItemLineBreaker() {
-        return propertiesReader.getApplicationProperties().getProperty("decoder.item.line-breaker");
+        return propertiesReader.getProperty("decoder.item.line-breaker");
     }
 
     private String getItemRegex() {
-        return propertiesReader.getApplicationProperties().getProperty("decoder.item-regex");
+        return propertiesReader.getProperty("decoder.item-regex");
     }
 }
