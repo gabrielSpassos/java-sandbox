@@ -40,6 +40,6 @@ public class FlatFileDecoderRoute extends RouteBuilder {
         relatory.setSales(saleList);
         relatory.setCustomers(customerList);
 
-        exchange.setProperty("relatory", relatory);
+        exchange.getIn().setBody(relatory, Relatory.class);
     }
 }

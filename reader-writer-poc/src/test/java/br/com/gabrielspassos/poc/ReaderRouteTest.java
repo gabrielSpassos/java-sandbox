@@ -16,7 +16,7 @@ public class ReaderRouteTest extends CamelTestSupport {
     @Test
     public void mustPutInformationAtExchangeBody() {
         template.sendBody(
-                "file://data/in/?fileName=relatory.dat&charset=utf-8&noop=true&delete=true",
+                "file://test/data/in/?fileName=relatory.dat&charset=utf-8&noop=true&delete=true",
                 Resources.MESSAGE
         );
 

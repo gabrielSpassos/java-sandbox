@@ -25,12 +25,12 @@ public class WriterRouteTest extends CamelTestSupport {
                 buildResult()
         );
 
-        Exchange exchange = consumer.receive("file://data/out/?fileName=result.${date:now:yyyy-MM-dd}.done.dat&charset=utf-8");
+        Exchange exchange = consumer.receive("file://test/data/out/?fileName=result.${date:now:yyyy-MM-dd}.done.dat&charset=utf-8");
         String expectedFileOutputFileName = String.format("result.%s.done.dat", getCurrentDate());
         GenericFile file = (GenericFile) exchange.getIn().getBody();
 
         assertEquals(expectedFileOutputFileName, file.getFileName());
-        assertEquals("data/out", file.getEndpointPath());
+        assertEquals("test/data/out", file.getEndpointPath());
     }
 
     private Result buildResult() {

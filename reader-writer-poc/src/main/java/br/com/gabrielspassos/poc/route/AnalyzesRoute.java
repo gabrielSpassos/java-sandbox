@@ -93,6 +93,6 @@ public class AnalyzesRoute extends RouteBuilder {
     }
 
     private Relatory getRelatory(Exchange exchange) {
-        return exchange.getProperty("relatory", Relatory.class);
+        return exchange.getIn().getBody(Relatory.class);
     }
 }
