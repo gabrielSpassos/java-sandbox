@@ -25,6 +25,7 @@ public class ReaderRoute extends RouteBuilder {
                 .routeId("reader")
                 .to(buildProcessedFilePath())
                 .convertBodyTo(String.class)
+                .log("Message ${body}")
                 .to("direct:decoder")
                 .end();
     }
