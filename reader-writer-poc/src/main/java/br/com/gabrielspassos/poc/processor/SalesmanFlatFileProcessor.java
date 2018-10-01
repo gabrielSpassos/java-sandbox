@@ -6,12 +6,16 @@ import org.apache.camel.Exchange;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SalesmanFlatFileProcessor extends FlatFileProcessor {
+
+    private static final Logger logger =
+            Logger.getLogger(SalesmanFlatFileProcessor.class.getName());
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -24,6 +28,7 @@ public class SalesmanFlatFileProcessor extends FlatFileProcessor {
                 .map(this::buildSalesman)
                 .collect(Collectors.toList());
 
+        logger.info(String.format("Salesman list %s", salesmenList));
         exchange.setProperty("salesmanList", salesmenList);
     }
 
@@ -32,6 +37,7 @@ public class SalesmanFlatFileProcessor extends FlatFileProcessor {
         salesman.setCpf(salesmanMatcher.group(1));
         salesman.setName(salesmanMatcher.group(2));
         salesman.setSalary(new BigDecimal(salesmanMatcher.group(3)));
+        logger.info(String.format("Salesman %s", salesman));
         return salesman;
     }
 

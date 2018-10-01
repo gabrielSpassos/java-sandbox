@@ -11,6 +11,7 @@ public abstract class FlatFileProcessor implements Processor {
 
     public PropertiesReader propertiesReader;
 
+
     public FlatFileProcessor() {
         this.propertiesReader = PropertiesReader.getInstance();
     }

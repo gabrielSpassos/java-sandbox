@@ -6,12 +6,16 @@ import org.apache.camel.Exchange;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SaleFlatFileProcessor extends FlatFileProcessor {
+
+    private static final Logger logger =
+            Logger.getLogger(SaleFlatFileProcessor.class.getName());
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -23,6 +27,8 @@ public class SaleFlatFileProcessor extends FlatFileProcessor {
                 .filter(Matcher::find)
                 .map(this::buildSale)
                 .collect(Collectors.toList());
+
+        logger.info(String.format("Sales list %s", saleList));
         exchange.setProperty("saleList", saleList);
     }
 
@@ -31,6 +37,7 @@ public class SaleFlatFileProcessor extends FlatFileProcessor {
         sale.setId(Long.valueOf(saleMatcher.group(1)));
         sale.setItems(buildItensList(saleMatcher.group(2)));
         sale.setSalesmanName(saleMatcher.group(3));
+        logger.info(String.format("Sale %s", sale));
         return sale;
     }
 
@@ -49,6 +56,7 @@ public class SaleFlatFileProcessor extends FlatFileProcessor {
         item.setId(Long.valueOf(itemMatcher.group(1)));
         item.setQuantity(Integer.valueOf(itemMatcher.group(2)));
         item.setPrice(Double.valueOf(itemMatcher.group(3)));
+        logger.info(String.format("Item %s", item));
         return item;
     }
 

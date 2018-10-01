@@ -24,7 +24,7 @@ public class WriterRoute extends RouteBuilder {
         from("direct:writer")
                 .routeId("writer")
                 .convertBodyTo(String.class)
-                .log("BODY: ${body}")
+                .log("Output: ${body}")
                 .to(buildOutputFilePath())
                 .end();
 
