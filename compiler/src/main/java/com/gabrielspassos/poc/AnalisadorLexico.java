@@ -12,9 +12,25 @@ public class AnalisadorLexico {
     public List<Token> analisar(String codeFileName) throws IOException {
         pushbackReader = new PushbackReader(new BufferedReader(new InputStreamReader(new FileInputStream(codeFileName), ENCODING)));
         int intch;
+        int linha = 1;
+        int coluna = 1;
 
         while((intch = pushbackReader.read()) != -1) {
-            System.out.println((char) intch);
+            char ch = (char) intch;
+            System.out.println(ch);
+
+            if(Character.isLetter(ch)) {
+
+            }
+
+            if(Character.isDigit(ch)) {
+
+            }
+
+            if(ch == '\n') {
+                linha++;
+                coluna = 1;
+            }
         }
 
         return new ArrayList<>();
