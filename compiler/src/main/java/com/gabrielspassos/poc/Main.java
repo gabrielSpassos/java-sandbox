@@ -1,7 +1,6 @@
 package main.java.com.gabrielspassos.poc;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -12,9 +11,8 @@ public class Main {
 
             System.out.println("Número de tokens: " + tokens.size());
 
-            List t = tokens.stream()
-                    .peek(System.out::println)
-                    .collect(Collectors.toList());
+            tokens.forEach(System.out::println);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
