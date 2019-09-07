@@ -18,8 +18,11 @@ public class AnalisadorLexico {
         while((intch = pushbackReader.read()) != -1) {
             char character = (char) intch;
             System.out.println("Character " + character);
-            Token token = getToken(character);
-            tokens.add(token);
+            if(character != ' ' && character != '\n') {
+                Token token = getToken(character);
+                tokens.add(token);
+            }
+
         }
 
         return tokens;
@@ -43,9 +46,6 @@ public class AnalisadorLexico {
 
     private Token handleDigit(char character) {
         String num = String.valueOf(character);
-        while (Character.isDigit(character)) {
-            num = num.concat(String.valueOf(character));
-        }
         return new Token(Tipo.SNUMERO, num);
     }
 
