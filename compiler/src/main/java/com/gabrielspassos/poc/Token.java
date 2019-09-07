@@ -14,6 +14,11 @@ public class Token {
         this.coluna = coluna;
     }
 
+    public Token(Tipo tipo, String lexema) {
+        this.tipo = tipo;
+        this.lexema = lexema;
+    }
+
     public Tipo getTipo() {
         return tipo;
     }
