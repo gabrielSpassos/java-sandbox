@@ -1,6 +1,6 @@
 programa teste;
 inicio
   var x: inteiro;
-  x := 3;
+  x := 300;
   escreva(x);
 fim.
