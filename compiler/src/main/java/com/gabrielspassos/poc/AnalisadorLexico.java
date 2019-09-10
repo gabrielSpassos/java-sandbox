@@ -17,12 +17,12 @@ public class AnalisadorLexico {
 
         while((intch = pushbackReader.read()) != -1) {
             char character = (char) intch;
-            System.out.println("Character " + character);
             if(character != ' ' && character != '\n') {
                 Token token = getToken(character);
-                tokens.add(token);
+                if (token != null) {
+                    tokens.add(token);
+                }
             }
-
         }
 
         return tokens;
@@ -41,7 +41,7 @@ public class AnalisadorLexico {
             return handleDigit(character);
         }
 
-        return new Token(Tipo.SERRO, null);
+        return null;
     }
 
     private Token handleDigit(char character) {
