@@ -10,6 +10,7 @@ public class AnalisadorLexico {
     private static final String ENCODING = "US-ASCII";
 
     private static final List<String> SPECIAL_CHARS = Arrays.asList(".", ":", ";", "(", ")");
+    private static final String DOIS_PONTOS = ":";
 
     public List<Token> analisar(String codeFileName) throws IOException {
         PushbackReader pushbackReader = getPushbackReader(codeFileName);
@@ -45,21 +46,10 @@ public class AnalisadorLexico {
         }
 
         if(SPECIAL_CHARS.contains(String.valueOf(character))){
-            return handleSpecialChars(character);
+            return handleSpecialChars(character, pushbackReader);
         }
 
         return null;
-    }
-
-    private Token handleDigit(char character, PushbackReader pushbackReader) throws IOException {
-        String num = String.valueOf(character);
-        char nextCharacter = (char) pushbackReader.read();
-        while (Character.isDigit(nextCharacter)) {
-            num = num.concat(String.valueOf(nextCharacter));
-            nextCharacter = (char) pushbackReader.read();
-        }
-        pushbackReader.unread((int) nextCharacter);
-        return new Token(Tipo.SNUMERO, num);
     }
 
     private Token handleIdentifierAndReservedWord(char character, PushbackReader pushbackReader) throws IOException {
@@ -74,8 +64,27 @@ public class AnalisadorLexico {
         return new Token(tipo, id);
     }
 
-    private Token handleSpecialChars(char character) {
+    private Token handleDigit(char character, PushbackReader pushbackReader) throws IOException {
+        String num = String.valueOf(character);
+        char nextCharacter = (char) pushbackReader.read();
+        while (Character.isDigit(nextCharacter)) {
+            num = num.concat(String.valueOf(nextCharacter));
+            nextCharacter = (char) pushbackReader.read();
+        }
+        pushbackReader.unread((int) nextCharacter);
+        return new Token(Tipo.SNUMERO, num);
+    }
+
+    private Token handleSpecialChars(char character, PushbackReader pushbackReader) throws IOException {
         String specialCharacter = String.valueOf(character);
+        if (DOIS_PONTOS.equals(specialCharacter)) {
+            char nextCharacter = (char) pushbackReader.read();
+            specialCharacter = specialCharacter.concat(String.valueOf(nextCharacter));
+            Tipo tipoById = Tipo.getTipoById(specialCharacter);
+            if (!Tipo.SATRIBUICAO.equals(tipoById)) {
+                pushbackReader.unread(nextCharacter);
+            }
+        }
         Tipo tipo = Tipo.getTipoById(specialCharacter);
         return new Token(tipo, specialCharacter);
     }
