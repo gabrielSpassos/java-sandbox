@@ -8,7 +8,6 @@ public enum Tipo {
     SINICIO,
     SFIM,
     SATRIBUICAO,
-    STIPO,
     SESCREVA,
     SINTEIRO,
     SPONTO_E_VIRGULA,

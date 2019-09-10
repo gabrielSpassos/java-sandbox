@@ -49,7 +49,7 @@ public class AnalisadorLexico {
             return handleSpecialChars(character, pushbackReader);
         }
 
-        return null;
+        return new Token(Tipo.SERRO, null);
     }
 
     private Token handleIdentifierAndReservedWord(char character, PushbackReader pushbackReader) throws IOException {
