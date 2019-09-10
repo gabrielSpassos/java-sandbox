@@ -44,6 +44,10 @@ public enum Tipo {
                 return SPONTO;
             case "escreva":
                 return SESCREVA;
+            case "(":
+                return SABRE_PARENTESIS;
+            case ")":
+                return SFECHA_PARENTESIS;
             default:
                 return SIDENTIFICADOR;
         }

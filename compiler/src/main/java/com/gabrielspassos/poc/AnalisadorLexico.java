@@ -2,11 +2,14 @@ package main.java.com.gabrielspassos.poc;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AnalisadorLexico {
 
     private static final String ENCODING = "US-ASCII";
+
+    private static final List<String> SPECIAL_CHARS = Arrays.asList(".", ":", ";", "(", ")");
 
     public List<Token> analisar(String codeFileName) throws IOException {
         PushbackReader pushbackReader = getPushbackReader(codeFileName);
@@ -41,6 +44,10 @@ public class AnalisadorLexico {
             return handleDigit(character, pushbackReader);
         }
 
+        if(SPECIAL_CHARS.contains(String.valueOf(character))){
+            return handleSpecialChars(character);
+        }
+
         return null;
     }
 
@@ -51,6 +58,7 @@ public class AnalisadorLexico {
             num = num.concat(String.valueOf(nextCharacter));
             nextCharacter = (char) pushbackReader.read();
         }
+        pushbackReader.unread((int) nextCharacter);
         return new Token(Tipo.SNUMERO, num);
     }
 
@@ -61,7 +69,14 @@ public class AnalisadorLexico {
             id = id.concat(String.valueOf(nextCharacter));
             nextCharacter = (char) pushbackReader.read();
         }
+        pushbackReader.unread((int) nextCharacter);
         Tipo tipo = Tipo.getTipoById(id);
         return new Token(tipo, id);
+    }
+
+    private Token handleSpecialChars(char character) {
+        String specialCharacter = String.valueOf(character);
+        Tipo tipo = Tipo.getTipoById(specialCharacter);
+        return new Token(tipo, specialCharacter);
     }
 }
