@@ -1,55 +1,39 @@
 package main.java.com.gabrielspassos.poc;
 
+import java.util.stream.Stream;
+
 public enum Tipo {
 
-    SPROGRAMA,
-    SVAR,
-    SDOISPONTOS,
-    SINICIO,
-    SFIM,
-    SATRIBUICAO,
-    SESCREVA,
-    SINTEIRO,
-    SPONTO_E_VIRGULA,
-    SPONTO,
-    SMAIS,
-    SMENOS,
-    SMULTIPLICACAO,
-    SNUMERO,
-    SIDENTIFICADOR,
-    SABRE_PARENTESIS,
-    SFECHA_PARENTESIS,
-    SERRO;
+    SPROGRAMA("programa"),
+    SVAR("var"),
+    SDOISPONTOS(":"),
+    SINICIO("inicio"),
+    SFIM("fim"),
+    SATRIBUICAO(":="),
+    SESCREVA("escreva"),
+    SINTEIRO("inteiro"),
+    SPONTO_E_VIRGULA(";"),
+    SPONTO("."),
+    SMAIS("+"),
+    SMENOS("-"),
+    SMULTIPLICACAO("*"),
+    SNUMERO(null),
+    SIDENTIFICADOR(null),
+    SABRE_PARENTESIS("("),
+    SFECHA_PARENTESIS(")"),
+    SERRO(null);
+
+    Tipo(String id) {
+        this.id = id;
+    }
+
+    private String id;
 
     public static Tipo getTipoById(String id) {
-        switch (id) {
-            case "programa":
-                return SPROGRAMA;
-            case "var":
-                return SVAR;
-            case ":":
-                return SDOISPONTOS;
-            case "inicio":
-                return SINICIO;
-            case "fim":
-                return SFIM;
-            case ":=":
-                return SATRIBUICAO;
-            case "inteiro":
-                return SINTEIRO;
-            case ";":
-                return SPONTO_E_VIRGULA;
-            case ".":
-                return SPONTO;
-            case "escreva":
-                return SESCREVA;
-            case "(":
-                return SABRE_PARENTESIS;
-            case ")":
-                return SFECHA_PARENTESIS;
-            default:
-                return SIDENTIFICADOR;
-        }
+        return Stream.of(Tipo.values())
+                .filter(tipo -> id.equals(tipo.id))
+                .findFirst()
+                .orElse(Tipo.SIDENTIFICADOR);
     }
 
 }
