@@ -36,4 +36,7 @@ public enum Tipo {
                 .orElse(Tipo.SIDENTIFICADOR);
     }
 
+    public String getId() {
+        return id;
+    }
 }
