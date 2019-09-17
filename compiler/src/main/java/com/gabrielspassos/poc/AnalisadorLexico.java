@@ -9,7 +9,7 @@ public class AnalisadorLexico {
 
     private static final String ENCODING = "US-ASCII";
     private int linha = 1;
-    private int coluna = 1;
+    private int coluna = 0;
 
     private static final List<String> SPECIAL_CHARS = Arrays.asList(".", ":", ";", "(", ")");
     private static final String DOIS_PONTOS = ":";
@@ -42,7 +42,7 @@ public class AnalisadorLexico {
         char character = (char) intch;
         if(character == '\n') {
             linha++;
-            coluna = 1;
+            coluna = 0;
         } else {
             coluna++;
         }
@@ -65,26 +65,30 @@ public class AnalisadorLexico {
 
     private Token getToken(char character, PushbackReader pushbackReader) throws IOException {
         if(Character.isLetter(character)) {
-            return handleIdentifierAndReservedWord(character, pushbackReader);
+            int col = coluna;
+            return handleIdentifierAndReservedWord(character, pushbackReader, col);
         }
 
         if (Tipo.SMAIS.getId().equals(String.valueOf(character))
                 || Tipo.SMENOS.getId().equals(String.valueOf(character))) {
-            return handlePlusAndMinusOperation(character, pushbackReader);
+            int col = coluna;
+            return handlePlusAndMinusOperation(character, pushbackReader, col);
         }
 
         if(Character.isDigit(character)) {
-            return handleDigit(character, pushbackReader);
+            int col = coluna;
+            return handleDigit(character, pushbackReader, col);
         }
 
         if(SPECIAL_CHARS.contains(String.valueOf(character))){
-            return handleSpecialChars(character, pushbackReader);
+            int col = coluna;
+            return handleSpecialChars(character, pushbackReader, col);
         }
 
         return new Token(Tipo.SERRO, null);
     }
 
-    private Token handleIdentifierAndReservedWord(char character, PushbackReader pushbackReader) throws IOException {
+    private Token handleIdentifierAndReservedWord(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String id = String.valueOf(character);
         char nextCharacter = readChar(pushbackReader);
         while (Character.isLetter(nextCharacter)) {
@@ -96,20 +100,20 @@ public class AnalisadorLexico {
         return new Token(tipo, id, linha, coluna);
     }
 
-    private Token handlePlusAndMinusOperation(char character, PushbackReader pushbackReader) throws IOException {
+    private Token handlePlusAndMinusOperation(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String operator = String.valueOf(character);
         char nextCharacter = readChar(pushbackReader);
         if (Character.isSpaceChar(nextCharacter)) {
             Tipo tipo = Tipo.getTipoById(operator);
             return new Token(tipo, operator, linha, coluna);
         }
-        Token token = handleDigit(nextCharacter, pushbackReader);
+        Token token = handleDigit(nextCharacter, pushbackReader, coluna);
         token.setLexema(operator.concat(token.getLexema()));
         return token;
 
     }
 
-    private Token handleDigit(char character, PushbackReader pushbackReader) throws IOException {
+    private Token handleDigit(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String num = String.valueOf(character);
         char nextCharacter = readChar(pushbackReader);
         while (Character.isDigit(nextCharacter) || Tipo.SPONTO.getId().equals(String.valueOf(nextCharacter))) {
@@ -120,7 +124,7 @@ public class AnalisadorLexico {
         return new Token(Tipo.SNUMERO, num, linha, coluna);
     }
 
-    private Token handleSpecialChars(char character, PushbackReader pushbackReader) throws IOException {
+    private Token handleSpecialChars(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String specialCharacter = String.valueOf(character);
         if (DOIS_PONTOS.equals(specialCharacter)) {
             char nextCharacter = readChar(pushbackReader);
