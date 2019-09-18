@@ -117,6 +117,9 @@ public class AnalisadorLexico {
         String num = String.valueOf(character);
         char nextCharacter = readChar(pushbackReader);
         while (Character.isDigit(nextCharacter) || Tipo.SPONTO.getId().equals(String.valueOf(nextCharacter))) {
+            if (isInvalidFloatNumber(String.valueOf(nextCharacter), pushbackReader)) {
+                return new Token(Tipo.SERRO, null, linha, coluna);
+            }
             num = num.concat(String.valueOf(nextCharacter));
             nextCharacter = readChar(pushbackReader);
         }
@@ -136,5 +139,17 @@ public class AnalisadorLexico {
         }
         Tipo tipo = Tipo.getTipoById(specialCharacter);
         return new Token(tipo, specialCharacter, linha, coluna);
+    }
+
+    private Boolean isInvalidFloatNumber(String character, PushbackReader pushbackReader) throws IOException {
+        if (Tipo.SPONTO.getId().equals(character)) {
+            char nextCharacter = readChar(pushbackReader);
+            if(Tipo.SPONTO.getId().equals(String.valueOf(nextCharacter))) {
+                return true;
+            }
+            unreadChar(pushbackReader, nextCharacter);
+            return false;
+        }
+        return false;
     }
 }
