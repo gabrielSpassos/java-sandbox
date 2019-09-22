@@ -131,11 +131,12 @@ public class AnalisadorLexico {
         String specialCharacter = String.valueOf(character);
         if (DOIS_PONTOS.equals(specialCharacter)) {
             char nextCharacter = readChar(pushbackReader);
-            specialCharacter = specialCharacter.concat(String.valueOf(nextCharacter));
-            Tipo tipoById = Tipo.getTipoById(specialCharacter);
-            if (!Tipo.SATRIBUICAO.equals(tipoById)) {
-                unreadChar(pushbackReader, nextCharacter);
+            String ch = specialCharacter.concat(String.valueOf(nextCharacter));
+            Tipo tipoById = Tipo.getTipoById(ch);
+            if (Tipo.SATRIBUICAO.equals(tipoById)) {
+                return new Token(tipoById, ch, linha, coluna);
             }
+            unreadChar(pushbackReader, nextCharacter);
         }
         Tipo tipo = Tipo.getTipoById(specialCharacter);
         return new Token(tipo, specialCharacter, linha, coluna);
