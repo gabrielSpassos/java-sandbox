@@ -14,7 +14,7 @@ public class AnalisadorLexico {
     private static final List<String> SPECIAL_CHARS = Arrays.asList(".", ":", ";", "(", ")");
     private static final String DOIS_PONTOS = ":";
 
-    public List<Token> analisar(String codeFileName) throws IOException {
+    public List<Token> analise(String codeFileName) throws IOException {
         PushbackReader pushbackReader = getPushbackReader(codeFileName);
         List<Token> tokens = new ArrayList<>();
 
