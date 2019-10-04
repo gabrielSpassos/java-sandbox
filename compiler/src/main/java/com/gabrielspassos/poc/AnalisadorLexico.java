@@ -11,8 +11,13 @@ public class AnalisadorLexico {
     private int linha = 1;
     private int coluna = 0;
 
-    private static final List<String> SPECIAL_CHARS = Arrays.asList(".", ":", ";", "(", ")");
-    private static final String DOIS_PONTOS = ":";
+    private static final List<String> CHARS_TO_IGNORE =
+            Arrays.asList(" ", "\n", "\r", "\t", "@");
+    private static final List<String> SPECIAL_CHARS =
+            Arrays.asList(".", ":", ",", ";", "(", ")", "=", "!", "{", "}", "<", "&", "[", "]", "*");
+    private static final String AND_SYMBOL = "&";
+    private static final String UNDER_LINE_SYMBOL = "_";
+    private static final String BAR_SYMBOL = "/";
 
     public List<Token> analise(String codeFileName) throws IOException {
         PushbackReader pushbackReader = getPushbackReader(codeFileName);
@@ -21,12 +26,16 @@ public class AnalisadorLexico {
         char character;
         do {
             character = readChar(pushbackReader);
-            if (character == ' ' || character == '\n' || character == '@') {
+            if (CHARS_TO_IGNORE.contains(String.valueOf(character))) {
                 continue;
             }
             Token token = getToken(character, pushbackReader);
             if (token != null) {
                 tokens.add(token);
+
+                if (Tipo.SERRO.equals(token.getTipo())) {
+                    break;
+                }
             }
         } while (character != '@');
 
@@ -85,13 +94,20 @@ public class AnalisadorLexico {
             return handleSpecialChars(character, pushbackReader, col);
         }
 
-        return new Token(Tipo.SERRO, null);
+        if(BAR_SYMBOL.equals(String.valueOf(character))){
+            int col = coluna;
+            return handleBar(character, pushbackReader, col);
+        }
+        int col = coluna;
+        return new Token(Tipo.SERRO, String.valueOf(character), linha, col);
     }
 
     private Token handleIdentifierAndReservedWord(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String id = String.valueOf(character);
         char nextCharacter = readChar(pushbackReader);
-        while (Character.isLetter(nextCharacter)) {
+        while (Character.isLetter(nextCharacter)
+                || UNDER_LINE_SYMBOL.equals(String.valueOf(nextCharacter))
+                || Character.isDigit(nextCharacter)) {
             id = id.concat(String.valueOf(nextCharacter));
             nextCharacter = readChar(pushbackReader);
         }
@@ -99,6 +115,43 @@ public class AnalisadorLexico {
         Tipo tipo = Tipo.getTipoById(id);
         return new Token(tipo, id, linha, coluna);
     }
+
+    private Token handleBar(char character, PushbackReader pushbackReader, int coluna) throws IOException {
+        String id = String.valueOf(character);
+        char nextCharacter = readChar(pushbackReader);
+
+        if(BAR_SYMBOL.equals(String.valueOf(nextCharacter))){
+            nextCharacter = readChar(pushbackReader);
+
+            while (!"\n".equals(String.valueOf(nextCharacter))) {
+
+                nextCharacter = readChar(pushbackReader);
+
+            }
+            return null;
+
+        }else if("*".equals(String.valueOf(nextCharacter))){
+
+            while (true) {
+
+                nextCharacter = readChar(pushbackReader);
+
+                if("*".equals(String.valueOf(nextCharacter))){
+                    nextCharacter = readChar(pushbackReader);
+                    if("/".equals(String.valueOf(nextCharacter))){
+                        break;
+                    }
+                }
+
+            }
+            return null;
+        }else{
+            unreadChar(pushbackReader, nextCharacter);
+            Tipo tipo = Tipo.getTipoById(id);
+            return new Token(tipo, id, linha, coluna);
+        }
+    }
+
 
     private Token handlePlusAndMinusOperation(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String operator = String.valueOf(character);
@@ -118,7 +171,7 @@ public class AnalisadorLexico {
         char nextCharacter = readChar(pushbackReader);
         while (Character.isDigit(nextCharacter) || Tipo.SPONTO.getId().equals(String.valueOf(nextCharacter))) {
             if (isInvalidFloatNumber(String.valueOf(nextCharacter), pushbackReader)) {
-                return new Token(Tipo.SERRO, null, linha, coluna);
+                return new Token(Tipo.SERRO, String.valueOf(nextCharacter), linha, coluna);
             }
             num = num.concat(String.valueOf(nextCharacter));
             nextCharacter = readChar(pushbackReader);
@@ -129,15 +182,36 @@ public class AnalisadorLexico {
 
     private Token handleSpecialChars(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String specialCharacter = String.valueOf(character);
-        if (DOIS_PONTOS.equals(specialCharacter)) {
+        if (AND_SYMBOL.equals(specialCharacter)) {
             char nextCharacter = readChar(pushbackReader);
             String ch = specialCharacter.concat(String.valueOf(nextCharacter));
             Tipo tipoById = Tipo.getTipoById(ch);
-            if (Tipo.SATRIBUICAO.equals(tipoById)) {
+            if (Tipo.SAND.equals(tipoById)) {
                 return new Token(tipoById, ch, linha, coluna);
             }
             unreadChar(pushbackReader, nextCharacter);
         }
+
+        if ("=".equals(specialCharacter)) {
+            char nextCharacter = readChar(pushbackReader);
+            String ch = specialCharacter.concat(String.valueOf(nextCharacter));
+            Tipo tipoById = Tipo.getTipoById(ch);
+            if (Tipo.SIGUALDADE.equals(tipoById)) {
+                return new Token(tipoById, ch, linha, coluna);
+            }
+            unreadChar(pushbackReader, nextCharacter);
+        }
+
+        if ("!".equals(specialCharacter)) {
+            char nextCharacter = readChar(pushbackReader);
+            String ch = specialCharacter.concat(String.valueOf(nextCharacter));
+            Tipo tipoById = Tipo.getTipoById(ch);
+            if (Tipo.SDIFERENÇA.equals(tipoById)) {
+                return new Token(tipoById, ch, linha, coluna);
+            }
+            unreadChar(pushbackReader, nextCharacter);
+        }
+
         Tipo tipo = Tipo.getTipoById(specialCharacter);
         return new Token(tipo, specialCharacter, linha, coluna);
     }
