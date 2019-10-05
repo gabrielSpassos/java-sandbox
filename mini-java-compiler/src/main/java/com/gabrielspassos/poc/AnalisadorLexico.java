@@ -17,6 +17,10 @@ public class AnalisadorLexico {
             Arrays.asList(".", ":", ",", ";", "(", ")", "=", "!", "{", "}", "<", "&", "[", "]", "*");
     private static final String AND_SYMBOL = "&";
     private static final String UNDER_LINE_SYMBOL = "_";
+    private static final String BAR_SYMBOL = "/";
+    private static final String EQUALS_SYMBOL = "=";
+    private static final String NEGATE_SYMBOL = "!";
+    private static final String ASTERISK_SYMBOL = "*";
 
     public List<Token> analise(String codeFileName) throws IOException {
         PushbackReader pushbackReader = getPushbackReader(codeFileName);
@@ -93,7 +97,12 @@ public class AnalisadorLexico {
             return handleSpecialChars(character, pushbackReader, col);
         }
 
-        return new Token(Tipo.SERRO, null, linha, coluna);
+        if(BAR_SYMBOL.equals(String.valueOf(character))){
+            int col = coluna;
+            return handleBar(character, pushbackReader, col);
+        }
+
+        return new Token(Tipo.SERRO, String.valueOf(character), linha, coluna);
     }
 
     private Token handleIdentifierAndReservedWord(char character, PushbackReader pushbackReader, int coluna) throws IOException {
@@ -128,7 +137,7 @@ public class AnalisadorLexico {
         char nextCharacter = readChar(pushbackReader);
         while (Character.isDigit(nextCharacter) || Tipo.SPONTO.getId().equals(String.valueOf(nextCharacter))) {
             if (isInvalidFloatNumber(String.valueOf(nextCharacter), pushbackReader)) {
-                return new Token(Tipo.SERRO, null, linha, coluna);
+                return new Token(Tipo.SERRO, String.valueOf(nextCharacter), linha, coluna);
             }
             num = num.concat(String.valueOf(nextCharacter));
             nextCharacter = readChar(pushbackReader);
@@ -139,17 +148,57 @@ public class AnalisadorLexico {
 
     private Token handleSpecialChars(char character, PushbackReader pushbackReader, int coluna) throws IOException {
         String specialCharacter = String.valueOf(character);
-        if (AND_SYMBOL.equals(specialCharacter)) {
+
+        if(isComposeChar(specialCharacter)) {
             char nextCharacter = readChar(pushbackReader);
             String ch = specialCharacter.concat(String.valueOf(nextCharacter));
             Tipo tipoById = Tipo.getTipoById(ch);
-            if (Tipo.SAND.equals(tipoById)) {
+            if (isComposeType(tipoById)) {
                 return new Token(tipoById, ch, linha, coluna);
             }
             unreadChar(pushbackReader, nextCharacter);
         }
+
         Tipo tipo = Tipo.getTipoById(specialCharacter);
         return new Token(tipo, specialCharacter, linha, coluna);
+    }
+
+    private Boolean isComposeChar(String character) {
+        return AND_SYMBOL.equals(character) || EQUALS_SYMBOL.equals(character) || NEGATE_SYMBOL.equals(character);
+    }
+
+    private Boolean isComposeType(Tipo tipo) {
+        return Tipo.SAND.equals(tipo) || Tipo.SIGUALDADE.equals(tipo) || Tipo.SDIFERENCA.equals(tipo);
+    }
+
+    private Token handleBar(char character, PushbackReader pushbackReader, int coluna) throws IOException {
+        char nextCharacter = readChar(pushbackReader);
+
+        if(BAR_SYMBOL.equals(String.valueOf(nextCharacter))){
+            nextCharacter = readChar(pushbackReader);
+            while (!System.lineSeparator().equals(String.valueOf(nextCharacter))) {
+                nextCharacter = readChar(pushbackReader);
+            }
+            return null;
+
+        }else if(ASTERISK_SYMBOL.equals(String.valueOf(nextCharacter))){
+            while (true) {
+                nextCharacter = readChar(pushbackReader);
+
+                if(ASTERISK_SYMBOL.equals(String.valueOf(nextCharacter))){
+                    nextCharacter = readChar(pushbackReader);
+                    if(BAR_SYMBOL.equals(String.valueOf(nextCharacter))){
+                        break;
+                    }
+                }
+            }
+            return null;
+        }else{
+            unreadChar(pushbackReader, nextCharacter);
+            String id = String.valueOf(character);
+            Tipo tipo = Tipo.getTipoById(id);
+            return new Token(tipo, id, linha, coluna);
+        }
     }
 
     private Boolean isInvalidFloatNumber(String character, PushbackReader pushbackReader) throws IOException {

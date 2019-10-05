@@ -38,7 +38,15 @@ public enum Tipo {
     SFECHA_CHAVES("}"),
     SNUMERO(null),
     SERRO(null),
-    SIDENTIFICADOR(null);
+    SIDENTIFICADOR(null),
+    SDIVISAO("/"),
+    SCHAR("char"),
+    SNULL ("null"),
+    SRETURN("return"),
+    SBOOLEAN_TRUE("true"),
+    SBOOLEAN_FALSE("false"),
+    SIGUALDADE("=="),
+    SDIFERENCA("!=");
 
     Tipo(String id) {
         this.id = id;
