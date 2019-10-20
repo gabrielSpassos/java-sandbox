@@ -16,11 +16,5 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.apache.flink:flink-java:1.9.0'
 	implementation 'org.apache.flink:flink-test-utils_2.12:1.9.0'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-}
-
-test {
-	useJUnitPlatform()
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
