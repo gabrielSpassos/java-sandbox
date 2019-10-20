@@ -55,7 +55,7 @@ public class FlinkService {
 
     public List<Integer> filterAmounts() throws Exception {
         ExecutionEnvironment env = getEnv();
-        DataSet<Integer> amounts = env.fromElements(1, 29, 40, 50);
+        DataSet<Integer> amounts = env.fromElements(1, 29, 40, 50, 70);
 
         int threshold = 30;
         return amounts
