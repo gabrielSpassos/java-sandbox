@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Main {
 
-    private static final String DEFAULT_FILE = "C:\\Users\\eduar\\Desktop\\Trabalho COMPILADORES\\java-sandbox\\compiler\\fatorial.java";
+    private static final String DEFAULT_FILE = "teste1.lpd";
 
     public static void main(String[] args) {
         AnalisadorLexico analisadorLexico = new AnalisadorLexico();
