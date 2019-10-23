@@ -46,7 +46,8 @@ public enum Tipo {
     SBOOLEAN_TRUE("true"),
     SBOOLEAN_FALSE("false"),
     SIGUALDADE("=="),
-    SDIFERENÇA("!=");
+    SDIFERENÇA("!="),
+    SPROGRAMA("programa");
 
 
 
