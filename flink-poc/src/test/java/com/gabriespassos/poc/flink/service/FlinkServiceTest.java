@@ -23,28 +23,31 @@ public class FlinkServiceTest {
 
     @Test
     public void shouldJoinData() throws Exception {
-        List<Tuple2<Tuple2<Integer, String>, Tuple3<Integer, String, String>>> joined = flinkService.joinDataSources();
+        List<Tuple2<Tuple3<String, Integer, Double>, Tuple3<Integer, String, String>>> joined = flinkService.joinDataSources();
 
         assertEquals(3, joined.size());
-        assertEquals("transaction_1", joined.get(0).f0.f1);
+        assertEquals("transaction_1", joined.get(0).f0.f0);
         assertEquals("London", joined.get(0).f1.f2);
+        assertEquals(50.50, joined.get(0).f0.f2, 0);
 
-        assertEquals("transaction_1_2", joined.get(1).f0.f1);
+        assertEquals("transaction_3", joined.get(1).f0.f0);
         assertEquals("London", joined.get(1).f1.f2);
+        assertEquals(20.0, joined.get(1).f0.f2,0);
 
-        assertEquals("transaction_2", joined.get(2).f0.f1);
+        assertEquals("transaction_2", joined.get(2).f0.f0);
         assertEquals("Liverpool", joined.get(2).f1.f2);
+        assertEquals(125.8, joined.get(2).f0.f2, 0);
     }
 
     @Test
     public void shouldSortDataDescending() throws Exception {
-        List<Tuple2<Integer, String>> sorted = flinkService.sortTransactions();
+        List<Tuple3<String, Integer, Double>> sorted = flinkService.sortTransactions();
 
         assertEquals(4, sorted.size());
-        assertEquals("transaction_200", sorted.get(0).f1);
-        assertEquals("transaction_5", sorted.get(1).f1);
-        assertEquals("transaction_4", sorted.get(2).f1);
-        assertEquals("transaction_2", sorted.get(3).f1);
+        assertEquals("transaction_200", sorted.get(0).f0);
+        assertEquals("transaction_5", sorted.get(1).f0);
+        assertEquals("transaction_4", sorted.get(2).f0);
+        assertEquals("transaction_2", sorted.get(3).f0);
     }
 
     @Test
@@ -61,5 +64,23 @@ public class FlinkServiceTest {
 
         assertEquals(1, filtered.size());
         assertEquals(160, filtered.get(0).intValue());
+    }
+
+    @Test
+    public void shouldReturnJoinedCsvs() throws Exception {
+        List<Tuple2<Tuple3<String, Integer, Double>, Tuple3<Integer, String, String>>> joined = flinkService.joinCsvFiles();
+
+        assertEquals(3, joined.size());
+        assertEquals("transaction_1", joined.get(0).f0.f0);
+        assertEquals("London", joined.get(0).f1.f1);
+        assertEquals(50.50, joined.get(0).f0.f2, 0);
+
+        assertEquals("transaction_3", joined.get(1).f0.f0);
+        assertEquals("London", joined.get(1).f1.f1);
+        assertEquals(20.0, joined.get(1).f0.f2,0);
+
+        assertEquals("transaction_2", joined.get(2).f0.f0);
+        assertEquals("Liverpool", joined.get(2).f1.f1);
+        assertEquals(125.8, joined.get(2).f0.f2, 0);
     }
 }

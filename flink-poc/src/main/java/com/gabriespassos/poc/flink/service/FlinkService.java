@@ -9,17 +9,18 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class FlinkService {
 
-    public List<Tuple2<Tuple2<Integer, String>, Tuple3<Integer, String, String>>> joinDataSources() throws Exception {
+    public List<Tuple2<Tuple3<String, Integer, Double>, Tuple3<Integer, String, String>>> joinDataSources() throws Exception {
         ExecutionEnvironment env = getEnv();
         DataSource<Tuple3<Integer, String, String>> addresses = env.fromElements(new Tuple3<>(1, "5th Avenue", "London"), new Tuple3<>(2, "4th Avenue", "Liverpool"));
-        DataSource<Tuple2<Integer, String>> transactions = env.fromElements(
-                new Tuple2<>(1, "transaction_1"), new Tuple2<>(2, "transaction_2"), new Tuple2<>(1, "transaction_1_2"));
+        DataSource<Tuple3<String, Integer, Double>> transactions = env.fromElements(
+                new Tuple3<>("transaction_1", 1, 50.50), new Tuple3<>("transaction_2", 2, 125.80), new Tuple3<>("transaction_3", 1, 20.0));
 
         return transactions.join(addresses)
                 .where(new IdKeySelectorTransaction())
@@ -27,14 +28,27 @@ public class FlinkService {
                 .collect();
     }
 
-    public List<Tuple2<Integer, String>> sortTransactions() throws Exception {
+    public List<Tuple2<Tuple3<String, Integer, Double>, Tuple3<Integer, String, String>>> joinCsvFiles() throws Exception {
         ExecutionEnvironment env = getEnv();
-        DataSet<Tuple2<Integer, String>> transactions =
+        DataSource<Tuple3<Integer, String, String>> addresses = env.readCsvFile("src/main/resources/addresses.csv")
+                .types(Integer.class, String.class, String.class);
+        DataSource<Tuple3<String, Integer, Double>> transactions = env.readCsvFile("src/main/resources/transactions.csv")
+                .types(String.class, Integer.class, Double.class);
+
+        return transactions.join(addresses)
+                .where(new IdKeySelectorTransaction())
+                .equalTo(new IdKeySelectorAddress())
+                .collect();
+    }
+
+    public List<Tuple3<String, Integer, Double>> sortTransactions() throws Exception {
+        ExecutionEnvironment env = getEnv();
+        DataSet<Tuple3<String, Integer, Double>> transactions =
                 env.fromElements(
-                        new Tuple2<>(4, "transaction_4"),
-                        new Tuple2<>(5, "transaction_5"),
-                        new Tuple2<>(200, "transaction_200"),
-                        new Tuple2<>(2, "transaction_2")
+                        new Tuple3<>("transaction_4", 4,5.0),
+                        new Tuple3<>("transaction_5", 5, 10.0),
+                        new Tuple3<>("transaction_200", 200, 33.33),
+                        new Tuple3<>("transaction_2", 2, 10000.45)
                 );
 
         return transactions
@@ -67,5 +81,9 @@ public class FlinkService {
 
     private ExecutionEnvironment getEnv() {
         return ExecutionEnvironment.getExecutionEnvironment();
+    }
+
+    private StreamExecutionEnvironment getStreamEnv() {
+        return StreamExecutionEnvironment.getExecutionEnvironment();
     }
 }
