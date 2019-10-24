@@ -17,8 +17,9 @@ public class FlinkService {
 
     public List<Tuple2<Tuple2<Integer, String>, Tuple3<Integer, String, String>>> joinDataSources() throws Exception {
         ExecutionEnvironment env = getEnv();
-        DataSource<Tuple3<Integer, String, String>> addresses = env.fromElements(new Tuple3<>(1, "5th Avenue", "London"));
-        DataSource<Tuple2<Integer, String>> transactions = env.fromElements(new Tuple2<>(1, "transaction_1"));
+        DataSource<Tuple3<Integer, String, String>> addresses = env.fromElements(new Tuple3<>(1, "5th Avenue", "London"), new Tuple3<>(2, "4th Avenue", "Liverpool"));
+        DataSource<Tuple2<Integer, String>> transactions = env.fromElements(
+                new Tuple2<>(1, "transaction_1"), new Tuple2<>(2, "transaction_2"), new Tuple2<>(1, "transaction_1_2"));
 
         return transactions.join(addresses)
                 .where(new IdKeySelectorTransaction())

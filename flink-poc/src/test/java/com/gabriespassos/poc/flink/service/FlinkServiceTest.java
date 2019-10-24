@@ -25,9 +25,15 @@ public class FlinkServiceTest {
     public void shouldJoinData() throws Exception {
         List<Tuple2<Tuple2<Integer, String>, Tuple3<Integer, String, String>>> joined = flinkService.joinDataSources();
 
-        assertEquals(1, joined.size());
+        assertEquals(3, joined.size());
         assertEquals("transaction_1", joined.get(0).f0.f1);
         assertEquals("London", joined.get(0).f1.f2);
+
+        assertEquals("transaction_1_2", joined.get(1).f0.f1);
+        assertEquals("London", joined.get(1).f1.f2);
+
+        assertEquals("transaction_2", joined.get(2).f0.f1);
+        assertEquals("Liverpool", joined.get(2).f1.f2);
     }
 
     @Test
