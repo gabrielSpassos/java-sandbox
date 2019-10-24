@@ -38,6 +38,10 @@ public class FlinkService {
         return transactions.join(addresses)
                 .where(new IdKeySelectorTransaction())
                 .equalTo(new IdKeySelectorAddress())
+                .sortPartition(0, Order.DESCENDING)
+                .writeAsCsv("src/main/resources/result.csv", "\n", ";")
+                .setParallelism(1)
+                .getDataSet()
                 .collect();
     }
 

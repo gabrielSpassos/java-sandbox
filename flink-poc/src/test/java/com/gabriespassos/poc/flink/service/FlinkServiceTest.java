@@ -71,13 +71,13 @@ public class FlinkServiceTest {
         List<Tuple2<Tuple3<String, Integer, Double>, Tuple3<Integer, String, String>>> joined = flinkService.joinCsvFiles();
 
         assertEquals(3, joined.size());
-        assertEquals("transaction_1", joined.get(0).f0.f0);
+        assertEquals("transaction_3", joined.get(0).f0.f0);
         assertEquals("London", joined.get(0).f1.f1);
-        assertEquals(50.50, joined.get(0).f0.f2, 0);
+        assertEquals(20.0, joined.get(0).f0.f2, 0);
 
-        assertEquals("transaction_3", joined.get(1).f0.f0);
+        assertEquals("transaction_1", joined.get(1).f0.f0);
         assertEquals("London", joined.get(1).f1.f1);
-        assertEquals(20.0, joined.get(1).f0.f2,0);
+        assertEquals(50.50, joined.get(1).f0.f2,0);
 
         assertEquals("transaction_2", joined.get(2).f0.f0);
         assertEquals("Liverpool", joined.get(2).f1.f1);
