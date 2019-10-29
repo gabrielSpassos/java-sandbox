@@ -40,13 +40,13 @@ public class ParserOne implements ParserOneConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MINUS:
     case CONSTANT:
-    case 12:
+    case 13:
       sum();
-      jj_consume_token(11);
+      jj_consume_token(12);
     {if (true) return 0;}
       break;
-    case 11:
-      jj_consume_token(11);
+    case 12:
+      jj_consume_token(12);
     {if (true) return 1;}
       break;
     default:
@@ -93,6 +93,7 @@ public class ParserOne implements ParserOneConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MULTIPLY:
       case DIVIDE:
+      case EXPONENTIAL:
         ;
         break;
       default:
@@ -105,6 +106,9 @@ public class ParserOne implements ParserOneConstants {
         break;
       case DIVIDE:
         jj_consume_token(DIVIDE);
+        break;
+      case EXPONENTIAL:
+        jj_consume_token(EXPONENTIAL);
         break;
       default:
         jj_la1[4] = jj_gen;
@@ -122,7 +126,7 @@ public class ParserOne implements ParserOneConstants {
       element();
       break;
     case CONSTANT:
-    case 12:
+    case 13:
       element();
       break;
     default:
@@ -137,10 +141,10 @@ public class ParserOne implements ParserOneConstants {
     case CONSTANT:
       jj_consume_token(CONSTANT);
       break;
-    case 12:
-      jj_consume_token(12);
-      sum();
+    case 13:
       jj_consume_token(13);
+      sum();
+      jj_consume_token(14);
       break;
     default:
       jj_la1[6] = jj_gen;
@@ -165,7 +169,7 @@ public class ParserOne implements ParserOneConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1a40,0x60,0x60,0x180,0x180,0x1240,0x1200,};
+      jj_la1_0 = new int[] {0x3440,0x60,0x60,0x380,0x380,0x2440,0x2400,};
    }
 
   /** Constructor with InputStream. */
@@ -303,7 +307,7 @@ public class ParserOne implements ParserOneConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[14];
+    boolean[] la1tokens = new boolean[15];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -317,7 +321,7 @@ public class ParserOne implements ParserOneConstants {
         }
       }
     }
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < 15; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
