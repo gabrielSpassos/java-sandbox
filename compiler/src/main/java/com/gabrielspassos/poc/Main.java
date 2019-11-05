@@ -8,6 +8,13 @@ public class Main {
     private static final String DEFAULT_FILE = "teste1.lpd";
 
     public static void main(String[] args) {
+        System.out.println("-----------Analise Lexica-----------");
+        lexicalAnalise(args);
+        System.out.println("-----------Analise Sintatica-----------");
+        syntacticAnalise(args);
+    }
+
+    private static void lexicalAnalise(String[] args) {
         try {
             String fileName = getFileName(args);
             AnalisadorLexico analisadorLexico = new AnalisadorLexico(fileName);
@@ -20,6 +27,18 @@ public class Main {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void syntacticAnalise(String[] args) {
+        try {
+            String fileName = getFileName(args);
+            ParserPreditivoRecursivo ppr = new ParserPreditivoRecursivo(fileName);
+            if(ppr.parse()) {
+                System.out.println("Aceito sintaticamente");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
