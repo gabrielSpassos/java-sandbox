@@ -10,7 +10,9 @@ public class MainParser {
         try {
             String fileName = getFileName(args);
             ParserPreditivoRecursivo ppr = new ParserPreditivoRecursivo(fileName);
-            ppr.parse();
+            if(ppr.parse()) {
+                System.out.println("Aceito sintaticamente");
+            };
         } catch (Exception e) {
             System.out.println(e);
         }

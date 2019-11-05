@@ -9,8 +9,8 @@ public class ParserPreditivoRecursivo extends Parser {
     }
 
     @Override
-    public void parse() {
-        analisaPrograma();
+    public Boolean parse() {
+        return analisaPrograma();
     }
 
     private Boolean analisaPrograma() {

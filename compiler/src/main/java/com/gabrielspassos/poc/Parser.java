@@ -17,7 +17,7 @@ public abstract class Parser {
         token = analisadorLexico.getToken();
     }
 
-    public abstract void parse();
+    public abstract Boolean parse();
 
     public TabelaSimbolos getTabelaSimbolos() {
         return tabelaSimbolos;
