@@ -1,7 +1,7 @@
 programa teste;
+var x: inteiro;
 inicio
-  var x: inteiro;
-  x := 300..01;
+  x := 300.01;
   x := x + 10;
   escreva(x);
 fim.
