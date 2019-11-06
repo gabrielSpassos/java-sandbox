@@ -20,7 +20,7 @@ public abstract class Parser {
     }
 
     public Boolean error(String message) {
-        System.out.println(message + " " + token.getTipo() + " " + token.getColuna());
+        System.out.println(message + " " + token.getTipo() + " .Na linha " + token.getLinha() + " e coluna " + token.getColuna());
         return false;
     }
 }
