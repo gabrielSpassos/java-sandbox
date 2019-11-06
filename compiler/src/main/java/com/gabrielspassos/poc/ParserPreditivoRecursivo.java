@@ -14,19 +14,19 @@ public class ParserPreditivoRecursivo extends Parser {
     }
 
     private Boolean analisaPrograma() {
-        getAnalizedToken();
+        getAnalyzedToken();
 
-        if(getToken().getTipo().equals(Tipo.SPROGRAMA)) {
-            getAnalizedToken();
-            if(getToken().getTipo().equals(Tipo.SIDENTIFICADOR)) {
-                getTabelaSimbolos().getTabela().put(getToken().getLexema(), getToken());
+        if(token.getTipo().equals(Tipo.SPROGRAMA)) {
+            getAnalyzedToken();
+            if(token.getTipo().equals(Tipo.SIDENTIFICADOR)) {
+                tabelaSimbolos.getTabela().put(token.getLexema(), token);
 
-                getAnalizedToken();
+                getAnalyzedToken();
 
-                if (getToken().getTipo().equals(Tipo.SPONTO_E_VIRGULA)) {
+                if (token.getTipo().equals(Tipo.SPONTO_E_VIRGULA)) {
                     if (analisaBloco()) {
-                        getAnalizedToken();
-                        if(getToken().getTipo().equals(Tipo.SPONTO)) {
+                        getAnalyzedToken();
+                        if(token.getTipo().equals(Tipo.SPONTO)) {
                             return true;
                         } else {
                             return error("Faltando ponto");
