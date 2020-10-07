@@ -2,6 +2,7 @@ package com.gabrielspassos.poc.service;
 
 import com.gabrielspassos.poc.crypt.CryptUtils;
 import com.gabrielspassos.poc.crypt.TripleDES;
+import com.gabrielspassos.poc.enumerator.TripleDESMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ public class AuthorizationService {
         String panBlock = CardService.createPanBlock(cardTrailOrNumber);
 
         try {
-            return TripleDES.encryptTextWithECBMode(panBlock, secretKey);
+            return TripleDES.encryptText(panBlock, secretKey, TripleDESMode.ECB_NO_PADDING, null);
         } catch (Exception e) {
             LOG.error("Error to encrypt pan block", e);
             throw new RuntimeException(e);
@@ -27,7 +28,7 @@ public class AuthorizationService {
         String xorPinPanBlock = xorWithPanBlock(pinBlock, panBlock);
 
         try {
-            return TripleDES.encryptHexWithECBMode(xorPinPanBlock, secretKey);
+            return TripleDES.encryptHex(xorPinPanBlock, secretKey, TripleDESMode.ECB_NO_PADDING, null);
         } catch (Exception e) {
             LOG.error("Error to create pin pan block", e);
             throw new RuntimeException(e);
