@@ -10,8 +10,13 @@ public class Main {
         String cardTrailOrNumber = "5115881573557547";
         String cardPassword = "1020";
         String key = Keys.TRIPLE_DES_COMPOSED_KEY;
+        TripleDESMode mode = TripleDESMode.CBC_NO_PADDING;
 
-        AuthorizationService.createEncryptedPanBlock(cardTrailOrNumber, key, TripleDESMode.CBC_NO_PADDING);
-        AuthorizationService.createPinPanBlock(cardTrailOrNumber, cardPassword, key, TripleDESMode.CBC_NO_PADDING);
+        String encryptedPan = AuthorizationService.encryptPan(cardTrailOrNumber, key, mode);
+        String encryptedPinPanBlock
+                = AuthorizationService.createPinPanBlock(cardTrailOrNumber, cardPassword, key, mode);
+
+        AuthorizationService.decryptPanBlock(encryptedPan, key, mode);
+        AuthorizationService.decryptPinPanBlock(encryptedPinPanBlock, cardTrailOrNumber, key, mode);
     }
 }

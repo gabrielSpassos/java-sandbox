@@ -20,6 +20,16 @@ public class CardService {
         return PAN_BLOCK_PREFIX.concat(cardNumberWithoutStartAndEnd);
     }
 
+    public static String getNumberFromTrail(String cardTrailOrNumber) {
+        if (!cardTrailOrNumber.contains(CARD_TRAIL_SEPARATOR)) {
+            return cardTrailOrNumber;
+        }
+
+        int indexOfSeparator = cardTrailOrNumber.indexOf(CARD_TRAIL_SEPARATOR);
+
+        return cardTrailOrNumber.substring(0, indexOfSeparator);
+    }
+
     public static String createPinBlock(String cardPassword) {
         String prefix = createPinBlockPrefix(cardPassword);
 
@@ -28,14 +38,9 @@ public class CardService {
         return StringUtils.rightPad(cardPasswordWithPrefix, PIN_BLOCK_LENGTH, PIN_BLOCK_FILLER);
     }
 
-    private static String getNumberFromTrail(String cardTrailOrNumber) {
-        if (!cardTrailOrNumber.contains(CARD_TRAIL_SEPARATOR)) {
-            return cardTrailOrNumber;
-        }
-
-        int indexOfSeparator = cardTrailOrNumber.indexOf(CARD_TRAIL_SEPARATOR);
-
-        return cardTrailOrNumber.substring(0, indexOfSeparator);
+    public static String getCardPasswordFromPinBlock(String pinBlock) {
+        Integer cardPasswordLength = Integer.valueOf(pinBlock.substring(0, PREFIX_LENGTH));
+        return pinBlock.substring(PREFIX_LENGTH, PREFIX_LENGTH + cardPasswordLength);
     }
 
     private static String createPinBlockPrefix(String cardPassword) {

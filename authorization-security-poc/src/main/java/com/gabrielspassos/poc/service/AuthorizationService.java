@@ -6,22 +6,35 @@ import com.gabrielspassos.poc.enumerator.TripleDESMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.gabrielspassos.poc.service.LogService.logPanBlockInfo;
+import static com.gabrielspassos.poc.service.LogService.logPanDecryptInfo;
+import static com.gabrielspassos.poc.service.LogService.logPanEncryptInfo;
+import static com.gabrielspassos.poc.service.LogService.logPinPanBlockDecryptInfo;
 import static com.gabrielspassos.poc.service.LogService.logPinPanBlockInfo;
 
 public class AuthorizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthorizationService.class);
 
-    public static String createEncryptedPanBlock(String cardTrailOrNumber, String secretKey, TripleDESMode tripleDESMode) {
-        String panBlock = CardService.createPanBlock(cardTrailOrNumber);
+    public static String encryptPan(String cardTrailOrNumber, String secretKey, TripleDESMode tripleDESMode) {
+        String cardNumber = CardService.getNumberFromTrail(cardTrailOrNumber);
 
         try {
-            String encryptedPanBlock = TripleDES.encryptText(panBlock, secretKey, tripleDESMode, tripleDESMode.getParameterSpec());
-            logPanBlockInfo(encryptedPanBlock, panBlock, cardTrailOrNumber, tripleDESMode, secretKey);
-            return encryptedPanBlock;
+            String encryptedPan = TripleDES.encryptText(cardNumber, secretKey, tripleDESMode, tripleDESMode.getParameterSpec());
+            logPanEncryptInfo(encryptedPan, cardNumber, tripleDESMode, secretKey);
+            return encryptedPan;
         } catch (Exception e) {
-            LOG.error("Error to encrypt pan block", e);
+            LOG.error("Error to encrypt pan", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String decryptPanBlock(String encryptedPan, String secretKey, TripleDESMode tripleDESMode) {
+        try {
+            String pan = TripleDES.decryptToText(encryptedPan, secretKey, tripleDESMode, tripleDESMode.getParameterSpec());
+            logPanDecryptInfo(encryptedPan, pan, tripleDESMode, secretKey);
+            return pan;
+        } catch (Exception e) {
+            LOG.error("Error to decrypt pan", e);
             throw new RuntimeException(e);
         }
     }
@@ -39,6 +52,22 @@ public class AuthorizationService {
             return encryptedPinPanBlock;
         } catch (Exception e) {
             LOG.error("Error to create pin pan block", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String decryptPinPanBlock(String encryptedPinPanBlock, String cardTrailOrNumber,
+                                            String secretKey, TripleDESMode tripleDESMode) {
+        String panBlock = CardService.createPanBlock(cardTrailOrNumber);
+
+        try {
+            String decryptPinPanBlock = TripleDES.decryptToHex(encryptedPinPanBlock, secretKey, tripleDESMode, tripleDESMode.getParameterSpec());
+            String xorPinPanBlock = xorWithPanBlock(decryptPinPanBlock, panBlock);
+            String cardPassword = CardService.getCardPasswordFromPinBlock(xorPinPanBlock);
+            logPinPanBlockDecryptInfo(encryptedPinPanBlock, xorPinPanBlock, cardTrailOrNumber, cardPassword, tripleDESMode, secretKey);
+            return cardPassword;
+        } catch (Exception e) {
+            LOG.error("Error to decrypt pin pan block", e);
             throw new RuntimeException(e);
         }
     }
