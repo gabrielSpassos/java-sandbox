@@ -18,6 +18,12 @@ public class CryptUtils {
         return base64ToByteArray(base64);
     }
 
+    public static String byteArrayToPureText(byte[] byteArray) {
+        String base64 = DatatypeConverter.printBase64Binary(byteArray);
+        byte[] bytes = base64ToByteArray(base64);
+        return new String(bytes);
+    }
+
     private static byte[] base64ToByteArray(String base64) {
         return DatatypeConverter.parseBase64Binary(base64);
     }

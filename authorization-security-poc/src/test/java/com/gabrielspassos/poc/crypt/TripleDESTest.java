@@ -55,4 +55,44 @@ class TripleDESTest {
 
         assertEquals(PIN_BLOCK_HEX_ECB, encrypt);
     }
+
+    @Test
+    public void shouldDecryptTextWithCBC() throws Exception {
+        IvParameterSpec parameterSpec = new IvParameterSpec(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
+
+        String decrypt = TripleDES.decryptToText(
+                CARD_NUMBER_HEX_CBC, Keys.TRIPLE_DES_COMPOSED_KEY, TripleDESMode.CBC_NO_PADDING, parameterSpec
+        );
+
+        assertEquals(CARD_NUMBER, decrypt);
+    }
+
+    @Test
+    public void shouldDecryptHexWithCBC() throws Exception {
+        IvParameterSpec parameterSpec = new IvParameterSpec(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
+
+        String decrypt = TripleDES.decryptToHex(
+                PIN_BLOCK_HEX_CBC, Keys.TRIPLE_DES_COMPOSED_KEY, TripleDESMode.CBC_NO_PADDING, parameterSpec
+        );
+
+        assertEquals(PIN_BLOCK, decrypt);
+    }
+
+    @Test
+    public void shouldDecryptTextWithECB() throws Exception {
+        String decrypt = TripleDES.decryptToText(
+                CARD_NUMBER_HEX_ECB, Keys.TRIPLE_DES_COMPOSED_KEY, TripleDESMode.ECB_NO_PADDING, null
+        );
+
+        assertEquals(CARD_NUMBER, decrypt);
+    }
+
+    @Test
+    public void shouldDecryptHexWithECB() throws Exception {
+        String decrypt = TripleDES.decryptToHex(
+                PIN_BLOCK_HEX_ECB, Keys.TRIPLE_DES_COMPOSED_KEY, TripleDESMode.ECB_NO_PADDING, null
+        );
+
+        assertEquals(PIN_BLOCK, decrypt);
+    }
 }
