@@ -26,5 +26,3 @@ version.properties
 /dist/
 /nbdist/
 /.nb-gradle/
-
-*.xml

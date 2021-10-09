@@ -1,0 +1,17 @@
+<Customer>
+    <id>2</id>
+    <name>Empresa A Ltda</name>
+    <document>24496061000150</document>
+    <type>LEGAL</type>
+    <email>empresa@gmail.com</email>
+    <isActive>false</isActive>
+    <accounts>
+        <accounts>
+            <id>2</id>
+            <bankCode>260</bankCode>
+            <branch>0001</branch>
+            <number>9884874</number>
+            <type>CONTA_PAGAMENTO</type>
+        </accounts>
+    </accounts>
+</Customer>

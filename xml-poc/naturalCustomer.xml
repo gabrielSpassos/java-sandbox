@@ -1,0 +1,31 @@
+<Customer>
+    <id>1</id>
+    <name>Jose Silva Souza</name>
+    <document>27670104015</document>
+    <type>NATURAL</type>
+    <email>jose.souza@gmail.com</email>
+    <isActive>true</isActive>
+    <accounts>
+        <accounts>
+            <id>1</id>
+            <bankCode>260</bankCode>
+            <branch>0001</branch>
+            <number>123456</number>
+            <type>CONTA_CORRENTE</type>
+        </accounts>
+        <accounts>
+            <id>3</id>
+            <bankCode>031</bankCode>
+            <branch>3242</branch>
+            <number>6432464</number>
+            <type>CONTA_POUPANCA</type>
+        </accounts>
+        <accounts>
+            <id>4</id>
+            <bankCode>260</bankCode>
+            <branch>0001</branch>
+            <number>0043238</number>
+            <type>CONTA_SALARIO</type>
+        </accounts>
+    </accounts>
+</Customer>
