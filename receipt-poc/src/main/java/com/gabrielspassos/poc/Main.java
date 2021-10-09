@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         List<String> receiptSplittedContent = ReceiptService.createReceiptSplittedContent();
         for (String line: receiptSplittedContent) {
-            System.out.println("Linha: " + line);
+            System.out.println(line);
         }
     }
 }
