@@ -1,4 +1,4 @@
-<Customer>
+<Customer url="http://localhost:8080/customer/1">
     <id>1</id>
     <name>Jose Silva Souza</name>
     <document>27670104015</document>

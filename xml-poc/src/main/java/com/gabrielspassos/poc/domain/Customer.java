@@ -1,11 +1,15 @@
 package com.gabrielspassos.poc.domain;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import domain.enumarator.PersonType;
 
 import java.util.List;
 import java.util.Objects;
 
 public class Customer {
+
+    @JacksonXmlProperty(isAttribute=true)
+    private String url;
 
     private Integer id;
     private String name;
@@ -21,6 +25,14 @@ public class Customer {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getName() {
@@ -73,6 +85,7 @@ public class Customer {
 
     public static final class Builder {
         private Integer id;
+        private String url;
         private String name;
         private String document;
         private PersonType type;
@@ -89,6 +102,11 @@ public class Customer {
 
         public Builder id(Integer id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder url(String url) {
+            this.url = url;
             return this;
         }
 
@@ -125,6 +143,7 @@ public class Customer {
         public Customer build() {
             Customer customer = new Customer();
             customer.setId(id);
+            customer.setUrl(url);
             customer.setName(name);
             customer.setDocument(document);
             customer.setType(type);
@@ -143,6 +162,7 @@ public class Customer {
         Customer customer = (Customer) o;
 
         if (!Objects.equals(id, customer.id)) return false;
+        if (!Objects.equals(url, customer.url)) return false;
         if (!Objects.equals(name, customer.name)) return false;
         if (!Objects.equals(document, customer.document)) return false;
         if (type != customer.type) return false;
@@ -154,6 +174,7 @@ public class Customer {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (document != null ? document.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
@@ -167,6 +188,7 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
+                ", url='" + url + '\'' +
                 ", name='" + name + '\'' +
                 ", document='" + document + '\'' +
                 ", type=" + type +
