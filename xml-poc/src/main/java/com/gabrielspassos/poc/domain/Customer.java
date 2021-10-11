@@ -17,6 +17,7 @@ public class Customer {
     private PersonType type;
     private String email;
     private Boolean isActive;
+    private Address address;
     private List<Account> accounts;
 
     public Integer getId() {
@@ -75,6 +76,14 @@ public class Customer {
         this.isActive = active;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public List<Account> getAccounts() {
         return accounts;
     }
@@ -91,6 +100,7 @@ public class Customer {
         private PersonType type;
         private String email;
         private Boolean isActive;
+        private Address address;
         private List<Account> accounts;
 
         private Builder() {
@@ -135,6 +145,11 @@ public class Customer {
             return this;
         }
 
+        public Builder address(Address address) {
+            this.address = address;
+            return this;
+        }
+
         public Builder accounts(List<Account> accounts) {
             this.accounts = accounts;
             return this;
@@ -149,6 +164,7 @@ public class Customer {
             customer.setType(type);
             customer.setEmail(email);
             customer.setIsActive(isActive);
+            customer.setAddress(address);
             customer.setAccounts(accounts);
             return customer;
         }
@@ -168,6 +184,7 @@ public class Customer {
         if (type != customer.type) return false;
         if (!Objects.equals(email, customer.email)) return false;
         if (!Objects.equals(isActive, customer.isActive)) return false;
+        if (!Objects.equals(address, customer.address)) return false;
         return Objects.equals(accounts, customer.accounts);
     }
 
@@ -180,6 +197,7 @@ public class Customer {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (isActive != null ? isActive.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (accounts != null ? accounts.hashCode() : 0);
         return result;
     }
@@ -194,6 +212,7 @@ public class Customer {
                 ", type=" + type +
                 ", email='" + email + '\'' +
                 ", isActive=" + isActive +
+                ", address=" + address +
                 ", accounts=" + accounts +
                 '}';
     }

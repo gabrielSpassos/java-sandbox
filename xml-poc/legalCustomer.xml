@@ -3,8 +3,9 @@
     <name>Empresa A Ltda</name>
     <document>24496061000150</document>
     <type>LEGAL</type>
-    <email>empresa@gmail.com</email>
+    <email/>
     <isActive>false</isActive>
+    <address/>
     <accounts>
         <accounts>
             <id>2</id>

@@ -5,6 +5,13 @@
     <type>NATURAL</type>
     <email>jose.souza@gmail.com</email>
     <isActive>true</isActive>
+    <address>
+        <id>1</id>
+        <street>Rua A, 101</street>
+        <city>Porto Alegre</city>
+        <state>RS</state>
+        <country>Brazil</country>
+    </address>
     <accounts>
         <accounts>
             <id>1</id>
