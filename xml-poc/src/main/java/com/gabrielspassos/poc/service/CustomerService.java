@@ -29,8 +29,14 @@ public class CustomerService {
         System.out.println("Natural customer xml: " + naturalCustomerAsXml);
         System.out.println("Legal customer xml: " + legalCustomerAsXml);
 
-        createXmlFile("naturalCustomer", naturalCustomer);
-        createXmlFile("legalCustomer", legalCustomer);
+        File naturalCustomerFile = createXmlFile("naturalCustomer", naturalCustomer);
+        File legalCustomerFile = createXmlFile("legalCustomer", legalCustomer);
+
+        Customer newNaturalCustomer = readXmlFile(naturalCustomerFile);
+        Customer newLegalCustomer = readXmlFile(legalCustomerFile);
+
+        System.out.println("Read Natural customer: " + newNaturalCustomer);
+        System.out.println("Read Legal customer: " + newLegalCustomer);
     }
 
     private String convertToXml(Object object) {
@@ -42,13 +48,24 @@ public class CustomerService {
         }
     }
 
-    private void createXmlFile(String filename, Object object) {
+    private File createXmlFile(String filename, Object object) {
         try {
             String fileNameWithExtension = filename + ".xml";
             File file = new File(fileNameWithExtension);
             xmlMapper.writeValue(file, object);
+            return file;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private Customer readXmlFile(File file) {
+        try {
+            return xmlMapper.readValue(file, Customer.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 }
