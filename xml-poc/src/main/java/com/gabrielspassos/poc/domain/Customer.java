@@ -12,7 +12,10 @@ public class Customer {
     private String url;
 
     private Integer id;
+
+    @JacksonXmlProperty(localName = "Name")
     private String name;
+
     private String document;
     private PersonType type;
     private String email;

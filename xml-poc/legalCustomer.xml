@@ -1,6 +1,5 @@
 <Customer url="http://localhost:8080/customer/2">
     <id>2</id>
-    <name>Empresa A Ltda</name>
     <document>24496061000150</document>
     <type>LEGAL</type>
     <email/>
@@ -15,4 +14,5 @@
             <type>CONTA_PAGAMENTO</type>
         </accounts>
     </accounts>
+    <Name>Empresa A Ltda</Name>
 </Customer>

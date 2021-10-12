@@ -1,6 +1,5 @@
 <Customer url="http://localhost:8080/customer/1">
     <id>1</id>
-    <name>Jose Silva Souza</name>
     <document>27670104015</document>
     <type>NATURAL</type>
     <email>jose.souza@gmail.com</email>
@@ -35,4 +34,5 @@
             <type>CONTA_SALARIO</type>
         </accounts>
     </accounts>
+    <Name>Jose Silva Souza</Name>
 </Customer>
