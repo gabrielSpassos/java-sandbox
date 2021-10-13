@@ -1,4 +1,4 @@
-<Customer url="http://localhost:8080/customer/2">
+<CUSTOMER url="http://localhost:8080/customer/2">
     <id>2</id>
     <document>24496061000150</document>
     <type>LEGAL</type>
@@ -15,4 +15,4 @@
         </accounts>
     </accounts>
     <Name>Empresa A Ltda</Name>
-</Customer>
+</CUSTOMER>

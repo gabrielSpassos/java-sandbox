@@ -1,11 +1,13 @@
 package com.gabrielspassos.poc.domain;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import domain.enumarator.PersonType;
 
 import java.util.List;
 import java.util.Objects;
 
+@JacksonXmlRootElement(localName = "CUSTOMER")
 public class Customer {
 
     @JacksonXmlProperty(isAttribute=true)
