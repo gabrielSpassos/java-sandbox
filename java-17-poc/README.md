@@ -26,3 +26,4 @@ jvmArgs += '--enable-preview'
 ```
 
 - Compiler alerts with sealed missing class on switch
+<img width="506" alt="Screen Shot 2023-01-05 at 22 04 12" src="https://user-images.githubusercontent.com/32275521/210909282-c55f6566-e183-4b32-a176-8e9db503a914.png">
