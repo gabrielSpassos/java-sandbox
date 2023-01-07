@@ -1,5 +1,15 @@
 # Java 17 PoC
 
+### Usage
+* Build
+````shell
+./gradlew clean build
+````
+* Execute
+````shell
+java --enable-preview -jar build/libs/java-17-poc-1.0-SNAPSHOT.jar
+````
+
 ### Notes
 
 - `sealed` classes must be at same package

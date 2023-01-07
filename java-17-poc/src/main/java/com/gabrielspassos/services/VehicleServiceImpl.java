@@ -1,14 +1,11 @@
 package com.gabrielspassos.services;
 
-import com.gabrielspassos.domain.Boat;
-import com.gabrielspassos.domain.Car;
-import com.gabrielspassos.domain.Motorbike;
-import com.gabrielspassos.domain.Truck;
-import com.gabrielspassos.domain.Vehicle;
+import com.gabrielspassos.domain.*;
 import com.gabrielspassos.domain.enumerators.CarType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.random.RandomGeneratorFactory;
 
 public final class VehicleServiceImpl implements VehicleService {
 
@@ -31,5 +28,19 @@ public final class VehicleServiceImpl implements VehicleService {
             case Car c && CAR_WITH_ROOF_RACK_ATTACHABLE.contains(c.getCarType()) -> Boolean.TRUE;
             default -> Boolean.FALSE;
         };
+    }
+
+    @Override
+    public int getRandomNumberOfPassengers() {
+        return RandomGeneratorFactory
+                .getDefault()
+                .create()
+                .nextInt(1, 7);
+    }
+
+    @Override
+    public Boolean isAbleToTransportAllPassengersSeated(Vehicle vehicle, int numberOfPassengers) {
+        int maxSeatedPassengers = getMaxSeatedPassengers(vehicle);
+        return maxSeatedPassengers >= numberOfPassengers;
     }
 }
