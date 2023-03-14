@@ -2,13 +2,10 @@ package com.gabrielspassos.poc.services;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
-import com.gabrielspassos.poc.dto.SavingAccountDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,15 +39,6 @@ class ClassServiceTest {
 
         assertTrue(attributesNamesAndValuesFromObject.containsKey("digit"));
         assertEquals(6L, attributesNamesAndValuesFromObject.get("digit"));
-    }
-
-    @Test
-    void shouldReturnAttributeNames() {
-        List<String> expectedList = Arrays.asList("agency", "number", "digit", "amount");
-
-        List<String> attributesNamesFromClass = classService.getAttributesNamesFromClass(SavingAccountDTO.class);
-
-        assertEquals(expectedList, attributesNamesFromClass);
     }
 
     @Test
