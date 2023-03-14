@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.services.dto;
+package com.gabrielspassos.poc.dto;
 
 public class BankingEmployeeDTO extends EmployeeDTO {
 

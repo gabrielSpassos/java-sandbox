@@ -1,8 +1,8 @@
 package com.gabrielspassos.poc.services;
 
-import com.gabrielspassos.poc.services.dto.AccountDTO;
-import com.gabrielspassos.poc.services.dto.EmployeeDTO;
-import com.gabrielspassos.poc.services.dto.SavingAccountDTO;
+import com.gabrielspassos.poc.dto.AccountDTO;
+import com.gabrielspassos.poc.dto.EmployeeDTO;
+import com.gabrielspassos.poc.dto.SavingAccountDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

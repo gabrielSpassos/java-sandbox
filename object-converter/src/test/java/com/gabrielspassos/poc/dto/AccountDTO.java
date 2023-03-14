@@ -1,8 +1,6 @@
-package com.gabrielspassos.poc.services.dto;
+package com.gabrielspassos.poc.dto;
 
-import java.math.BigDecimal;
-
-public class SavingAccountDTO {
+public class AccountDTO {
 
     private String agency;
 
@@ -10,9 +8,13 @@ public class SavingAccountDTO {
 
     private Long digit;
 
-    private BigDecimal amount;
+    public AccountDTO() {
+    }
 
-    public SavingAccountDTO() {
+    public AccountDTO(String agency, String number, Long digit) {
+        this.agency = agency;
+        this.number = number;
+        this.digit = digit;
     }
 
     public String getAgency() {
@@ -39,21 +41,12 @@ public class SavingAccountDTO {
         this.digit = digit;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     @Override
     public String toString() {
-        return "SavingAccountDTO{" +
+        return "AccountDTO{" +
                 "agency='" + agency + '\'' +
                 ", number='" + number + '\'' +
                 ", digit=" + digit +
-                ", amount=" + amount +
                 '}';
     }
 }

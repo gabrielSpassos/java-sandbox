@@ -1,6 +1,7 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.mappers;
 
 import com.gabrielspassos.poc.exceptions.*;
+import com.gabrielspassos.poc.services.ClassService;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -9,19 +10,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class ConverterService {
+public class ObjectConverterMapper {
 
-    private static ConverterService instance;
+    private static ObjectConverterMapper instance;
 
     private final ClassService classService;
 
-    private ConverterService() {
+    private ObjectConverterMapper() {
         this.classService = ClassService.getClassService();
     }
 
-    public static synchronized ConverterService getConverterService(){
+    public static synchronized ObjectConverterMapper getObjectConverterMapper(){
         if (instance == null) {
-            instance = new ConverterService();
+            instance = new ObjectConverterMapper();
         }
         return instance;
     }

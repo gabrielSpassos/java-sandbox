@@ -4,10 +4,10 @@
 
 ### Usage
 
-* Create a [singleton](https://refactoring.guru/design-patterns/singleton) `ConverterService` instance
+* Create a [singleton](https://refactoring.guru/design-patterns/singleton) `ObjectConverterMapper` instance
 
 ```java
-ConverterService converterService = ConverterService.getConverterService();
+ObjectConverterMapper objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
 ```
 
 * Convert an `originObject` (class `OriginClassDTO`) to other `convertedObject` (class `DestinyClassDTO`)
@@ -17,5 +17,10 @@ ConverterService converterService = ConverterService.getConverterService();
 OriginClassDTO originObject = new OriginClassDTO();
 
 // instance of DestinyClassDTO with all common attributes names of two classes filled
-DestinyClassDTO convertedObject = converterService.convert(originObject, DestinyClassDTO.class);
+DestinyClassDTO convertedObject = objectConverterMapper.convert(originObject, DestinyClassDTO.class);
 ```
+
+Pending:
+
+- [ ] Include cache on the getFieldMethod
+- [ ] Add annotation to set fields based on attributeName + annotation

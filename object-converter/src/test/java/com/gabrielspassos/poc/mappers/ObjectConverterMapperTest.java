@@ -1,33 +1,32 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.mappers;
 
-import com.gabrielspassos.poc.exceptions.ErrorToInstantiateClassException;
 import com.gabrielspassos.poc.exceptions.InvalidClassConstructorException;
 import com.gabrielspassos.poc.exceptions.NoParametersException;
-import com.gabrielspassos.poc.services.dto.AccountDTO;
-import com.gabrielspassos.poc.services.dto.BankingEmployeeDTO;
-import com.gabrielspassos.poc.services.dto.ClassWithoutDefaultConstructorDTO;
-import com.gabrielspassos.poc.services.dto.EmployeeDTO;
-import com.gabrielspassos.poc.services.dto.PersonDTO;
-import com.gabrielspassos.poc.services.dto.SavingAccountDTO;
+import com.gabrielspassos.poc.dto.AccountDTO;
+import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
+import com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO;
+import com.gabrielspassos.poc.dto.EmployeeDTO;
+import com.gabrielspassos.poc.dto.PersonDTO;
+import com.gabrielspassos.poc.dto.SavingAccountDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConverterServiceTest {
+class ObjectConverterMapperTest {
 
-    private ConverterService converterService;
+    private ObjectConverterMapper objectConverterMapper;
 
     @BeforeEach
     void setup() {
-        this.converterService = ConverterService.getConverterService();
+        this.objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
     }
 
     @Test
     void shouldConvertClass() {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
 
-        SavingAccountDTO converted = converterService.convert(account, SavingAccountDTO.class);
+        SavingAccountDTO converted = objectConverterMapper.convert(account, SavingAccountDTO.class);
 
         assertNotNull(converted);
         assertEquals("0001", converted.getAgency());
@@ -40,7 +39,7 @@ class ConverterServiceTest {
     void shouldConvertExtendedClass() {
         PersonDTO personDTO = new PersonDTO("John", 38);
 
-        EmployeeDTO converted = converterService.convert(personDTO, EmployeeDTO.class);
+        EmployeeDTO converted = objectConverterMapper.convert(personDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
         assertEquals("John", converted.getName());
@@ -53,7 +52,7 @@ class ConverterServiceTest {
     void shouldConvertChildClassToParent() {
         EmployeeDTO employeeDTO = new EmployeeDTO("Maria", 24, 548954L, true);
 
-        PersonDTO converted = converterService.convert(employeeDTO, PersonDTO.class);
+        PersonDTO converted = objectConverterMapper.convert(employeeDTO, PersonDTO.class);
 
         assertNotNull(converted);
         assertEquals("Maria", converted.getName());
@@ -64,7 +63,7 @@ class ConverterServiceTest {
     void shouldConvertChildClassToParentWithMultipleExtensions() {
         BankingEmployeeDTO bankingEmployeeDTO = new BankingEmployeeDTO("Felipe", 38, 848343L, false, 2.5);
 
-        EmployeeDTO converted = converterService.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        EmployeeDTO converted = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
         assertEquals("Felipe", converted.getName());
@@ -76,10 +75,10 @@ class ConverterServiceTest {
     @Test
     void shouldThrowErrorToInvalidClassWithoutDefaultConstructor() {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
-        var expectedMessage = "com.gabrielspassos.poc.services.dto.ClassWithoutDefaultConstructorDTO doesn't contains a valid default constructor";
+        var expectedMessage = "com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO doesn't contains a valid default constructor";
 
         InvalidClassConstructorException exception = assertThrowsExactly(InvalidClassConstructorException.class,
-                () -> converterService.convert(account, ClassWithoutDefaultConstructorDTO.class));
+                () -> objectConverterMapper.convert(account, ClassWithoutDefaultConstructorDTO.class));
 
         assertEquals(expectedMessage, exception.getErrorMessage());
     }
@@ -87,7 +86,7 @@ class ConverterServiceTest {
     @Test
     void shouldThrowErrorOnInvalidInputObject() {
         NoParametersException exception = assertThrowsExactly(NoParametersException.class,
-                () -> converterService.convert(null, ClassWithoutDefaultConstructorDTO.class));
+                () -> objectConverterMapper.convert(null, ClassWithoutDefaultConstructorDTO.class));
 
         assertEquals("Can not use null value", exception.getErrorMessage());
     }
@@ -97,7 +96,7 @@ class ConverterServiceTest {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
 
         NoParametersException exception = assertThrowsExactly(NoParametersException.class,
-                () -> converterService.convert(account, null));
+                () -> objectConverterMapper.convert(account, null));
 
         assertEquals("Can not use null value", exception.getErrorMessage());
     }
