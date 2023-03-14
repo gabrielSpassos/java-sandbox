@@ -3,26 +3,34 @@ package com.gabrielspassos.poc.services;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ClassService extends AbstractClassService {
+public class CacheableClassService extends AbstractClassService {
 
-    private static ClassService instance;
+    private static CacheableClassService instance;
 
-    private ClassService() {
+    private HashMap<Class<?>, List<Field>> classFieldsCache;
+
+    private CacheableClassService() {
+        this.classFieldsCache = new HashMap<>();
     }
 
-    public static synchronized ClassService getClassService(){
+    public static synchronized CacheableClassService getCacheableClassService(){
         if (instance == null) {
-            instance = new ClassService();
+            instance = new CacheableClassService();
         }
         return instance;
     }
 
     protected List<Field> getFieldsFromClass(Class<?> tClass) {
+        if (classFieldsCache.containsKey(tClass)) {
+            return classFieldsCache.get(tClass);
+        }
+
         List<Field> superClassFields = new ArrayList<>();
         boolean hasSuperClass = true;
         Class<?> childClass = tClass;
@@ -38,8 +46,10 @@ public class ClassService extends AbstractClassService {
         } while (hasSuperClass);
 
         List<Field> classFields = Arrays.asList(tClass.getDeclaredFields());
-        return Stream.concat(superClassFields.stream(), classFields.stream())
+        List<Field> allFields = Stream.concat(superClassFields.stream(), classFields.stream())
                 .collect(Collectors.toList());
+        classFieldsCache.put(tClass, allFields);
+        return allFields;
     }
 
 }

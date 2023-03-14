@@ -20,7 +20,13 @@ OriginClassDTO originObject = new OriginClassDTO();
 DestinyClassDTO convertedObject = objectConverterMapper.convert(originObject, DestinyClassDTO.class);
 ```
 
-Pending:
+* Change ObjectConverterMapper to **not** use cache. _Obs:_ the **default** is to use the cache.
+```java
+objectConverterMapper.setShouldCacheClassInfo(Boolean.FALSE);
+```
 
-- [ ] Include cache on the getFieldMethod
+### What is pending on this project
+
+- [X] Rename to ObjectConverterMapper
+- [X] Include cache on the getFieldMethod
 - [ ] Add annotation to set fields based on attributeName + annotation
