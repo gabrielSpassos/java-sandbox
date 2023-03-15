@@ -2,6 +2,8 @@ package com.gabrielspassos.poc.dto;
 
 public class EmployeeDTO extends PersonDTO {
 
+    private String firstName;
+
     private Long contractNumber;
 
     private Boolean isContractActive;
@@ -13,6 +15,14 @@ public class EmployeeDTO extends PersonDTO {
         super(name, age);
         this.contractNumber = contractNumber;
         this.isContractActive = isContractActive;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public Long getContractNumber() {

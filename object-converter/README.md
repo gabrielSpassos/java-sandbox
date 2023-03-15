@@ -29,4 +29,4 @@ objectConverterMapper.setShouldCacheClassInfo(Boolean.FALSE);
 
 - [X] Rename to ObjectConverterMapper
 - [X] Include cache on the getFieldMethod
-- [ ] Add annotation to set fields based on attributeName + annotation
+- [X] Add annotation to set fields based on attributeName + annotation
