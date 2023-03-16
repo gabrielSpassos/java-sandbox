@@ -1,7 +1,10 @@
 package com.gabrielspassos.poc.dto;
 
+import com.gabrielspassos.poc.annotations.AttributeSynonym;
+
 public class PersonDTO {
 
+    @AttributeSynonym(synonyms = {"species", "firstName"})
     private String name;
 
     private Integer age;

@@ -1,11 +1,14 @@
 package com.gabrielspassos.poc.services;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 public interface IClassService {
 
-    Map<String, Object> getAttributesNamesAndValuesFromObject(Object object);
+    Map<Field, Object> getAttributesAndValuesFromObject(Object object);
 
-    Field getAccessibleFieldByName(Object object, String fieldName) throws NoSuchFieldException;
+    List<Field> getAccessibleFieldsFromObjectByOrigin(Object object, Field originField) throws NoSuchFieldException;
+
+    Field getFieldFromObjectByName(Object object, String originField) throws NoSuchFieldException;
 }

@@ -1,6 +1,7 @@
 package com.gabrielspassos.poc.mappers;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
+import com.gabrielspassos.poc.dto.AnimalDTO;
 import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
 import com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
@@ -49,6 +50,7 @@ class ObjectConverterMapperTest {
         EmployeeDTO converted = objectConverterMapper.convert(personDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
+        assertEquals("John", converted.getFirstName());
         assertEquals("John", converted.getName());
         assertEquals(38, converted.getAge());
         assertNull(converted.getContractNumber());
@@ -77,6 +79,16 @@ class ObjectConverterMapperTest {
         assertEquals(38, converted.getAge());
         assertEquals(848343L, converted.getContractNumber());
         assertFalse(converted.getContractActive());
+    }
+
+    @Test
+    void shouldConvertObjectWithAnnotation() {
+        PersonDTO personDTO = new PersonDTO("John", 38);
+
+        AnimalDTO converted = objectConverterMapper.convert(personDTO, AnimalDTO.class);
+
+        assertNotNull(converted);
+        assertEquals("John", converted.getSpecies());
     }
 
     @Test

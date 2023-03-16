@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClassServiceTest {
 
@@ -24,21 +23,24 @@ class ClassServiceTest {
     }
 
     @Test
-    void shouldReturnAttributeNamesAndValues() {
+    void shouldReturnAttributeNamesAndValues() throws IllegalAccessException {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
 
-        Map<String, Object> attributesNamesAndValuesFromObject
-                = classService.getAttributesNamesAndValuesFromObject(account);
+        Map<Field, Object> attributesAndValuesFromObject
+                = classService.getAttributesAndValuesFromObject(account);
 
-        assertFalse(attributesNamesAndValuesFromObject.isEmpty());
-        assertTrue(attributesNamesAndValuesFromObject.containsKey("agency"));
-        assertEquals("0001", attributesNamesAndValuesFromObject.get("agency"));
+        assertFalse(attributesAndValuesFromObject.isEmpty());
+        Field agency = getFieldByName(attributesAndValuesFromObject, "agency");
+        assertNotNull(agency);
+        assertEquals("0001", agency.get(account));
 
-        assertTrue(attributesNamesAndValuesFromObject.containsKey("number"));
-        assertEquals("12345", attributesNamesAndValuesFromObject.get("number"));
+        Field number = getFieldByName(attributesAndValuesFromObject, "number");
+        assertNotNull(number);
+        assertEquals("12345", number.get(account));
 
-        assertTrue(attributesNamesAndValuesFromObject.containsKey("digit"));
-        assertEquals(6L, attributesNamesAndValuesFromObject.get("digit"));
+        Field digit = getFieldByName(attributesAndValuesFromObject, "digit");
+        assertNotNull(digit);
+        assertEquals(6L, digit.get(account));
     }
 
     @Test
@@ -46,7 +48,7 @@ class ClassServiceTest {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setContractNumber(23232L);
 
-        Field accessibleFieldByName = classService.getAccessibleFieldByName(employeeDTO, "contractNumber");
+        Field accessibleFieldByName = classService.getFieldFromObjectByName(employeeDTO, "contractNumber");
 
         assertNotNull(accessibleFieldByName);
         assertEquals("contractNumber", accessibleFieldByName.getName());
@@ -56,7 +58,15 @@ class ClassServiceTest {
     void shouldThrowErrorForNonExistentField() {
         AccountDTO accountDTO = new AccountDTO();
 
-        assertThrows(NoSuchFieldException.class, () -> classService.getAccessibleFieldByName(accountDTO, "abc"));
+        assertThrows(NoSuchFieldException.class, () -> classService.getFieldFromObjectByName(accountDTO, "abc"));
+    }
+
+    private Field getFieldByName(Map<Field, Object> attributesAndValuesFromObject, String attributeName) {
+        return attributesAndValuesFromObject.keySet()
+                .stream()
+                .filter(field -> field.getName().equals(attributeName))
+                .findAny()
+                .get();
     }
 
 }

@@ -12,6 +12,7 @@ import com.gabrielspassos.poc.services.IClassService;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,12 +44,13 @@ public class ObjectConverterMapper {
             throw new NoParametersException();
         }
 
-        Map<String, Object> attributesNamesAndValues
-                = getClassService().getAttributesNamesAndValuesFromObject(objectToConvert);
+        Map<Field, Object> attributesNamesAndValues
+                = getClassService().getAttributesAndValuesFromObject(objectToConvert);
 
         T instanceOfClass = createInstanceOfClass(destinyClass);
 
-        attributesNamesAndValues.forEach((key, value) -> includeValueByAttributeName(instanceOfClass, key, value));
+        attributesNamesAndValues.forEach((field, attributeVale) ->
+                includeValueByAttributeName(instanceOfClass, field, attributeVale));
 
         return instanceOfClass;
     }
@@ -72,14 +74,16 @@ public class ObjectConverterMapper {
         }
     }
 
-    private <T> void includeValueByAttributeName(T object, String attributeName, Object attributeValue) {
+    private <T> void includeValueByAttributeName(T object, Field field, Object attributeValue) {
         try {
-            Field field = getClassService().getAccessibleFieldByName(object, attributeName);
-            field.set(object, attributeValue);
+            List<Field> fieldsFromObject = getClassService().getAccessibleFieldsFromObjectByOrigin(object, field);
+            for (Field fieldFromObject : fieldsFromObject) {
+                fieldFromObject.set(object, attributeValue);
+            }
         } catch (NoSuchFieldException e) {
             return;
         } catch (Exception e) {
-            throw new ErrorToIncludeValueToAttribute(e, attributeValue, attributeName);
+            throw new ErrorToIncludeValueToAttribute(e, attributeValue, field);
         }
     }
 
