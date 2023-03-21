@@ -1,19 +1,21 @@
 package org.gabrielspassos.poc;
 
+import org.gabrielspassos.poc.utils.StringUtil;
+
 import java.util.HashSet;
 import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DiamondStackService {
+public class DiamondStackSolution {
 
     private static final String TAB = "\t";
     private static final String NEW_LINE = "\n";
 
-    private final StringService stringService;
+    private final StringUtil stringUtil;
 
-    public DiamondStackService() {
-        this.stringService = new StringService();
+    public DiamondStackSolution() {
+        this.stringUtil = new StringUtil();
     }
 
     public String createDiamond(String inputLetter) {
@@ -24,12 +26,12 @@ public class DiamondStackService {
 
         while (splitAlphabet.iterator().hasNext()) {
             var tabDistance = (splitAlphabet.size() - 1) * 2;
-            var isFirstItem = isFirstItem(splitAlphabet, stackMaxSize);
-            var isLastItem = isLastItem(splitAlphabet);
+            var isFirstItem = splitAlphabet.size() == stackMaxSize;
+            var isLastItem = splitAlphabet.size() == 1;
 
             var letter = splitAlphabet.pop();
-            var tabStartSeparation = buildTheTabSeparation(tabStartDistance);
-            var tabMiddleSeparation = buildTheTabSeparation(tabDistance);
+            var tabStartSeparation = stringUtil.repeat(TAB, tabStartDistance);
+            var tabMiddleSeparation = stringUtil.repeat(TAB, tabDistance);
 
             if (isFirstItem) {
                 diamond = tabStartSeparation + letter + tabMiddleSeparation + letter + tabStartSeparation + NEW_LINE;
@@ -37,7 +39,7 @@ public class DiamondStackService {
                 var optionalLetter = isLastItem ? "" : letter;
 
                 var diamondLine = tabStartSeparation + letter + tabMiddleSeparation + optionalLetter + tabStartSeparation + NEW_LINE;
-                diamond = stringService.includeBeforeAndAfter(diamond, diamondLine, diamondLine);
+                diamond = stringUtil.includeBeforeAndAfter(diamond, diamondLine, diamondLine);
             }
 
             tabStartDistance++;
@@ -73,18 +75,6 @@ public class DiamondStackService {
                         "I", "J", "K", "L", "M", "N", "O", "P", "Q",
                         "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
                 .collect(Collectors.toCollection(HashSet::new));
-    }
-
-    private String buildTheTabSeparation(Integer distance) {
-        return TAB.repeat(Math.max(0, distance));
-    }
-
-    private boolean isFirstItem(Stack<String> splitAlphabet, int stackMaxSize) {
-        return splitAlphabet.size() == stackMaxSize;
-    }
-
-    private boolean isLastItem(Stack<String> splitAlphabet) {
-        return splitAlphabet.size() == 1;
     }
 
 }

@@ -1,16 +1,23 @@
 package org.gabrielspassos.poc;
 
+import org.gabrielspassos.poc.utils.StringUtil;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DiamondService {
+public class DiamondListSolution {
 
     private static final String TAB = "\t";
     private static final String NEW_LINE = "\n";
+
+    private final StringUtil stringUtil;
+
+    public DiamondListSolution() {
+        this.stringUtil = new StringUtil();
+    }
 
     public String createDiamond(String inputLetter) {
         var splitAlphabet = createSplittedAlphabet(inputLetter);
@@ -21,18 +28,18 @@ public class DiamondService {
             var tabDistance = i * 2;
             var letter = splitAlphabet.get(i);
 
-            if (isLastItem(i+1).test(splitAlphabet)) {
-                var tabSeparation = buildTheTabSeparation(tabDistance);
+            if (splitAlphabet.size() == (i + 1)) {
+                var tabSeparation = stringUtil.repeat(TAB, tabDistance);
                 var diamondLine = letter + tabSeparation + letter + NEW_LINE;
                 stringBuilder.append(diamondLine);
-            } else if (isFirstItem(i).test(splitAlphabet)) {
-                var tabStartSeparation = buildTheTabSeparation(tabStartDistance);
+            } else if (0 == i) {
+                var tabStartSeparation = stringUtil.repeat(TAB, tabStartDistance);
                 var diamondLine = tabStartSeparation + letter + tabStartSeparation + NEW_LINE;
                 stringBuilder.insert(0, diamondLine);
                 stringBuilder.append(diamondLine);
             } else {
-                var tabStartSeparation = buildTheTabSeparation(tabStartDistance);
-                var tabMiddleSeparation = buildTheTabSeparation(tabDistance);
+                var tabStartSeparation = stringUtil.repeat(TAB, tabStartDistance);
+                var tabMiddleSeparation = stringUtil.repeat(TAB, tabDistance);
                 var diamondLine =  tabStartSeparation + letter + tabMiddleSeparation + letter + tabStartSeparation + NEW_LINE;
                 stringBuilder.insert(0, diamondLine);
                 stringBuilder.append(diamondLine);
@@ -72,15 +79,4 @@ public class DiamondService {
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
-    private String buildTheTabSeparation(Integer distance) {
-        return TAB.repeat(Math.max(0, distance));
-    }
-
-    private Predicate<List<?>> isLastItem(Integer index) {
-        return list -> list.size() == index;
-    }
-
-    private Predicate<List<?>> isFirstItem(Integer index) {
-        return list -> 0 == index;
-    }
 }

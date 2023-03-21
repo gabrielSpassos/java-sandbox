@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DiamondStackServiceTest {
+class DiamondListSolutionTest {
 
     @Test
     void shouldThrowErrorForInvalidNumberInput() {
         var input = "12";
-        var diamondStackService = new DiamondStackService();
+        var diamondService = new DiamondListSolution();
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> diamondStackService.createDiamond(input));
+                () -> diamondService.createDiamond(input));
 
         assertEquals("Invalid input 12", exception.getMessage());
     }
@@ -20,10 +20,10 @@ class DiamondStackServiceTest {
     @Test
     void shouldThrowErrorForInvalidLettersInput() {
         var input = "Ab";
-        var diamondStackService = new DiamondStackService();
+        var diamondService = new DiamondListSolution();
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> diamondStackService.createDiamond(input));
+                () -> diamondService.createDiamond(input));
 
         assertEquals("Invalid input Ab", exception.getMessage());
     }
@@ -31,10 +31,10 @@ class DiamondStackServiceTest {
     @Test
     void shouldThrowErrorForInvalidCharacterInput() {
         var input = "$";
-        var diamondStackService = new DiamondStackService();
+        var diamondService = new DiamondListSolution();
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> diamondStackService.createDiamond(input));
+                () -> diamondService.createDiamond(input));
 
         assertEquals("Invalid input $", exception.getMessage());
     }
@@ -42,10 +42,10 @@ class DiamondStackServiceTest {
     @Test
     void shouldCreateDiamond() {
         var input = "C";
-        var diamondStackService = new DiamondStackService();
+        var diamondService = new DiamondListSolution();
         var expectedOutput = "\t\tA\t\t\n\tB\t\tB\t\nC\t\t\t\tC\n\tB\t\tB\t\n\t\tA\t\t\n";
 
-        var output = diamondStackService.createDiamond(input);
+        var output = diamondService.createDiamond(input);
 
         assertEquals(expectedOutput, output);
     }
@@ -53,7 +53,7 @@ class DiamondStackServiceTest {
     @Test
     void shouldCreateDiamondWithInputLowerCase() {
         var input = "e";
-        var diamondStackService = new DiamondStackService();
+        var diamondService = new DiamondListSolution();
         var expectedOutput =
                 """
                 \t\t\t\tA\t\t\t\t
@@ -67,7 +67,7 @@ class DiamondStackServiceTest {
                 \t\t\t\tA\t\t\t\t
                 """;
 
-        var output = diamondStackService.createDiamond(input);
+        var output = diamondService.createDiamond(input);
 
         assertEquals(expectedOutput, output);
     }
