@@ -1,17 +1,17 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.utils;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PreconditionsServiceTest {
+class PreconditionsUtilsTest {
 
-    private static PreconditionsService preconditionsService;
+    private static PreconditionsUtils preconditionsUtils;
 
     @BeforeAll
     public static void setup() {
-        preconditionsService = new PreconditionsService();
+        preconditionsUtils = new PreconditionsUtils();
     }
 
     @Test
@@ -19,7 +19,7 @@ class PreconditionsServiceTest {
         var input = -1;
 
         IllegalArgumentException exception = assertThrowsExactly(IllegalArgumentException.class,
-                () -> preconditionsService.checkIntegerInputBiggerThanZero(input));
+                () -> preconditionsUtils.checkIntegerInputBiggerThanZero(input));
 
         assertEquals("Invalid input: -1. Input must be bigger than zero.", exception.getMessage());
     }
@@ -28,6 +28,6 @@ class PreconditionsServiceTest {
     void shouldValidateIntegerInput() {
         var input = 1;
 
-        assertDoesNotThrow(() -> preconditionsService.checkIntegerInputBiggerThanZero(input));
+        assertDoesNotThrow(() -> preconditionsUtils.checkIntegerInputBiggerThanZero(input));
     }
 }

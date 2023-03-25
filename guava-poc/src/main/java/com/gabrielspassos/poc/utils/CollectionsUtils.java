@@ -1,11 +1,11 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.utils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
 import java.util.List;
 
-public class CollectionsService {
+public class CollectionsUtils {
 
     public String joinStrings(List<String> strings) {
         return Joiner.on(";").join(strings);

@@ -1,17 +1,17 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.utils;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ThrowableServiceTest {
+class ThrowableUtilsTest {
 
-    private static ThrowableService throwableService;
+    private static ThrowableUtils throwableUtils;
 
     @BeforeAll
     public static void setup() {
-        throwableService = new ThrowableService();
+        throwableUtils = new ThrowableUtils();
     }
 
     @Test
@@ -19,7 +19,7 @@ class ThrowableServiceTest {
         var throwableExample = new Throwable("Throwable example");
 
         IllegalArgumentException exception = assertThrowsExactly(IllegalArgumentException.class,
-                () -> throwableService.throwSomeError(throwableExample));
+                () -> throwableUtils.throwSomeError(throwableExample));
 
         assertEquals(throwableExample, exception.getCause());
     }
@@ -29,7 +29,7 @@ class ThrowableServiceTest {
         var throwableExample = new IllegalStateException("IllegalStateException example");
 
         IllegalStateException exception = assertThrowsExactly(IllegalStateException.class,
-                () -> throwableService.throwSomeError(throwableExample));
+                () -> throwableUtils.throwSomeError(throwableExample));
 
         assertEquals("IllegalStateException example", exception.getMessage());
     }
