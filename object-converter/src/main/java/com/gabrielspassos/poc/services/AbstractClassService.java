@@ -1,8 +1,13 @@
 package com.gabrielspassos.poc.services;
 
 import com.gabrielspassos.poc.annotations.AttributeSynonym;
+import com.gabrielspassos.poc.dtos.PairDTO;
+import com.gabrielspassos.poc.exceptions.BasicException;
 import com.gabrielspassos.poc.exceptions.ErrorToGetAttributeValueException;
+import com.gabrielspassos.poc.exceptions.ErrorToInstantiateClassException;
+import com.gabrielspassos.poc.exceptions.InvalidClassConstructorException;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +53,38 @@ public abstract class AbstractClassService implements IClassService {
                 .peek(fieldFromObject -> fieldFromObject.setAccessible(true))
                 .findAny()
                 .orElseThrow(() -> new NoSuchFieldException(fieldName));
+    }
+
+    public <T> T createInstanceOfClass(Class<T> tClass) {
+        try {
+            Constructor<?>[] constructors = tClass.getConstructors();
+            Constructor<?> constructor = Arrays.stream(constructors)
+                    .filter(constructorToFilter -> constructorToFilter.getParameterCount() == 0)
+                    .findAny()
+                    .orElseThrow(() -> new InvalidClassConstructorException(tClass.getName()));
+            return (T) constructor.newInstance();
+        } catch (BasicException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ErrorToInstantiateClassException(e, tClass.getName());
+        }
+    }
+
+    public List<PairDTO<Field, Field>> getMatchingFields(Class<?> input, Class<?> output) {
+        List<PairDTO<Field, Field>> pairList = new ArrayList<>();
+        List<Field> fieldsFromInput = getFieldsFromClass(input);
+        List<Field> fieldsFromOutput = getFieldsFromClass(output);
+
+        for (Field fieldFromOutput : fieldsFromOutput) {
+            for (Field fieldFromInput : fieldsFromInput) {
+                List<String> fieldWithSynonyms = getFieldWithSynonyms(fieldFromInput);
+                if (fieldWithSynonyms.contains(fieldFromOutput.getName())) {
+                    pairList.add(new PairDTO<>(fieldFromInput, fieldFromOutput));
+                }
+            }
+        }
+
+        return pairList;
     }
 
     private Object getAttributeValue(Field field, Object object) {
