@@ -1,21 +1,60 @@
 package com.gabrielspassos.poc.services;
 
+import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import com.google.common.cache.Weigher;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class CacheTest {
 
     private LoadingCache<String, String> cache;
+
+    @Test
+    void testCache() throws InterruptedException {
+        CacheLoader<String, String> loader = new CacheLoader<>() {
+            public String load(String key) {
+                return key.toUpperCase();
+            }
+
+            public ListenableFuture<String> reload(String key, String oldValue) {
+                String newValue = Strings.repeat(oldValue, 2);
+                System.out.printf("Key: %s, Old value: %s, new value: %s%n", key, oldValue, newValue);
+                return Futures.immediateFuture(newValue);
+            }
+        };
+        RemovalListener<String, String> removalListener = new RemovalListener<>() {
+            public void onRemoval(RemovalNotification<String, String> removal) {
+                System.out.println("Removal notification: " + removal);
+            }
+        };
+        LoadingCache<String, String> cache = CacheBuilder.newBuilder()
+                .maximumSize(4)
+                .removalListener(removalListener)
+                .refreshAfterWrite(20, TimeUnit.MILLISECONDS)
+                .expireAfterWrite(2, TimeUnit.SECONDS)
+                .build(loader);
+
+        assertEquals(0, cache.size());
+        String key = cache.getUnchecked("key");
+        assertEquals(1, cache.size());
+        assertEquals("KEY", key);
+        TimeUnit.SECONDS.sleep(1);
+        assertEquals("KEYKEY", cache.getIfPresent("key"));
+        TimeUnit.SECONDS.sleep(5);
+        assertNull(cache.getIfPresent("key"));
+    }
 
     @Test
     void shouldInsertOnCache() {

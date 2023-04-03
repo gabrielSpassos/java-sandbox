@@ -69,3 +69,6 @@ public class AnimalDTO {
 - [X] Rename to ObjectConverterMapper
 - [X] Include cache on the getFieldMethod
 - [X] Add annotation to set fields based on attributeName + annotation
+- [ ] performance test
+- [ ] load class in memory
+- [ ] use class that is already on the class loader

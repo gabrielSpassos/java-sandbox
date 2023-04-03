@@ -72,4 +72,30 @@ class DiamondStackSolutionTest {
         assertEquals(expectedOutput, output);
     }
 
+    @Test
+    void shouldReturnJustOneLatter() {
+        var input = "a";
+        var diamondStackService = new DiamondStackSolution();
+
+        var output = diamondStackService.createDiamond(input);
+
+        assertEquals("A", output);
+    }
+
+    @Test
+    void shouldReturnBDiamond() {
+        var input = "B";
+        var expectedOutput =
+                """
+                \tA\t
+                B\t\tB
+                \tA\t
+                """;
+        var diamondStackService = new DiamondStackSolution();
+
+        var output = diamondStackService.createDiamond(input);
+
+        assertEquals(expectedOutput, output);
+    }
+
 }

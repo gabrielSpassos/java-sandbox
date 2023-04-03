@@ -33,7 +33,9 @@ public class DiamondStackSolution {
             var tabStartSeparation = stringUtil.repeat(TAB, tabStartDistance);
             var tabMiddleSeparation = stringUtil.repeat(TAB, tabDistance);
 
-            if (isFirstItem) {
+            if (isFirstItem && isLastItem) {
+                diamond = letter;
+            } else if (isFirstItem) {
                 diamond = tabStartSeparation + letter + tabMiddleSeparation + letter + tabStartSeparation + NEW_LINE;
             } else {
                 var optionalLetter = isLastItem ? "" : letter;

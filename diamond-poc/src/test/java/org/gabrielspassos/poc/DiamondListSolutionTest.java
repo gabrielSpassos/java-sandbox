@@ -2,7 +2,8 @@ package org.gabrielspassos.poc;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DiamondListSolutionTest {
 
@@ -68,6 +69,22 @@ class DiamondListSolutionTest {
                 """;
 
         var output = diamondService.createDiamond(input);
+
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldReturnBDiamond() {
+        var input = "B";
+        var expectedOutput =
+                """
+                \tA\t
+                B\t\tB
+                \tA\t
+                """;
+        var diamondListSolution = new DiamondListSolution();
+
+        var output = diamondListSolution.createDiamond(input);
 
         assertEquals(expectedOutput, output);
     }

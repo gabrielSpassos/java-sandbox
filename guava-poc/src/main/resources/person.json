@@ -1,0 +1,13 @@
+{
+  "name": "John",
+  "age": 52,
+  "height": 1.83,
+  "isMarried": false,
+  "children": [{
+    "name": "Marry",
+    "age": 20,
+    "height": 1.71,
+    "isMarried": true,
+    "children": []
+  }]
+}
