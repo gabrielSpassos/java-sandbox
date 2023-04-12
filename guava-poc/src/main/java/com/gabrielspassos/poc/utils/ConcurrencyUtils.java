@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
 public class ConcurrencyUtils {
 
     public ListenableFuture<Integer> createListenableFutureWithCallback(Integer value) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        ListeningExecutorService listeningExecutorService = MoreExecutors.listeningDecorator(executorService);
-        ListenableFuture<Integer> asyncTask = listeningExecutorService.submit(() -> {
-            TimeUnit.MILLISECONDS.sleep(500); // long running task
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        ListeningExecutorService listening = MoreExecutors.listeningDecorator(executor);
+        ListenableFuture<Integer> asyncTask = listening.submit(() -> {
+            TimeUnit.MILLISECONDS.sleep(500);
             boolean isValueEven = value % 2 == 0;
 
             if (isValueEven) {
@@ -38,7 +38,7 @@ public class ConcurrencyUtils {
             public void onFailure(Throwable t) {
                 System.out.println("This is a Callback Message. Error " + t);
             }
-        }, executorService);
+        }, executor);
 
         return asyncTask;
     }

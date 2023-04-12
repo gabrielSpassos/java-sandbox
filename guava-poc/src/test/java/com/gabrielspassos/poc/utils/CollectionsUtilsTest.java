@@ -2,19 +2,40 @@ package com.gabrielspassos.poc.utils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CollectionsUtilsTest {
@@ -135,6 +156,91 @@ class CollectionsUtilsTest {
         assertTrue(Iterables.contains(joined, "a d"));
         assertTrue(Iterables.contains(joined, "b c"));
         assertTrue(Iterables.contains(joined, "b d"));
+    }
+
+    @Test
+    public void createMultiset() {
+        List<Integer> collection = Arrays.asList(84, 1, 31, 7);
+        Multiset<Integer> multiset = HashMultiset.create(collection);
+
+        List<Integer> otherCollection = Arrays.asList(31, 7, 1, 84);
+        Multiset<Integer> immutableMultiset = ImmutableMultiset.copyOf(otherCollection);
+
+        assertNotEquals(collection, otherCollection);
+        assertEquals(multiset, immutableMultiset);
+    }
+
+    @Test
+    public void createEmptyMultiset() {
+        Multiset<Integer> multiset = HashMultiset.create();
+        Multiset<Integer> immutableMultiset = new ImmutableMultiset.Builder<Integer>().build();
+
+        assertEquals(multiset, immutableMultiset);
+    }
+
+    @Test
+    public void createMultimap() {
+        // creates a ListMultimap with tree keys and array list values
+        ArrayList<Integer> integers = Lists.newArrayList();
+        ListMultimap<String, Integer> treeListMultimap = MultimapBuilder.treeKeys().arrayListValues().build();
+        treeListMultimap.put("A", 1);
+        treeListMultimap.putAll("A", Lists.newArrayList(1, 2, 3));
+        treeListMultimap.put("B", 4);
+        treeListMultimap.putAll("C", integers);
+
+        assertEquals(Lists.newArrayList(1, 1, 2, 3), treeListMultimap.get("A"));
+        assertEquals(Lists.newArrayList(4), treeListMultimap.get("B"));
+        assertFalse(treeListMultimap.containsKey("C"));
+
+        // creates a SetMultimap with hash keys and enum set values
+        SetMultimap<String, Integer> hashEnumMultimap = MultimapBuilder.hashKeys().hashSetValues().build();
+        hashEnumMultimap.put("A", 1);
+        hashEnumMultimap.putAll("A", Lists.newArrayList(1, 2, 3));
+        hashEnumMultimap.put("B", 4);
+        hashEnumMultimap.putAll("C", integers);
+        assertEquals(Set.of(1, 2, 3), hashEnumMultimap.get("A"));
+        assertEquals(Set.of(4), hashEnumMultimap.get("B"));
+        assertFalse(hashEnumMultimap.containsKey("C"));
+    }
+
+    @Test
+    public void createEmptyMultimap() {
+        ListMultimap<String, Integer> build = MultimapBuilder.treeKeys().arrayListValues().build();
+        ArrayListMultimap<String, Integer> arrayListMultimap = ArrayListMultimap.create();
+        ImmutableListMultimap<String, Integer> immutableListMultimap = new ImmutableListMultimap.Builder<String, Integer>().build();
+
+        SetMultimap<String, Integer> hashEnumMultimap = MultimapBuilder.hashKeys().hashSetValues().build();
+        HashMultimap<String, Integer> hashMultimap = HashMultimap.create();
+        ImmutableSetMultimap<String, Integer> immutableSetMultimap = new ImmutableSetMultimap.Builder<String, Integer>().build();
+    }
+
+    @Test
+    public void createBiMap() {
+        BiMap<String, Integer> biMap = HashBiMap.create();
+        biMap.put("Bob", 42);
+        BiMap<Integer, String> inverse = biMap.inverse();
+        assertEquals("Bob", inverse.get(42));
+
+        ImmutableBiMap<String, Integer> immutableBiMap = new ImmutableBiMap.Builder<String, Integer>()
+                .put("Bob", 42)
+                .build();
+        ImmutableBiMap<Integer, String> immutableInverse = immutableBiMap.inverse();
+        assertEquals("Bob", immutableInverse.get(42));
+    }
+
+    @Test
+    public void createTable() {
+        Table<String, Double, Boolean> table = HashBasedTable.create();
+        table.put("foo", 1.6, true);
+        table.put("bar", -5.9, false);
+
+        Map<Double, Boolean> firstRow = table.row("foo");
+        Map<String, Boolean> secondColumn = table.column(-5.9);
+
+        assertTrue(firstRow.get(1.6));
+        assertFalse(secondColumn.get("bar"));
+
+        ImmutableTable<String, Double, Boolean> immutableTable = new ImmutableTable.Builder<String, Double, Boolean>().build();
     }
 
 }
