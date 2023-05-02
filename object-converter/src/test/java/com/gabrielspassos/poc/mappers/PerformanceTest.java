@@ -24,13 +24,17 @@ public class PerformanceTest {
         BankingEmployeeDTO bankingEmployeeDTO = new BankingEmployeeDTO("Felipe", 38, 848343L, false, 2.5);
 
         ZonedDateTime startWithFile = ZonedDateTime.now();
-        EmployeeDTO convertedWithFileClassConverter = fileClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        for (int i = 0; i < 1000; i++) {
+            EmployeeDTO convertedWithFileClassConverter = fileClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        }
         ZonedDateTime finishWithFile = ZonedDateTime.now();
         System.out.print("Time in milliseconds with class converter: ");
         System.out.println(ChronoUnit.MILLIS.between(startWithFile, finishWithFile));
 
         ZonedDateTime startWithObject = ZonedDateTime.now();
-        EmployeeDTO convertedWithObjectConverter = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        for (int i = 0; i < 1000; i++) {
+            EmployeeDTO convertedWithObjectConverter = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        }
         ZonedDateTime finishWithObject = ZonedDateTime.now();
         System.out.print("Time in milliseconds with object converter: ");
         System.out.println(ChronoUnit.MILLIS.between(startWithObject, finishWithObject));

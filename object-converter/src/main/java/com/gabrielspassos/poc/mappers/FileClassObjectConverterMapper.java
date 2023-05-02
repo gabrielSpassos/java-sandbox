@@ -15,7 +15,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
@@ -94,7 +95,8 @@ public class FileClassObjectConverterMapper {
             String converterClassName = getConverterClassName(objectToConvert, destinyClass);
 
             // create an empty source file
-            File sourceFile = File.createTempFile(converterClassName, ".java");
+            //File sourceFile = File.createTempFile(converterClassName, ".java");
+            File sourceFile = createFileWithNotExists(converterClassName + ".java");
             sourceFile.deleteOnExit();
 
             // generate the source code, using the source filename as the class name
@@ -163,6 +165,22 @@ public class FileClassObjectConverterMapper {
                 : field.getName();
 
         return capitalize(fieldName);
+    }
+
+    private File createFileWithNotExists(String filename) {
+        try {
+            Path source = Paths.get(this.getClass().getResource("/mappers").getPath());
+            String finalFileName = String.format("%s/%s", source, filename);
+            File file = new File(finalFileName);
+
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            return file;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
