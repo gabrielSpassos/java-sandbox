@@ -71,8 +71,8 @@ public class AnimalDTO {
 - [X] Add annotation to set fields based on attributeName + annotation
 - [X] performance test with more conversions
 - [X] create class with cache
-- [ ] load class in memory
-- [ ] use class that is already on the class loader
+- [X] load class in memory
+- [X] use class that is already on the class loader
 
 - https://www.baeldung.com/java-string-compile-execute-code
 - https://www.javassist.org/

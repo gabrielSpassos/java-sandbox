@@ -1,8 +1,7 @@
 package com.gabrielspassos.poc;
 
-import com.gabrielspassos.poc.dto.SavingAccountDTO;
-
 import com.gabrielspassos.poc.dto.AccountDTO;
+import com.gabrielspassos.poc.dto.SavingAccountDTO;
 
 public class ConverterFromAccountDTOToSavingAccountDTO {
     public SavingAccountDTO convert(AccountDTO input) {

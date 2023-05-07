@@ -9,25 +9,22 @@ import com.gabrielspassos.poc.dto.SavingAccountDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-class FileClassObjectConverterMapperTest {
+class InMemoryClassObjectConverterMapperTest {
 
-    private static FileClassObjectConverterMapper fileClassObjectConverterMapper;
+    private static InMemoryClassObjectConverterMapper inMemoryClassObjectConverterMapper;
 
     @BeforeAll
     static void setup() {
-        fileClassObjectConverterMapper = FileClassObjectConverterMapper.getMapper();
+        inMemoryClassObjectConverterMapper = InMemoryClassObjectConverterMapper.getMapper();
     }
 
     @Test
     void shouldConvert() {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
 
-        SavingAccountDTO converted = fileClassObjectConverterMapper.convert(account, SavingAccountDTO.class);
+        SavingAccountDTO converted = inMemoryClassObjectConverterMapper.convert(account, SavingAccountDTO.class);
 
         assertNotNull(converted);
         assertEquals("0001", converted.getAgency());
@@ -40,7 +37,7 @@ class FileClassObjectConverterMapperTest {
     void shouldConvertExtendedClass() {
         PersonDTO personDTO = new PersonDTO("John", 38);
 
-        EmployeeDTO converted = fileClassObjectConverterMapper.convert(personDTO, EmployeeDTO.class);
+        EmployeeDTO converted = inMemoryClassObjectConverterMapper.convert(personDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
         assertEquals("John", converted.getFirstName());
@@ -54,7 +51,7 @@ class FileClassObjectConverterMapperTest {
     void shouldConvertChildClassToParent() {
         EmployeeDTO employeeDTO = new EmployeeDTO("Maria", 24, 548954L, true);
 
-        PersonDTO converted = fileClassObjectConverterMapper.convert(employeeDTO, PersonDTO.class);
+        PersonDTO converted = inMemoryClassObjectConverterMapper.convert(employeeDTO, PersonDTO.class);
 
         assertNotNull(converted);
         assertEquals("Maria", converted.getName());
@@ -65,7 +62,7 @@ class FileClassObjectConverterMapperTest {
     void shouldConvertChildClassToParentWithMultipleExtensions() {
         BankingEmployeeDTO bankingEmployeeDTO = new BankingEmployeeDTO("Felipe", 38, 848343L, false, 2.5);
 
-        EmployeeDTO converted = fileClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        EmployeeDTO converted = inMemoryClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
         assertEquals("Felipe", converted.getName());
@@ -78,7 +75,7 @@ class FileClassObjectConverterMapperTest {
     void shouldConvertObjectWithAnnotation() {
         PersonDTO personDTO = new PersonDTO("John", 38);
 
-        AnimalDTO converted = fileClassObjectConverterMapper.convert(personDTO, AnimalDTO.class);
+        AnimalDTO converted = inMemoryClassObjectConverterMapper.convert(personDTO, AnimalDTO.class);
 
         assertNotNull(converted);
         assertEquals("John", converted.getSpecies());
