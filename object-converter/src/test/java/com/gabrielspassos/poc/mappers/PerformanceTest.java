@@ -26,6 +26,14 @@ public class PerformanceTest {
         int iterations = 10000;
         BankingEmployeeDTO bankingEmployeeDTO = new BankingEmployeeDTO("Felipe", 38, 848343L, false, 2.5);
 
+        ZonedDateTime startWithObject = ZonedDateTime.now();
+        for (int i = 0; i < iterations; i++) {
+            EmployeeDTO convertedWithObjectConverter = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        }
+        ZonedDateTime finishWithObject = ZonedDateTime.now();
+        System.out.print("Time in milliseconds with object converter: ");
+        System.out.println(ChronoUnit.MILLIS.between(startWithObject, finishWithObject));
+
         ZonedDateTime startInMemory = ZonedDateTime.now();
         for (int i = 0; i < iterations; i++) {
             EmployeeDTO convertedInMemoryClassConverter = inMemoryClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
@@ -41,14 +49,6 @@ public class PerformanceTest {
         ZonedDateTime finishWithFile = ZonedDateTime.now();
         System.out.print("Time in milliseconds with class converter: ");
         System.out.println(ChronoUnit.MILLIS.between(startWithFile, finishWithFile));
-
-        ZonedDateTime startWithObject = ZonedDateTime.now();
-        for (int i = 0; i < iterations; i++) {
-            EmployeeDTO convertedWithObjectConverter = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
-        }
-        ZonedDateTime finishWithObject = ZonedDateTime.now();
-        System.out.print("Time in milliseconds with object converter: ");
-        System.out.println(ChronoUnit.MILLIS.between(startWithObject, finishWithObject));
     }
 
 }

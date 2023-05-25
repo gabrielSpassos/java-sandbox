@@ -73,6 +73,9 @@ public class AnimalDTO {
 - [X] create class with cache
 - [X] load class in memory
 - [X] use class that is already on the class loader
+- [X] in memory solution first check if class (converter) exists, if not create it
+- [X] in memory solution create map destiny class -> converter
+- [ ] segregate solutions
 
 - https://www.baeldung.com/java-string-compile-execute-code
 - https://www.javassist.org/
