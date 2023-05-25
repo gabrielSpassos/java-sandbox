@@ -2,7 +2,9 @@ package com.gabrielspassos.poc.services;
 
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
-import com.gabrielspassos.poc.dtos.PairDTO;
+import com.gabrielspassos.poc.reflections.dtos.PairDTO;
+import com.gabrielspassos.poc.reflections.services.CacheableClassService;
+import com.gabrielspassos.poc.reflections.services.IClassService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

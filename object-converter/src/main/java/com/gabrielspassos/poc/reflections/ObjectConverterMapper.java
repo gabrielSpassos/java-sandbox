@@ -1,13 +1,13 @@
-package com.gabrielspassos.poc.mappers;
+package com.gabrielspassos.poc.reflections;
 
-import com.gabrielspassos.poc.exceptions.BasicException;
-import com.gabrielspassos.poc.exceptions.ErrorToIncludeValueToAttribute;
-import com.gabrielspassos.poc.exceptions.ErrorToInstantiateClassException;
-import com.gabrielspassos.poc.exceptions.InvalidClassConstructorException;
-import com.gabrielspassos.poc.exceptions.NoParametersException;
-import com.gabrielspassos.poc.services.CacheableClassService;
-import com.gabrielspassos.poc.services.ClassService;
-import com.gabrielspassos.poc.services.IClassService;
+import com.gabrielspassos.poc.reflections.exceptions.BasicException;
+import com.gabrielspassos.poc.reflections.exceptions.ErrorToIncludeValueToAttribute;
+import com.gabrielspassos.poc.reflections.exceptions.ErrorToInstantiateClassException;
+import com.gabrielspassos.poc.reflections.exceptions.InvalidClassConstructorException;
+import com.gabrielspassos.poc.reflections.exceptions.NoParametersException;
+import com.gabrielspassos.poc.reflections.services.CacheableClassService;
+import com.gabrielspassos.poc.reflections.services.ClassService;
+import com.gabrielspassos.poc.reflections.services.IClassService;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.utils;
+package com.gabrielspassos.poc.memory.utils;
 
 import java.util.Objects;
 

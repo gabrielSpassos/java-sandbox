@@ -6,6 +6,7 @@ import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
+import com.gabrielspassos.poc.memory.InMemoryClassObjectConverterMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

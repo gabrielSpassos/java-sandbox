@@ -1,11 +1,11 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.reflections.services;
 
-import com.gabrielspassos.poc.annotations.AttributeSynonym;
-import com.gabrielspassos.poc.dtos.PairDTO;
-import com.gabrielspassos.poc.exceptions.BasicException;
-import com.gabrielspassos.poc.exceptions.ErrorToGetAttributeValueException;
-import com.gabrielspassos.poc.exceptions.ErrorToInstantiateClassException;
-import com.gabrielspassos.poc.exceptions.InvalidClassConstructorException;
+import com.gabrielspassos.poc.common.AttributeSynonym;
+import com.gabrielspassos.poc.reflections.dtos.PairDTO;
+import com.gabrielspassos.poc.reflections.exceptions.BasicException;
+import com.gabrielspassos.poc.reflections.exceptions.ErrorToGetAttributeValueException;
+import com.gabrielspassos.poc.reflections.exceptions.ErrorToInstantiateClassException;
+import com.gabrielspassos.poc.reflections.exceptions.InvalidClassConstructorException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

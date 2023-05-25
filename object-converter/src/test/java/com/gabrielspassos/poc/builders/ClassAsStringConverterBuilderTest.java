@@ -4,6 +4,7 @@ import com.gabrielspassos.poc.dto.AccountDTO;
 import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
+import com.gabrielspassos.poc.memory.builders.ClassAsStringConverterBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class ClassAsStringConverterBuilderTest {
     @Test
     void shouldReturnConverterClassAsString() {
         String expected =
-                "package com.gabrielspassos.poc.loaders;\n" +
+                "package com.gabrielspassos.poc.memory.loaders;\n" +
                 "\n" +
                 "import com.gabrielspassos.poc.dto.AccountDTO;\n" +
                 "import com.gabrielspassos.poc.dto.SavingAccountDTO;\n" +
@@ -48,7 +49,7 @@ class ClassAsStringConverterBuilderTest {
     @Test
     void shouldReturnConverterClassWithBooleanValuesAsString() {
         String expected =
-                "package com.gabrielspassos.poc.loaders;\n" +
+                "package com.gabrielspassos.poc.memory.loaders;\n" +
                 "\n" +
                 "import com.gabrielspassos.poc.dto.BankingEmployeeDTO;\n" +
                 "import com.gabrielspassos.poc.dto.EmployeeDTO;\n" +

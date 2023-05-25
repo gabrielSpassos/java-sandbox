@@ -2,6 +2,8 @@ package com.gabrielspassos.poc.mappers;
 
 import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
+import com.gabrielspassos.poc.memory.InMemoryClassObjectConverterMapper;
+import com.gabrielspassos.poc.reflections.ObjectConverterMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,6 @@ import java.util.UUID;
 public class PerformanceTest {
 
     private static InMemoryClassObjectConverterMapper inMemoryClassObjectConverterMapper;
-    private static FileClassObjectConverterMapper fileClassObjectConverterMapper;
     private static ObjectConverterMapper objectConverterMapper;
     private static Random random;
 
@@ -25,7 +26,6 @@ public class PerformanceTest {
     @BeforeAll
     static void setup() {
         inMemoryClassObjectConverterMapper = InMemoryClassObjectConverterMapper.getMapper();
-        fileClassObjectConverterMapper = FileClassObjectConverterMapper.getMapper();
         objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
         random = new Random();
     }
@@ -50,15 +50,6 @@ public class PerformanceTest {
         ZonedDateTime finishInMemory = ZonedDateTime.now();
         System.out.print("Time in milliseconds with in memory converter: ");
         System.out.println(ChronoUnit.MILLIS.between(startInMemory, finishInMemory));
-
-        ZonedDateTime startWithFile = ZonedDateTime.now();
-        for (int i = 0; i < iterations; i++) {
-            BankingEmployeeDTO bankingEmployeeDTO = buildBankingEmployee(i);
-            EmployeeDTO convertedWithFileClassConverter = fileClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
-        }
-        ZonedDateTime finishWithFile = ZonedDateTime.now();
-        System.out.print("Time in milliseconds with class converter: ");
-        System.out.println(ChronoUnit.MILLIS.between(startWithFile, finishWithFile));
     }
 
     private BankingEmployeeDTO buildBankingEmployee(int interactionNumber) {
