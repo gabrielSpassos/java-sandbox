@@ -1,6 +1,6 @@
 package com.gabrielspassos.poc.loaders;
 
-public interface InMemoryClass<I, O> {
+public interface InMemoryConverterClass<I, O> {
 
     O convert(I input);
 

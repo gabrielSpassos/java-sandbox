@@ -21,7 +21,7 @@ public class InMemoryLoadersTest {
             "import com.gabrielspassos.poc.dto.AccountDTO;\n" +
             "import com.gabrielspassos.poc.dto.SavingAccountDTO;\n" +
             "\n" +
-            "public class TestClass implements InMemoryClass<AccountDTO, SavingAccountDTO> {\n" +
+            "public class TestClass implements InMemoryConverterClass<AccountDTO, SavingAccountDTO> {\n" +
             "\n" +
             "    public SavingAccountDTO convert(AccountDTO input) {\n" +
             "        SavingAccountDTO output = new SavingAccountDTO();\n" +
@@ -54,9 +54,9 @@ public class InMemoryLoadersTest {
 
             ClassLoader classLoader = manager.getClassLoader(null);
             Class<?> clazz = classLoader.loadClass(QUALIFIED_CLASS_NAME);
-            InMemoryClass instanceOfClass = (InMemoryClass) clazz.newInstance();
+            InMemoryConverterClass instanceOfClass = (InMemoryConverterClass) clazz.newInstance();
 
-            Assertions.assertInstanceOf(InMemoryClass.class, instanceOfClass);
+            Assertions.assertInstanceOf(InMemoryConverterClass.class, instanceOfClass);
 
             Object convert = instanceOfClass.convert(account);
             Assertions.assertNotNull(convert);

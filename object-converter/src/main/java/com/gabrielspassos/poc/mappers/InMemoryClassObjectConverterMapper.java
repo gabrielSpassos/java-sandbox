@@ -1,7 +1,7 @@
 package com.gabrielspassos.poc.mappers;
 
 import com.gabrielspassos.poc.builders.ClassAsStringConverterBuilder;
-import com.gabrielspassos.poc.loaders.InMemoryClass;
+import com.gabrielspassos.poc.loaders.InMemoryConverterClass;
 import com.gabrielspassos.poc.loaders.InMemoryFileManager;
 import com.gabrielspassos.poc.loaders.JavaSourceFromString;
 
@@ -21,7 +21,7 @@ public class InMemoryClassObjectConverterMapper {
     private static InMemoryClassObjectConverterMapper instance;
 
     private final ClassAsStringConverterBuilder classAsStringConverterBuilder;
-    private final HashMap<String, InMemoryClass> convertersMap;
+    private final HashMap<String, InMemoryConverterClass> convertersMap;
 
 
     private InMemoryClassObjectConverterMapper() {
@@ -38,7 +38,7 @@ public class InMemoryClassObjectConverterMapper {
 
     public <T> T convert(Object objectToConvert, Class<T> destinyClass) {
         String converterClassName = classAsStringConverterBuilder.getConverterClassName(objectToConvert, destinyClass);
-        InMemoryClass instanceOfClass = convertersMap.get(converterClassName);
+        InMemoryConverterClass instanceOfClass = convertersMap.get(converterClassName);
 
         if (Objects.nonNull(instanceOfClass)) {
             return (T) instanceOfClass.convert(objectToConvert);
@@ -49,34 +49,33 @@ public class InMemoryClassObjectConverterMapper {
         return (T) instanceOfClass.convert(objectToConvert);
     }
 
-    private <T> InMemoryClass instantiateConverterClass(String converterClassName,
-                                                        Object objectToConvert,
-                                                        Class<T> destinyClass) {
+    private <T> InMemoryConverterClass instantiateConverterClass(String converterClassName,
+                                                                 Object objectToConvert,
+                                                                 Class<T> destinyClass) {
         try {
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-            DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
             InMemoryFileManager manager = new InMemoryFileManager(compiler
                     .getStandardFileManager(null, null, null));
 
             String qualifiedName = QUALIFIED_CLASS_NAME_FOLDER + converterClassName;
             String converterClassSource = classAsStringConverterBuilder
                     .createConverterClassAsString(converterClassName, objectToConvert, destinyClass);
-
             List<JavaFileObject> sourceFiles = Collections.singletonList(
                     new JavaSourceFromString(qualifiedName, converterClassSource));
 
+            // compile source code
+            DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
             JavaCompiler.CompilationTask task = compiler
                     .getTask(null, manager, diagnostics, null, null, sourceFiles);
-
             boolean result = task.call();
-
             if (!result) {
                 throw new RuntimeException("error to convert");
             }
 
+            // load class
             ClassLoader classLoader = manager.getClassLoader(null);
             Class<?> clazz = classLoader.loadClass(qualifiedName);
-            return (InMemoryClass) clazz.newInstance();
+            return (InMemoryConverterClass) clazz.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

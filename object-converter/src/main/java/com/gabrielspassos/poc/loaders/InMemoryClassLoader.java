@@ -13,10 +13,14 @@ public class InMemoryClassLoader extends ClassLoader {
         this.manager = requireNonNull(manager, "manager must not be null");
     }
 
+    /*
+     this method override the findClass method from the java.lang Class loader
+     this is used by the method: protected Class<?> loadClass(String name, boolean resolve)
+     */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
 
-        Map<String, JavaClassAsBytes> compiledClasses = manager.getBytesMap();
+        Map<String, JavaSourceFromString> compiledClasses = manager.getBytesMap();
 
         if (compiledClasses.containsKey(name)) {
             byte[] bytes = compiledClasses.get(name).getBytes();

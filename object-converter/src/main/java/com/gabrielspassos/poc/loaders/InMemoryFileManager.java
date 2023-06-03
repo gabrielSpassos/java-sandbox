@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class InMemoryFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
-    private Map<String, JavaClassAsBytes> compiledClasses;
+    private Map<String, JavaSourceFromString> compiledClasses;
     private ClassLoader loader;
 
     public InMemoryFileManager(StandardJavaFileManager standardManager) {
@@ -23,9 +23,9 @@ public class InMemoryFileManager extends ForwardingJavaFileManager<JavaFileManag
     public JavaFileObject getJavaFileForOutput(Location location, String className,
                                                JavaFileObject.Kind kind, FileObject sibling) {
 
-        JavaClassAsBytes classAsBytes = new JavaClassAsBytes(className, kind);
+        JavaSourceFromString classAsBytes = new JavaSourceFromString(className, kind);
+        // this map is used on the class loader
         compiledClasses.put(className, classAsBytes);
-
         return classAsBytes;
     }
 
@@ -34,7 +34,7 @@ public class InMemoryFileManager extends ForwardingJavaFileManager<JavaFileManag
         return loader;
     }
 
-    public Map<String, JavaClassAsBytes> getBytesMap() {
+    public Map<String, JavaSourceFromString> getBytesMap() {
         return compiledClasses;
     }
 }

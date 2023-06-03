@@ -27,7 +27,7 @@ class ClassAsStringConverterBuilderTest {
                 "import com.gabrielspassos.poc.dto.AccountDTO;\n" +
                 "import com.gabrielspassos.poc.dto.SavingAccountDTO;\n" +
                 "\n" +
-                "public class ConverterFromAccountDTOToSavingAccountDTO implements InMemoryClass<AccountDTO, SavingAccountDTO> {\n" +
+                "public class ConverterFromAccountDTOToSavingAccountDTO implements InMemoryConverterClass<AccountDTO, SavingAccountDTO> {\n" +
                 "\tpublic SavingAccountDTO convert(AccountDTO input) {\n" +
                 "\t\tSavingAccountDTO output = new SavingAccountDTO();\n" +
                 "\t\toutput.setAgency(input.getAgency());\n" +
@@ -53,7 +53,7 @@ class ClassAsStringConverterBuilderTest {
                 "import com.gabrielspassos.poc.dto.BankingEmployeeDTO;\n" +
                 "import com.gabrielspassos.poc.dto.EmployeeDTO;\n" +
                 "\n" +
-                "public class ConverterFromBankingEmployeeDTOToEmployeeDTO implements InMemoryClass<BankingEmployeeDTO, EmployeeDTO> {\n" +
+                "public class ConverterFromBankingEmployeeDTOToEmployeeDTO implements InMemoryConverterClass<BankingEmployeeDTO, EmployeeDTO> {\n" +
                 "\tpublic EmployeeDTO convert(BankingEmployeeDTO input) {\n" +
                 "\t\tEmployeeDTO output = new EmployeeDTO();\n" +
                 "\t\toutput.setName(input.getName());\n" +

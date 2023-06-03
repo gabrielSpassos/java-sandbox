@@ -43,7 +43,7 @@ public class ClassAsStringConverterBuilder {
         stringBuilder.append("import " + input.getClass().getName() + ";\n");
         stringBuilder.append("import " + output.getName() + ";\n\n");
         stringBuilder.append("public class " + className);
-        stringBuilder.append(" implements InMemoryClass<" + inputClassName + ", " + outputClassName +"> {\n");
+        stringBuilder.append(" implements InMemoryConverterClass<" + inputClassName + ", " + outputClassName +"> {\n");
         stringBuilder.append("\tpublic " + outputClassName + " convert(" + inputClassName + " input) {\n");
         stringBuilder.append("\t\t" + outputClassName + " output = new " + outputClassName + "();\n");
 
