@@ -8,6 +8,7 @@ import com.gabrielspassos.poc.loaders.JavaSourceFromString;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
+import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class InMemoryClassObjectConverterMapper {
             }
 
             // load class
-            ClassLoader classLoader = manager.getClassLoader(null);
+            ClassLoader classLoader = manager.getClassLoader(StandardLocation.CLASS_PATH);
             Class<?> clazz = classLoader.loadClass(qualifiedName);
             return (InMemoryConverterClass) clazz.newInstance();
         } catch (Exception e) {

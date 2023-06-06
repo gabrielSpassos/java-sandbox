@@ -7,27 +7,35 @@ import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Random;
+import java.util.UUID;
 
 public class PerformanceTest {
 
     private static InMemoryClassObjectConverterMapper inMemoryClassObjectConverterMapper;
     private static FileClassObjectConverterMapper fileClassObjectConverterMapper;
     private static ObjectConverterMapper objectConverterMapper;
+    private static Random random;
+
+    private static final int MAX_AGE = 85;
+    private static final int MIN_AGE = 16;
+    private static final double MAX_BONUS = 4.9;
+    private static final double MIN_BONUS = 0;
 
     @BeforeAll
     static void setup() {
         inMemoryClassObjectConverterMapper = InMemoryClassObjectConverterMapper.getMapper();
         fileClassObjectConverterMapper = FileClassObjectConverterMapper.getMapper();
         objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
+        random = new Random();
     }
 
     @Test
     void shouldTestPerformance() {
         int iterations = 10000;
-        BankingEmployeeDTO bankingEmployeeDTO = new BankingEmployeeDTO("Felipe", 38, 848343L, false, 2.5);
-
         ZonedDateTime startWithObject = ZonedDateTime.now();
         for (int i = 0; i < iterations; i++) {
+            BankingEmployeeDTO bankingEmployeeDTO = buildBankingEmployee(i);
             EmployeeDTO convertedWithObjectConverter = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
         }
         ZonedDateTime finishWithObject = ZonedDateTime.now();
@@ -36,6 +44,7 @@ public class PerformanceTest {
 
         ZonedDateTime startInMemory = ZonedDateTime.now();
         for (int i = 0; i < iterations; i++) {
+            BankingEmployeeDTO bankingEmployeeDTO = buildBankingEmployee(i);
             EmployeeDTO convertedInMemoryClassConverter = inMemoryClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
         }
         ZonedDateTime finishInMemory = ZonedDateTime.now();
@@ -44,11 +53,20 @@ public class PerformanceTest {
 
         ZonedDateTime startWithFile = ZonedDateTime.now();
         for (int i = 0; i < iterations; i++) {
+            BankingEmployeeDTO bankingEmployeeDTO = buildBankingEmployee(i);
             EmployeeDTO convertedWithFileClassConverter = fileClassObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
         }
         ZonedDateTime finishWithFile = ZonedDateTime.now();
         System.out.print("Time in milliseconds with class converter: ");
         System.out.println(ChronoUnit.MILLIS.between(startWithFile, finishWithFile));
+    }
+
+    private BankingEmployeeDTO buildBankingEmployee(int interactionNumber) {
+        boolean isContractActive = interactionNumber % 2 == 0;
+        int age = random.nextInt(MAX_AGE - MIN_AGE) + MIN_AGE;
+        double bonus = MIN_BONUS + (random.nextDouble() * (MAX_BONUS - MIN_BONUS));
+
+        return new BankingEmployeeDTO(UUID.randomUUID().toString(), age, (long) interactionNumber, isContractActive, bonus);
     }
 
 }

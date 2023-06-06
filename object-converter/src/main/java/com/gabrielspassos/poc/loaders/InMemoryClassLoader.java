@@ -1,16 +1,15 @@
 package com.gabrielspassos.poc.loaders;
 
+import java.util.Hashtable;
 import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
 
 public class InMemoryClassLoader extends ClassLoader {
 
-    private InMemoryFileManager manager;
+    private Map<String, JavaSourceFromString> compiledClasses;
 
-    public InMemoryClassLoader(ClassLoader parent, InMemoryFileManager manager) {
-        super(parent);
-        this.manager = requireNonNull(manager, "manager must not be null");
+    public InMemoryClassLoader() {
+        super();
+        this.compiledClasses = new Hashtable<>();
     }
 
     /*
@@ -19,8 +18,7 @@ public class InMemoryClassLoader extends ClassLoader {
      */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-
-        Map<String, JavaSourceFromString> compiledClasses = manager.getBytesMap();
+        Map<String, JavaSourceFromString> compiledClasses = this.compiledClasses;
 
         if (compiledClasses.containsKey(name)) {
             byte[] bytes = compiledClasses.get(name).getBytes();
@@ -28,5 +26,9 @@ public class InMemoryClassLoader extends ClassLoader {
         } else {
             throw new ClassNotFoundException();
         }
+    }
+
+    public void addClass(String className, JavaSourceFromString javaClass) {
+        compiledClasses.put(className, javaClass);
     }
 }
