@@ -121,6 +121,7 @@ class ObjectConverterMapperTest {
         assertEquals("Can not use null value", exception.getErrorMessage());
     }
 
+    //todo: move to performance test
     @Test
     void testPerformanceWithCache() {
         int interactions = 1000000;
