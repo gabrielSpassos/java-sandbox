@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.annotations;
+package com.gabrielspassos.poc.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

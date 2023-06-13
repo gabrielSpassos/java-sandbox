@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.loaders;
+package com.gabrielspassos.poc.memory.loaders;
 
 import java.util.Hashtable;
 import java.util.Map;

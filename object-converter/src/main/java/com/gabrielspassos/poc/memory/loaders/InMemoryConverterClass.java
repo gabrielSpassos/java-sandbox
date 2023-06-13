@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.loaders;
+package com.gabrielspassos.poc.memory.loaders;
 
 public interface InMemoryConverterClass<I, O> {
 

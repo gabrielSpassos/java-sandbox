@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.exceptions;
+package com.gabrielspassos.poc.reflections.exceptions;
 
 public class ErrorToIncludeValueToAttribute extends BasicException {
 

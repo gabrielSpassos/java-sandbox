@@ -7,8 +7,9 @@ import com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
-import com.gabrielspassos.poc.exceptions.InvalidClassConstructorException;
-import com.gabrielspassos.poc.exceptions.NoParametersException;
+import com.gabrielspassos.poc.reflections.exceptions.InvalidClassConstructorException;
+import com.gabrielspassos.poc.reflections.exceptions.NoParametersException;
+import com.gabrielspassos.poc.reflections.ObjectConverterMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,9 +1,9 @@
-package com.gabrielspassos.poc.mappers;
+package com.gabrielspassos.poc.memory;
 
-import com.gabrielspassos.poc.builders.ClassAsStringConverterBuilder;
-import com.gabrielspassos.poc.loaders.InMemoryConverterClass;
-import com.gabrielspassos.poc.loaders.InMemoryFileManager;
-import com.gabrielspassos.poc.loaders.JavaSourceFromString;
+import com.gabrielspassos.poc.memory.builders.ClassAsStringConverterBuilder;
+import com.gabrielspassos.poc.memory.loaders.InMemoryConverterClass;
+import com.gabrielspassos.poc.memory.loaders.InMemoryFileManager;
+import com.gabrielspassos.poc.memory.loaders.JavaSourceFromString;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class InMemoryClassObjectConverterMapper {
 
-    final static String QUALIFIED_CLASS_NAME_FOLDER = "com.gabrielspassos.poc.loaders.";
+    final static String QUALIFIED_CLASS_NAME_FOLDER = "com.gabrielspassos.poc.memory.loaders.";
 
     private static InMemoryClassObjectConverterMapper instance;
 

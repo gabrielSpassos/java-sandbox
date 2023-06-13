@@ -1,6 +1,6 @@
-package com.gabrielspassos.poc.services;
+package com.gabrielspassos.poc.reflections.services;
 
-import com.gabrielspassos.poc.dtos.PairDTO;
+import com.gabrielspassos.poc.reflections.dtos.PairDTO;
 
 import java.lang.reflect.Field;
 import java.util.List;

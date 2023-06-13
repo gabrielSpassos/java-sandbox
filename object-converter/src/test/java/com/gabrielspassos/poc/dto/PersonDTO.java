@@ -1,6 +1,6 @@
 package com.gabrielspassos.poc.dto;
 
-import com.gabrielspassos.poc.annotations.AttributeSynonym;
+import com.gabrielspassos.poc.common.AttributeSynonym;
 
 public class PersonDTO {
 

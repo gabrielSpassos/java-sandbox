@@ -1,6 +1,9 @@
 package com.gabrielspassos.poc.loaders;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
+import com.gabrielspassos.poc.memory.loaders.InMemoryConverterClass;
+import com.gabrielspassos.poc.memory.loaders.InMemoryFileManager;
+import com.gabrielspassos.poc.memory.loaders.JavaSourceFromString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +16,10 @@ import java.util.List;
 
 public class InMemoryLoadersTest {
 
-    final static String QUALIFIED_CLASS_NAME = "com.gabrielspassos.poc.loaders.TestClass";
+    final static String QUALIFIED_CLASS_NAME = "com.gabrielspassos.poc.memory.loaders.TestClass";
 
     final static String SOURCE_CODE =
-            "package com.gabrielspassos.poc.loaders;\n" +
+            "package com.gabrielspassos.poc.memory.loaders;\n" +
             "\n" +
             "import com.gabrielspassos.poc.dto.AccountDTO;\n" +
             "import com.gabrielspassos.poc.dto.SavingAccountDTO;\n" +

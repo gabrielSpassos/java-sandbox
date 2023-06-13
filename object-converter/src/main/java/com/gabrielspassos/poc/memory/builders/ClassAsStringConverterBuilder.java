@@ -1,22 +1,20 @@
-package com.gabrielspassos.poc.builders;
+package com.gabrielspassos.poc.memory.builders;
 
-import com.gabrielspassos.poc.dtos.PairDTO;
-import com.gabrielspassos.poc.services.CacheableClassService;
-import com.gabrielspassos.poc.services.IClassService;
+import com.gabrielspassos.poc.memory.dtos.PairDTO;
+import com.gabrielspassos.poc.memory.services.ClassService;
+import com.gabrielspassos.poc.memory.utils.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
-
-import static com.gabrielspassos.poc.utils.StringUtils.capitalize;
 
 public class ClassAsStringConverterBuilder {
 
     private static ClassAsStringConverterBuilder instance;
 
-    private IClassService classService;
+    private ClassService classService;
 
     private ClassAsStringConverterBuilder() {
-        this.classService = CacheableClassService.getCacheableClassService();
+        this.classService = ClassService.getInstance();
     }
 
     public static synchronized ClassAsStringConverterBuilder getBuilder(){
@@ -39,7 +37,7 @@ public class ClassAsStringConverterBuilder {
         List<PairDTO<Field, Field>> matchingFields = classService.getMatchingFields(input.getClass(), output);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("package com.gabrielspassos.poc.loaders;\n\n");
+        stringBuilder.append("package com.gabrielspassos.poc.memory.loaders;\n\n");
         stringBuilder.append("import " + input.getClass().getName() + ";\n");
         stringBuilder.append("import " + output.getName() + ";\n\n");
         stringBuilder.append("public class " + className);
@@ -65,6 +63,6 @@ public class ClassAsStringConverterBuilder {
                 ? field.getName().replaceAll("is", "")
                 : field.getName();
 
-        return capitalize(fieldName);
+        return StringUtils.capitalize(fieldName);
     }
 }

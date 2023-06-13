@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.dtos;
+package com.gabrielspassos.poc.reflections.dtos;
 
 public class PairDTO<L, R> {
 
