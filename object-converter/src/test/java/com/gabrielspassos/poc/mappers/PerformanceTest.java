@@ -32,7 +32,18 @@ public class PerformanceTest {
 
     @Test
     void shouldTestPerformance() {
-        int iterations = 10000;
+        int iterations = 100000;
+
+        ZonedDateTime startWithoutCache = ZonedDateTime.now();
+        objectConverterMapper.setShouldCacheClassInfo(Boolean.FALSE);
+        for (int i = 0; i < iterations; i++) {
+            BankingEmployeeDTO bankingEmployeeDTO = buildBankingEmployee(i);
+            EmployeeDTO convertedWithObjectConverter = objectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        }
+        ZonedDateTime finishWithoutCache = ZonedDateTime.now();
+        System.out.print("Time in milliseconds without cache: ");
+        System.out.println(ChronoUnit.MILLIS.between(startWithoutCache, finishWithoutCache));
+
         ZonedDateTime startWithObject = ZonedDateTime.now();
         for (int i = 0; i < iterations; i++) {
             BankingEmployeeDTO bankingEmployeeDTO = buildBankingEmployee(i);

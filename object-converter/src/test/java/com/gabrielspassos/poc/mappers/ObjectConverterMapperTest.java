@@ -7,14 +7,11 @@ import com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
+import com.gabrielspassos.poc.reflections.ObjectConverterMapper;
 import com.gabrielspassos.poc.reflections.exceptions.InvalidClassConstructorException;
 import com.gabrielspassos.poc.reflections.exceptions.NoParametersException;
-import com.gabrielspassos.poc.reflections.ObjectConverterMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -119,34 +116,6 @@ class ObjectConverterMapperTest {
                 () -> objectConverterMapper.convert(account, null));
 
         assertEquals("Can not use null value", exception.getErrorMessage());
-    }
-
-    //todo: move to performance test
-    @Test
-    void testPerformanceWithCache() {
-        int interactions = 1000000;
-        ZonedDateTime start = ZonedDateTime.now();
-        for (long i = 0; i < interactions; i++) {
-            String indexAsString = String.valueOf(i);
-            AccountDTO accountDTO = new AccountDTO(indexAsString, indexAsString, i);
-
-            objectConverterMapper.convert(accountDTO, SavingAccountDTO.class);
-        }
-        ZonedDateTime finish = ZonedDateTime.now();
-        System.out.print("Time in milliseconds with cache: ");
-        System.out.println(ChronoUnit.MILLIS.between(start, finish));
-
-        ZonedDateTime startWithoutCache = ZonedDateTime.now();
-        objectConverterMapper.setShouldCacheClassInfo(Boolean.FALSE);
-        for (long i = 0; i < interactions; i++) {
-            String indexAsString = String.valueOf(i);
-            AccountDTO accountDTO = new AccountDTO(indexAsString, indexAsString, i);
-
-            objectConverterMapper.convert(accountDTO, SavingAccountDTO.class);
-        }
-        ZonedDateTime finishWithoutCache = ZonedDateTime.now();
-        System.out.print("Time in milliseconds without cache: ");
-        System.out.println(ChronoUnit.MILLIS.between(startWithoutCache, finishWithoutCache));
     }
 
 }
