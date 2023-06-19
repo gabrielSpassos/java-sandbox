@@ -64,6 +64,19 @@ public class AnimalDTO {
 }
 ```
 
+### Comparing Solutions
+
+| # of conversions | Reflections without Cache Converter | Reflections with Cache Converter | In Memory Converter |
+|:----------------:|:-----------------------------------:|:--------------------------------:|:-------------------:|
+|        1         |                  4                  |                1                 |         261         |
+|        1K        |                 52                  |                29                |          4          |
+|       10K        |                 221                 |               154                |         16          |
+|        1M        |                4422                 |               4285               |        1059         |
+|       10M        |                44669                |              50221               |        10695        |
+|       30M        |               131930                |              131556              |        31909        |
+
+_Obs: the numbers on the solutions columns are the time spent to complete the all the conversions in milliseconds (ms)_
+
 ### What is pending on this project
 
 - [X] Rename to ObjectConverterMapper
@@ -75,11 +88,15 @@ public class AnimalDTO {
 - [X] use class that is already on the class loader
 - [X] in memory solution first check if class (converter) exists, if not create it
 - [X] in memory solution create map destiny class -> converter
-- [X] segregate solutions
-- [ ] move performance test to be on the same test
-- [ ] test performance with scenario (loop with 1, 1000, 10000, 10000000)
-- [ ] create performance analysis output
-- [ ] java unsafe
+- [ ] segregate solutions
+- [X] move performance test to be on the same test
+- [X] test performance with scenario (loop with 1, 1000, 10000, 10000000)
+- [X] create performance analysis output
+- [ ] redo reflections logic to try use bubble sort complexity
+- [X] two conversions inside each iteration
+- [X] three asserts inside each iteration
+- [X] complete separate objects
+- [ ] implement converter with java unsafe
 
 - https://www.baeldung.com/java-string-compile-execute-code
 - https://www.javassist.org/

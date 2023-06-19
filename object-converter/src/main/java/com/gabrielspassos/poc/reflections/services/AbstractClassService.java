@@ -25,7 +25,7 @@ public abstract class AbstractClassService implements IClassService {
     public Map<Field, Object> getAttributesAndValuesFromObject(Object object) {
         return getFieldsFromClass(object.getClass())
                 .stream()
-                .filter(field -> Objects.nonNull(getAttributeValue(field, object)))
+                .filter(field -> Objects.nonNull(getAttributeValue(field, object))) //todo: validate why has this filter
                 .collect(Collectors.toMap(Function.identity(), field -> getAttributeValue(field, object)));
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractClassService implements IClassService {
 
     public <T> T createInstanceOfClass(Class<T> tClass) {
         try {
-            Constructor<?>[] constructors = tClass.getConstructors();
+            Constructor<?>[] constructors = tClass.getConstructors(); //todo: include cache
             Constructor<?> constructor = Arrays.stream(constructors)
                     .filter(constructorToFilter -> constructorToFilter.getParameterCount() == 0)
                     .findAny()

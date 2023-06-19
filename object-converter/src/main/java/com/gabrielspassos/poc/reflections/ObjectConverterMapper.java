@@ -47,7 +47,7 @@ public class ObjectConverterMapper {
         Map<Field, Object> attributesNamesAndValues
                 = getClassService().getAttributesAndValuesFromObject(objectToConvert);
 
-        T instanceOfClass = createInstanceOfClass(destinyClass);
+        T instanceOfClass = getClassService().createInstanceOfClass(destinyClass);
 
         attributesNamesAndValues.forEach((field, attributeVale) ->
                 includeValueByAttributeName(instanceOfClass, field, attributeVale));
@@ -57,21 +57,6 @@ public class ObjectConverterMapper {
 
     public void setShouldCacheClassInfo(Boolean shouldCacheClassInfo) {
         this.shouldCacheClassInfo = shouldCacheClassInfo;
-    }
-
-    private <T> T createInstanceOfClass(Class<T> tClass) {
-        try {
-            Constructor<?>[] constructors = tClass.getConstructors();
-            Constructor<?> constructor = Arrays.stream(constructors)
-                    .filter(constructorToFilter -> constructorToFilter.getParameterCount() == 0)
-                    .findAny()
-                    .orElseThrow(() -> new InvalidClassConstructorException(tClass.getName()));
-            return (T) constructor.newInstance();
-        } catch (BasicException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ErrorToInstantiateClassException(e, tClass.getName());
-        }
     }
 
     private <T> void includeValueByAttributeName(T object, Field field, Object attributeValue) {
