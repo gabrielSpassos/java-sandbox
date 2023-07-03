@@ -89,6 +89,7 @@ _Obs: the numbers on the solutions columns are the time spent to complete the al
 - [X] in memory solution first check if class (converter) exists, if not create it
 - [X] in memory solution create map destiny class -> converter
 - [ ] segregate solutions
+- [ ] segregate unit tests
 - [X] move performance test to be on the same test
 - [X] test performance with scenario (loop with 1, 1000, 10000, 10000000)
 - [X] create performance analysis output

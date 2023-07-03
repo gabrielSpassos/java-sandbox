@@ -1,5 +1,6 @@
 package com.gabrielspassos.poc.mappers;
 
+import com.gabrielspassos.poc.cacheablereflections.CacheableReflectionsConverterMapper;
 import com.gabrielspassos.poc.dto.PerformanceOneDTO;
 import com.gabrielspassos.poc.dto.PerformanceTwoDTO;
 import com.gabrielspassos.poc.memory.InMemoryClassObjectConverterMapper;
@@ -14,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PerformanceTest {
 
     private static InMemoryClassObjectConverterMapper inMemoryClassObjectConverterMapper;
-    private static ObjectConverterMapper objectConverterMapper;
+    private static CacheableReflectionsConverterMapper cacheableReflectionsConverterMapper;
     private static ObjectConverterMapper objectWithoutCacheConverterMapper;
 
     @BeforeAll
     static void setup() {
         inMemoryClassObjectConverterMapper = InMemoryClassObjectConverterMapper.getMapper();
-        objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
+        cacheableReflectionsConverterMapper = CacheableReflectionsConverterMapper.getCacheableReflectionsConverterMapper();
         objectWithoutCacheConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
     }
 
@@ -38,10 +39,10 @@ public class PerformanceTest {
         int tenThousand = 10000;
         testPerformanceBaseScenario(tenThousand);
 
-        // scenario 4 - 1000000 iteration
-        int oneMillion = 1000000;
-        testPerformanceBaseScenario(oneMillion);
-
+//        // scenario 4 - 1000000 iteration
+//        int oneMillion = 1000000;
+//        testPerformanceBaseScenario(oneMillion);
+//
 //        // scenario 5 - 10000000 iteration
 //        int tenMillion = 10000000;
 //        testPerformanceBaseScenario(tenMillion);
@@ -53,7 +54,6 @@ public class PerformanceTest {
 
     private void testPerformanceBaseScenario(int iterations) {
         System.out.printf("Test Performance with %s iterations%n", iterations);
-        objectWithoutCacheConverterMapper.setShouldCacheClassInfo(Boolean.FALSE);
         long startWithoutCache = System.currentTimeMillis();
         for (int i = 0; i < iterations; i++) {
             PerformanceOneDTO performanceOneDTO = buildPerformanceOneDTO();
@@ -65,21 +65,21 @@ public class PerformanceTest {
             assertEquals(firstConvertedObject.getValue(), secondConvertedObject.getValue());
         }
         long finishWithoutCache = System.currentTimeMillis();
-        System.out.print("Time in milliseconds without cache: ");
+        System.out.print("Time in milliseconds without cache converter: ");
         System.out.println(finishWithoutCache - startWithoutCache);
 
         long startWithCache = System.currentTimeMillis();
         for (int i = 0; i < iterations; i++) {
             PerformanceOneDTO performanceOneDTO = buildPerformanceOneDTO();
-            PerformanceTwoDTO firstConvertedObject = objectConverterMapper.convert(performanceOneDTO, PerformanceTwoDTO.class);
-            PerformanceOneDTO secondConvertedObject = objectConverterMapper.convert(firstConvertedObject, PerformanceOneDTO.class);
+            PerformanceTwoDTO firstConvertedObject = cacheableReflectionsConverterMapper.convert(performanceOneDTO, PerformanceTwoDTO.class);
+            PerformanceOneDTO secondConvertedObject = cacheableReflectionsConverterMapper.convert(firstConvertedObject, PerformanceOneDTO.class);
 
             assertEquals(firstConvertedObject.getId(), secondConvertedObject.getId());
             assertEquals(firstConvertedObject.getName(), secondConvertedObject.getName());
             assertEquals(firstConvertedObject.getValue(), secondConvertedObject.getValue());
         }
         long finishWithCache = System.currentTimeMillis();
-        System.out.print("Time in milliseconds with object converter: ");
+        System.out.print("Time in milliseconds with cacheable converter: ");
         System.out.println(finishWithCache - startWithCache);
 
         long startInMemory = System.currentTimeMillis();

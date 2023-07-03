@@ -34,6 +34,7 @@ public class ClassAsStringConverterBuilder {
         String inputClassName = input.getClass().getSimpleName();
         String outputClassName = output.getSimpleName();
 
+        //todo: use only one loop
         List<PairDTO<Field, Field>> matchingFields = classService.getMatchingFields(input.getClass(), output);
 
         StringBuilder stringBuilder = new StringBuilder();
