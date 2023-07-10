@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.utils;
+package com.gabrielspassos.poc.memory.utils;
 
 import com.gabrielspassos.poc.memory.utils.StringUtils;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
 package com.gabrielspassos.poc.reflections.services;
 
 import com.gabrielspassos.poc.common.AttributeSynonym;
-import com.gabrielspassos.poc.reflections.exceptions.BasicException;
 import com.gabrielspassos.poc.reflections.exceptions.ErrorToGetAttributeValueException;
 import com.gabrielspassos.poc.reflections.exceptions.ErrorToInstantiateClassException;
 
@@ -52,8 +51,6 @@ public class ClassService {
         try {
             Constructor<T> constructor = tClass.getConstructor();
             return (T) constructor.newInstance();
-        } catch (BasicException e) {
-            throw e;
         } catch (Exception e) {
             throw new ErrorToInstantiateClassException(e, tClass.getName());
         }

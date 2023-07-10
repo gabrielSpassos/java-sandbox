@@ -68,12 +68,12 @@ public class AnimalDTO {
 
 | # of conversions | Reflections without Cache Converter | Reflections with Cache Converter | In Memory Converter |
 |:----------------:|:-----------------------------------:|:--------------------------------:|:-------------------:|
-|        1         |                  4                  |                1                 |         261         |
-|        1K        |                 52                  |                29                |          4          |
-|       10K        |                 221                 |               154                |         16          |
-|        1M        |                4422                 |               4285               |        1059         |
-|       10M        |                44669                |              50221               |        10695        |
-|       30M        |               131930                |              131556              |        31909        |
+|        1         |                  2                  |                0                 |         248         |
+|        1K        |                 24                  |                10                |          5          |
+|       10K        |                 114                 |                74                |         22          |
+|        1M        |                2907                 |               2361               |        1082         |
+|       10M        |                28248                |              23670               |        10791        |
+|       30M        |                84626                |              71669               |        33195        |
 
 _Obs: the numbers on the solutions columns are the time spent to complete the all the conversions in milliseconds (ms)_
 
@@ -88,12 +88,12 @@ _Obs: the numbers on the solutions columns are the time spent to complete the al
 - [X] use class that is already on the class loader
 - [X] in memory solution first check if class (converter) exists, if not create it
 - [X] in memory solution create map destiny class -> converter
-- [ ] segregate solutions
-- [ ] segregate unit tests
+- [X] segregate solutions
+- [X] segregate unit tests
 - [X] move performance test to be on the same test
 - [X] test performance with scenario (loop with 1, 1000, 10000, 10000000)
 - [X] create performance analysis output
-- [ ] redo reflections logic to try use bubble sort complexity
+- [X] redo reflections logic to try use bubble sort complexity
 - [X] two conversions inside each iteration
 - [X] three asserts inside each iteration
 - [X] complete separate objects

@@ -1,7 +1,6 @@
 package com.gabrielspassos.poc.memory.services;
 
 import com.gabrielspassos.poc.common.AttributeSynonym;
-import com.gabrielspassos.poc.memory.dtos.PairDTO;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,24 +28,7 @@ public class ClassService {
         return instance;
     }
 
-    public List<PairDTO<Field, Field>> getMatchingFields(Class<?> input, Class<?> output) {
-        List<PairDTO<Field, Field>> pairList = new ArrayList<>();
-        List<Field> fieldsFromInput = getFieldsFromClass(input);
-        List<Field> fieldsFromOutput = getFieldsFromClass(output);
-
-        for (Field fieldFromOutput : fieldsFromOutput) {
-            for (Field fieldFromInput : fieldsFromInput) {
-                List<String> fieldWithSynonyms = getFieldWithSynonyms(fieldFromInput);
-                if (fieldWithSynonyms.contains(fieldFromOutput.getName())) {
-                    pairList.add(new PairDTO<>(fieldFromInput, fieldFromOutput));
-                }
-            }
-        }
-
-        return pairList;
-    }
-
-    private List<Field> getFieldsFromClass(Class<?> tClass) {
+    public List<Field> getFieldsFromClass(Class<?> tClass) {
         if (classFieldsCache.containsKey(tClass)) {
             return classFieldsCache.get(tClass);
         }
@@ -72,20 +54,17 @@ public class ClassService {
         return allFields;
     }
 
-    private List<String> getFieldWithSynonyms(Field field) {
+    public List<String> getFieldWithSynonyms(Field field) {
         if (!field.isAnnotationPresent(AttributeSynonym.class)) {
             return List.of(field.getName());
         }
 
-        List<String> attributeSynonyms = getAttributeSynonyms(field);
+        List<String> attributeSynonyms = Arrays.asList(field.getAnnotation(AttributeSynonym.class).synonyms());
+
         return new ArrayList<>() {{
             add(field.getName());
             addAll(attributeSynonyms);
         }};
-    }
-
-    private List<String> getAttributeSynonyms(Field field) {
-        return Arrays.asList(field.getAnnotation(AttributeSynonym.class).synonyms());
     }
 
 }

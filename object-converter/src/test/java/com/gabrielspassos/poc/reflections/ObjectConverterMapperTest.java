@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.mappers;
+package com.gabrielspassos.poc.reflections;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
 import com.gabrielspassos.poc.dto.AnimalDTO;

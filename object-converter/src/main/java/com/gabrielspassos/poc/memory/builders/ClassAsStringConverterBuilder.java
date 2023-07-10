@@ -1,6 +1,5 @@
 package com.gabrielspassos.poc.memory.builders;
 
-import com.gabrielspassos.poc.memory.dtos.PairDTO;
 import com.gabrielspassos.poc.memory.services.ClassService;
 import com.gabrielspassos.poc.memory.utils.StringUtils;
 
@@ -34,9 +33,6 @@ public class ClassAsStringConverterBuilder {
         String inputClassName = input.getClass().getSimpleName();
         String outputClassName = output.getSimpleName();
 
-        //todo: use only one loop
-        List<PairDTO<Field, Field>> matchingFields = classService.getMatchingFields(input.getClass(), output);
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("package com.gabrielspassos.poc.memory.loaders;\n\n");
         stringBuilder.append("import " + input.getClass().getName() + ";\n");
@@ -46,11 +42,19 @@ public class ClassAsStringConverterBuilder {
         stringBuilder.append("\tpublic " + outputClassName + " convert(" + inputClassName + " input) {\n");
         stringBuilder.append("\t\t" + outputClassName + " output = new " + outputClassName + "();\n");
 
+        List<Field> fieldsFromInput = classService.getFieldsFromClass(input.getClass());
+        List<Field> fieldsFromOutput = classService.getFieldsFromClass(output);
         String setLine = "\t\toutput.set%s(input.get%s());\n";
-        for (PairDTO<Field, Field> pair: matchingFields) {
-            String inputFieldName = getFieldName(pair.getLeft());
-            String outputFieldName = getFieldName(pair.getRight());
-            stringBuilder.append(String.format(setLine, outputFieldName, inputFieldName));
+
+        for (Field fieldFromOutput : fieldsFromOutput) {
+            for (Field fieldFromInput : fieldsFromInput) {
+                List<String> fieldWithSynonyms = classService.getFieldWithSynonyms(fieldFromInput);
+                if (fieldWithSynonyms.contains(fieldFromOutput.getName())) {
+                    String inputFieldName = getFieldName(fieldFromInput);
+                    String outputFieldName = getFieldName(fieldFromOutput);
+                    stringBuilder.append(String.format(setLine, outputFieldName, inputFieldName));
+                }
+            }
         }
 
         stringBuilder.append("\t\treturn output;\n");

@@ -1,10 +1,9 @@
-package com.gabrielspassos.poc.builders;
+package com.gabrielspassos.poc.memory.builders;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
 import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
-import com.gabrielspassos.poc.memory.builders.ClassAsStringConverterBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

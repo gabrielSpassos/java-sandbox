@@ -1,6 +1,5 @@
 package com.gabrielspassos.poc.cacheablereflections.services;
 
-import com.gabrielspassos.poc.cacheablereflections.exceptions.BasicException;
 import com.gabrielspassos.poc.cacheablereflections.exceptions.ErrorToGetAttributeValueException;
 import com.gabrielspassos.poc.cacheablereflections.exceptions.ErrorToInstantiateClassException;
 import com.gabrielspassos.poc.common.AttributeSynonym;
@@ -70,8 +69,6 @@ public class ClassService {
             Constructor<T> constructor = tClass.getConstructor();
             classConstructorsCache.put(tClass, constructor);
             return (T) constructor.newInstance();
-        } catch (BasicException e) {
-            throw e;
         } catch (Exception e) {
             throw new ErrorToInstantiateClassException(e, tClass.getName());
         }

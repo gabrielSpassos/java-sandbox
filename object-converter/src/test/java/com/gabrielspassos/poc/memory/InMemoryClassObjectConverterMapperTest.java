@@ -1,4 +1,4 @@
-package com.gabrielspassos.poc.mappers;
+package com.gabrielspassos.poc.memory;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
 import com.gabrielspassos.poc.dto.AnimalDTO;
@@ -6,11 +6,13 @@ import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
-import com.gabrielspassos.poc.memory.InMemoryClassObjectConverterMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class InMemoryClassObjectConverterMapperTest {
 

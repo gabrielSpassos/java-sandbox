@@ -1,9 +1,6 @@
-package com.gabrielspassos.poc.loaders;
+package com.gabrielspassos.poc.memory.loaders;
 
 import com.gabrielspassos.poc.dto.AccountDTO;
-import com.gabrielspassos.poc.memory.loaders.InMemoryConverterClass;
-import com.gabrielspassos.poc.memory.loaders.InMemoryFileManager;
-import com.gabrielspassos.poc.memory.loaders.JavaSourceFromString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
