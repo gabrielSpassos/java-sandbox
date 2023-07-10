@@ -1,10 +1,9 @@
 package com.gabrielspassos.poc.cacheablereflections.services;
 
+import com.gabrielspassos.poc.cacheablereflections.exceptions.BasicException;
+import com.gabrielspassos.poc.cacheablereflections.exceptions.ErrorToGetAttributeValueException;
+import com.gabrielspassos.poc.cacheablereflections.exceptions.ErrorToInstantiateClassException;
 import com.gabrielspassos.poc.common.AttributeSynonym;
-import com.gabrielspassos.poc.reflections.exceptions.BasicException;
-import com.gabrielspassos.poc.reflections.exceptions.ErrorToGetAttributeValueException;
-import com.gabrielspassos.poc.reflections.exceptions.ErrorToInstantiateClassException;
-import com.gabrielspassos.poc.reflections.exceptions.InvalidClassConstructorException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -68,13 +67,7 @@ public class ClassService {
                 return (T) classConstructorsCache.get(tClass).newInstance();
             }
 
-            //todo: get if possible get default constructor with one existent method
-            Constructor<?>[] constructors = tClass.getConstructors();
-            Constructor<?> constructor = Arrays.stream(constructors)
-                    .filter(constructorToFilter -> constructorToFilter.getParameterCount() == 0)
-                    .findAny()
-                    .orElseThrow(() -> new InvalidClassConstructorException(tClass.getName()));
-
+            Constructor<T> constructor = tClass.getConstructor();
             classConstructorsCache.put(tClass, constructor);
             return (T) constructor.newInstance();
         } catch (BasicException e) {
