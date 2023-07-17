@@ -1,7 +1,5 @@
-package com.gabrielspassos.poc.cacheablereflections;
+package com.gabrielspassos.poc.unsafe;
 
-import com.gabrielspassos.poc.cacheablereflections.exceptions.ErrorToInstantiateClassException;
-import com.gabrielspassos.poc.cacheablereflections.exceptions.NoParametersException;
 import com.gabrielspassos.poc.dto.AccountDTO;
 import com.gabrielspassos.poc.dto.AnimalDTO;
 import com.gabrielspassos.poc.dto.BankingEmployeeDTO;
@@ -9,6 +7,7 @@ import com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
+import com.gabrielspassos.poc.unsafe.exceptions.NoParametersException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -18,20 +17,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
-public class CacheableReflectionsConverterMapperTest {
+class UnsafeObjectConverterMapperTest {
 
-    private static CacheableReflectionsConverterMapper mapper;
+    private static UnsafeObjectConverterMapper unsafeObjectConverterMapper;
 
     @BeforeAll
     static void setup() {
-        mapper = CacheableReflectionsConverterMapper.getCacheableReflectionsConverterMapper();
+        unsafeObjectConverterMapper = UnsafeObjectConverterMapper.getUnsafeObjectConverterMapper();
     }
 
     @Test
     void shouldConvertClass() {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
 
-        SavingAccountDTO converted = mapper.convert(account, SavingAccountDTO.class);
+        SavingAccountDTO converted = unsafeObjectConverterMapper.convert(account, SavingAccountDTO.class);
 
         assertNotNull(converted);
         assertEquals("0001", converted.getAgency());
@@ -44,7 +43,7 @@ public class CacheableReflectionsConverterMapperTest {
     void shouldConvertExtendedClass() {
         PersonDTO personDTO = new PersonDTO("John", 38);
 
-        EmployeeDTO converted = mapper.convert(personDTO, EmployeeDTO.class);
+        EmployeeDTO converted = unsafeObjectConverterMapper.convert(personDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
         assertEquals("John", converted.getFirstName());
@@ -58,7 +57,7 @@ public class CacheableReflectionsConverterMapperTest {
     void shouldConvertChildClassToParent() {
         EmployeeDTO employeeDTO = new EmployeeDTO("Maria", 24, 548954L, true);
 
-        PersonDTO converted = mapper.convert(employeeDTO, PersonDTO.class);
+        PersonDTO converted = unsafeObjectConverterMapper.convert(employeeDTO, PersonDTO.class);
 
         assertNotNull(converted);
         assertEquals("Maria", converted.getName());
@@ -69,7 +68,7 @@ public class CacheableReflectionsConverterMapperTest {
     void shouldConvertChildClassToParentWithMultipleExtensions() {
         BankingEmployeeDTO bankingEmployeeDTO = new BankingEmployeeDTO("Felipe", 38, 848343L, false, 2.5);
 
-        EmployeeDTO converted = mapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
+        EmployeeDTO converted = unsafeObjectConverterMapper.convert(bankingEmployeeDTO, EmployeeDTO.class);
 
         assertNotNull(converted);
         assertEquals("Felipe", converted.getName());
@@ -82,27 +81,16 @@ public class CacheableReflectionsConverterMapperTest {
     void shouldConvertObjectWithAnnotation() {
         PersonDTO personDTO = new PersonDTO("John", 38);
 
-        AnimalDTO converted = mapper.convert(personDTO, AnimalDTO.class);
+        AnimalDTO converted = unsafeObjectConverterMapper.convert(personDTO, AnimalDTO.class);
 
         assertNotNull(converted);
         assertEquals("John", converted.getSpecies());
     }
 
     @Test
-    void shouldThrowErrorToInvalidClassWithoutDefaultConstructor() {
-        AccountDTO account = new AccountDTO("0001", "12345", 6L);
-        var expectedMessage = "Error to create instance of class com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO";
-
-        ErrorToInstantiateClassException exception = assertThrowsExactly(ErrorToInstantiateClassException.class,
-                () -> mapper.convert(account, ClassWithoutDefaultConstructorDTO.class));
-
-        assertEquals(expectedMessage, exception.getErrorMessage());
-    }
-
-    @Test
     void shouldThrowErrorOnInvalidInputObject() {
         NoParametersException exception = assertThrowsExactly(NoParametersException.class,
-                () -> mapper.convert(null, ClassWithoutDefaultConstructorDTO.class));
+                () -> unsafeObjectConverterMapper.convert(null, ClassWithoutDefaultConstructorDTO.class));
 
         assertEquals("Can not use null value", exception.getErrorMessage());
     }
@@ -112,8 +100,9 @@ public class CacheableReflectionsConverterMapperTest {
         AccountDTO account = new AccountDTO("0001", "12345", 6L);
 
         NoParametersException exception = assertThrowsExactly(NoParametersException.class,
-                () -> mapper.convert(account, null));
+                () -> unsafeObjectConverterMapper.convert(account, null));
 
         assertEquals("Can not use null value", exception.getErrorMessage());
     }
+
 }

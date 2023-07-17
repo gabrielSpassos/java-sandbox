@@ -7,10 +7,9 @@ import com.gabrielspassos.poc.dto.ClassWithoutDefaultConstructorDTO;
 import com.gabrielspassos.poc.dto.EmployeeDTO;
 import com.gabrielspassos.poc.dto.PersonDTO;
 import com.gabrielspassos.poc.dto.SavingAccountDTO;
-import com.gabrielspassos.poc.reflections.ObjectConverterMapper;
 import com.gabrielspassos.poc.reflections.exceptions.ErrorToInstantiateClassException;
 import com.gabrielspassos.poc.reflections.exceptions.NoParametersException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class ObjectConverterMapperTest {
 
-    private ObjectConverterMapper objectConverterMapper;
+    private static ObjectConverterMapper objectConverterMapper;
 
-    @BeforeEach
-    void setup() {
-        this.objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
+    @BeforeAll
+    static void setup() {
+        objectConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
     }
 
     @Test

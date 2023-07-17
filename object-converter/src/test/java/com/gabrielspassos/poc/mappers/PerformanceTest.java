@@ -5,6 +5,7 @@ import com.gabrielspassos.poc.dto.PerformanceOneDTO;
 import com.gabrielspassos.poc.dto.PerformanceTwoDTO;
 import com.gabrielspassos.poc.memory.InMemoryClassObjectConverterMapper;
 import com.gabrielspassos.poc.reflections.ObjectConverterMapper;
+import com.gabrielspassos.poc.unsafe.UnsafeObjectConverterMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +18,14 @@ public class PerformanceTest {
     private static InMemoryClassObjectConverterMapper inMemoryClassObjectConverterMapper;
     private static CacheableReflectionsConverterMapper cacheableReflectionsConverterMapper;
     private static ObjectConverterMapper objectWithoutCacheConverterMapper;
+    private static UnsafeObjectConverterMapper unsafeObjectConverterMapper;
 
     @BeforeAll
     static void setup() {
         inMemoryClassObjectConverterMapper = InMemoryClassObjectConverterMapper.getMapper();
         cacheableReflectionsConverterMapper = CacheableReflectionsConverterMapper.getCacheableReflectionsConverterMapper();
         objectWithoutCacheConverterMapper = ObjectConverterMapper.getObjectConverterMapper();
+        unsafeObjectConverterMapper = UnsafeObjectConverterMapper.getUnsafeObjectConverterMapper();
     }
 
     @Test
@@ -103,6 +106,20 @@ public class PerformanceTest {
         long finishInMemory = System.currentTimeMillis();
         System.out.print("Time in milliseconds with in memory converter: ");
         System.out.println(finishInMemory - startInMemory);
+
+        long startUnsafe = System.currentTimeMillis();
+        for (int i = 0; i < iterations; i++) {
+            PerformanceOneDTO performanceOneDTO = buildPerformanceOneDTO();
+            PerformanceTwoDTO firstConvertedObject = unsafeObjectConverterMapper.convert(performanceOneDTO, PerformanceTwoDTO.class);
+            PerformanceOneDTO secondConvertedObject = unsafeObjectConverterMapper.convert(firstConvertedObject, PerformanceOneDTO.class);
+
+            assertEquals(firstConvertedObject.getId(), secondConvertedObject.getId());
+            assertEquals(firstConvertedObject.getName(), secondConvertedObject.getName());
+            assertEquals(firstConvertedObject.getValue(), secondConvertedObject.getValue());
+        }
+        long finishUnsafe = System.currentTimeMillis();
+        System.out.print("Time in milliseconds with unsafe converter: ");
+        System.out.println(finishUnsafe - startUnsafe);
         System.out.println("*******************************************************");
     }
 

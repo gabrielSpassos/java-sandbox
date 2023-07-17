@@ -66,16 +66,16 @@ public class AnimalDTO {
 
 ### Comparing Solutions
 
-| # of conversions | Reflections without Cache Converter | Reflections with Cache Converter | In Memory Converter |
-|:----------------:|:-----------------------------------:|:--------------------------------:|:-------------------:|
-|        1         |                  2                  |                0                 |         256         |
-|        10        |                  1                  |                1                 |          1          |
-|       100        |                  5                  |                2                 |          2          |
-|        1K        |                 15                  |                10                |          4          |
-|       10K        |                 99                  |                71                |         19          |
-|        1M        |                2907                 |               2361               |        1082         |
-|       10M        |                28248                |              23670               |        10791        |
-|       30M        |                84626                |              71669               |        33195        |
+| # of conversions | Reflections without Cache Converter | Reflections with Cache Converter | In Memory Converter | Unsafe Converter |
+|:----------------:|:-----------------------------------:|:--------------------------------:|:-------------------:|:----------------:|
+|        1         |                  2                  |                0                 |         266         |        0         |
+|        10        |                  1                  |                2                 |          0          |        1         |
+|       100        |                  7                  |                4                 |          2          |        1         |
+|        1K        |                 17                  |                16                |          8          |        5         |
+|       10K        |                 104                 |                69                |         16          |        38        |
+|        1M        |                2896                 |               2321               |        1058         |       1715       |
+|       10M        |                27871                |              23386               |        10577        |      14659       |
+|       30M        |                83499                |              69944               |        31645        |      42643       |
 
 _Obs: the numbers on the solutions columns are the time spent to complete the all the conversions in milliseconds (ms)_
 
@@ -99,7 +99,9 @@ _Obs: the numbers on the solutions columns are the time spent to complete the al
 - [X] two conversions inside each iteration
 - [X] three asserts inside each iteration
 - [X] complete separate objects
-- [ ] implement converter with java unsafe
+- [X] implement converter with java unsafe
+  - (https://howtodoinjava.com/java-examples/usage-of-class-sun-misc-unsafe/)
+  - (https://stackoverflow.com/questions/54142600/defineclass-method-throws-java-lang-classformaterror-incompatible-magic-value-1)
 
 - https://www.baeldung.com/java-string-compile-execute-code
 - https://www.javassist.org/
