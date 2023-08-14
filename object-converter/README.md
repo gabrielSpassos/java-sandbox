@@ -66,16 +66,16 @@ public class AnimalDTO {
 
 ### Comparing Solutions
 
-| # of conversions | Reflections without Cache Converter | Reflections with Cache Converter | In Memory Converter | Unsafe Converter |
-|:----------------:|:-----------------------------------:|:--------------------------------:|:-------------------:|:----------------:|
-|        1         |                  2                  |                0                 |         266         |        0         |
-|        10        |                  1                  |                2                 |          0          |        1         |
-|       100        |                  7                  |                4                 |          2          |        1         |
-|        1K        |                 17                  |                16                |          8          |        5         |
-|       10K        |                 104                 |                69                |         16          |        38        |
-|        1M        |                2896                 |               2321               |        1058         |       1715       |
-|       10M        |                27871                |              23386               |        10577        |      14659       |
-|       30M        |                83499                |              69944               |        31645        |      42643       |
+| # of conversions | Reflections without Cache Converter | Reflections with Cache Converter | In Memory Converter | Unsafe Converter  |
+|:----------------:|:-----------------------------------:|:--------------------------------:|:-------------------:|:-----------------:|
+|        1         |                  3                  |                0                 |         283         |         0         |
+|        10        |                  1                  |                1                 |          0          |         1         |
+|       100        |                  4                  |                3                 |          1          |         1         |
+|        1K        |                 15                  |                8                 |          4          |         5         |
+|       10K        |                 108                 |                74                |         18          |        42         |
+|        1M        |           2915 - (2,915s)           |         2399 - (2,399s)          |   1071 - (1,071s)   |  1294 - (1,294s)  |
+|       10M        |          27901 - (27,901s)          |        23726 - (23,726s)         |  10659 - (10,659s)  | 13144 - (13,144s) |
+|       30M        |          84656 - (1,41min)          |        71791  - (1,19min)        |  32297 - (32,297s)  | 39234 - (39,234s) |
 
 _Obs: the numbers on the solutions columns are the time spent to complete the all the conversions in milliseconds (ms)_
 

@@ -42,25 +42,25 @@ public class PerformanceTest {
         int oneHundred = 100;
         testPerformanceBaseScenario(oneHundred);
 
-        // scenario 4 - 1000 iteration
+        // scenario 4 - 1K iteration
         int oneThousand = 1000;
         testPerformanceBaseScenario(oneThousand);
 
-        // scenario 5 - 10000 iteration
+        // scenario 5 - 10K iteration
         int tenThousand = 10000;
         testPerformanceBaseScenario(tenThousand);
 
-//        // scenario 6 - 1000000 iteration
-//        int oneMillion = 1000000;
-//        testPerformanceBaseScenario(oneMillion);
-//
-//        // scenario 7 - 10000000 iteration
-//        int tenMillion = 10000000;
-//        testPerformanceBaseScenario(tenMillion);
-//
-//        // scenario 8 - 30000000 iteration
-//        int thirtyMillion = 30000000;
-//        testPerformanceBaseScenario(thirtyMillion);
+        // scenario 6 - 1M iteration
+        int oneMillion = 1000000;
+        testPerformanceBaseScenario(oneMillion);
+
+        // scenario 7 - 10M iteration
+        int tenMillion = 10000000;
+        testPerformanceBaseScenario(tenMillion);
+
+        // scenario 8 - 30M iteration
+        int thirtyMillion = 30000000;
+        testPerformanceBaseScenario(thirtyMillion);
     }
 
     private void testPerformanceBaseScenario(int iterations) {

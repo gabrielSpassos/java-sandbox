@@ -90,91 +90,14 @@ public class ClassService {
 
     public Object getAttributeValue(Field field, Object object, Long offset) {
         try {
-            Class<?> type = field.getType();
-            if (type.isPrimitive()) {
-                if (java.lang.Character.TYPE == type) {
-                    return unsafe.getChar(object, offset);
-                }
-
-                if (java.lang.Byte.TYPE == type) {
-                    return unsafe.getByte(object, offset);
-                }
-
-                if (java.lang.Short.TYPE == type) {
-                    return unsafe.getShort(object, offset);
-                }
-
-                if (java.lang.Integer.TYPE == type) {
-                    return unsafe.getInt(object, offset);
-                }
-
-                if (java.lang.Long.TYPE == type) {
-                    return unsafe.getLong(object, offset);
-                }
-
-                if (java.lang.Float.TYPE == type) {
-                    return unsafe.getFloat(object, offset);
-                }
-
-                if (java.lang.Double.TYPE == type) {
-                    return unsafe.getDouble(object, offset);
-                }
-
-                if (java.lang.Boolean.TYPE == type) {
-                    return unsafe.getBoolean(object, offset);
-                }
-            }
             return unsafe.getObject(object, offset);
         } catch (Exception e) {
             throw new ErrorToGetAttributeValueException(e, field);
         }
     }
 
-    //todo: test with only the object option
     public void putAttributeValue(Field field, Object object, Long offset, Object attributeValue) {
         try {
-            Class<?> type = field.getType();
-            if (type.isPrimitive()) {
-                if (java.lang.Character.TYPE == type) {
-                    unsafe.putChar(object, offset, (Character) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Byte.TYPE == type) {
-                    unsafe.putByte(object, offset, (Byte) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Short.TYPE == type) {
-                    unsafe.putShort(object, offset, (Short) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Integer.TYPE == type) {
-                    unsafe.putInt(object, offset, (Integer) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Long.TYPE == type) {
-                    unsafe.putLong(object, offset, (Long) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Float.TYPE == type) {
-                    unsafe.putFloat(object, offset, (Float) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Double.TYPE == type) {
-                    unsafe.putDouble(object, offset, (Double) attributeValue);
-                    return;
-                }
-
-                if (java.lang.Boolean.TYPE == type) {
-                    unsafe.putBoolean(object, offset, (Boolean) attributeValue);
-                    return;
-                }
-            }
             unsafe.putObject(object, offset, attributeValue);
         } catch (Exception e) {
             throw new ErrorToPutAttributeValueException(e, field);
