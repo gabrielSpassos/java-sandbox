@@ -1,9 +1,10 @@
 package org.gabrielspassos;
 
-import org.gabrielspassos.repository.AccountRepository;
+import org.gabrielspassos.repository.AccountRepositoryImpl;
 import org.gabrielspassos.repository.UserRepository;
 import org.gabrielspassos.service.AccountService;
 import org.gabrielspassos.service.CustomerService;
+import org.gabrielspassos.service.TransactionService;
 import org.gabrielspassos.service.UserService;
 
 public class Main {
@@ -13,7 +14,7 @@ public class Main {
         System.out.println(customerService.findActiveCustomers());
 
         // constructor dependency injection
-        AccountRepository accountRepository = new AccountRepository();
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
         AccountService accountService = new AccountService(accountRepository);
         System.out.println(accountService.findActiveAccounts());
 
@@ -22,5 +23,8 @@ public class Main {
         UserService userService = new UserService();
         userService.setUserRepository(userRepository);
         System.out.println(userService.findActiveUsers());
+
+        TransactionService transactionService = new TransactionService(accountService, userService);
+        System.out.println(transactionService.updateAccountStatusToInactive("user@email.com", 123456L));
     }
 }

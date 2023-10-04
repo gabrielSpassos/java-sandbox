@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class FakeAccountRepository extends AccountRepository {
+public class FakeAccountRepository implements AccountRepository {
 
     @Override
     public List<AccountDTO> findAll() {

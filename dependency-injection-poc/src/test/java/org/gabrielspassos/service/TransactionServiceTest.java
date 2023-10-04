@@ -1,7 +1,7 @@
 package org.gabrielspassos.service;
 
 import org.gabrielspassos.dto.AccountDTO;
-import org.gabrielspassos.repository.AccountRepository;
+import org.gabrielspassos.repository.AccountRepositoryImpl;
 import org.gabrielspassos.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ class TransactionServiceTest {
     @Test
     void shouldSetAccountAsInactive() {
         // is necessary to set all this "track" of dependencies to create the desired object
-        AccountRepository accountRepository = new AccountRepository();
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
         AccountService accountService = new AccountService(accountRepository);
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService();
@@ -30,7 +30,7 @@ class TransactionServiceTest {
 
     @Test
     void shouldThrowErrorForNotValidUser() {
-        AccountRepository accountRepository = new AccountRepository();
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
         AccountService accountService = new AccountService(accountRepository);
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService();
@@ -45,7 +45,7 @@ class TransactionServiceTest {
 
     @Test
     void shouldThrowErrorForNotValidAccount() {
-        AccountRepository accountRepository = new AccountRepository();
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
         AccountService accountService = new AccountService(accountRepository);
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService();

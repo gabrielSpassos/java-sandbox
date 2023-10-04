@@ -3,6 +3,7 @@ package org.gabrielspassos.service;
 import org.gabrielspassos.dto.AccountDTO;
 import org.gabrielspassos.fakes.repository.FakeAccountRepository;
 import org.gabrielspassos.repository.AccountRepository;
+import org.gabrielspassos.repository.AccountRepositoryImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +16,7 @@ class AccountServiceTest {
 
     @Test
     void shouldReturnActiveAccounts() {
-        AccountRepository accountRepository = new AccountRepository();
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
         AccountService accountService = new AccountService(accountRepository);
 
         List<AccountDTO> activeAccounts = accountService.findActiveAccounts();
