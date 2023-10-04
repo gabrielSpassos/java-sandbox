@@ -2,6 +2,7 @@ package org.gabrielspassos.application;
 
 import org.gabrielspassos.application.fakes.application.FakeLocalApp;
 import org.gabrielspassos.dto.AccountDTO;
+import org.gabrielspassos.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,6 +21,16 @@ class LocalAppTest {
 
         assertNotNull(activeAccounts);
         assertFalse(activeAccounts.isEmpty());
+    }
+
+    @Test
+    void shouldReturnFindAllUsersActives() {
+        LocalApp localApp = new LocalApp();
+
+        List<UserDTO> activeUsers = localApp.getUserService().findActiveUsers();
+
+        assertNotNull(activeUsers);
+        assertFalse(activeUsers.isEmpty());
     }
 
     @Test
