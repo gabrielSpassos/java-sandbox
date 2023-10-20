@@ -61,6 +61,8 @@ public class ShoppingCart {
     }
 
     private BigDecimal getProductsTotalPrice() {
-        return products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return products.stream()
+                .map(Product::getProductTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

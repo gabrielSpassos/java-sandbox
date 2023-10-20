@@ -1,5 +1,7 @@
 package org.gabrielspassos.shopping;
 
+import org.gabrielspassos.util.AmountUtil;
+
 import java.math.BigDecimal;
 
 public class Product {
@@ -8,13 +10,15 @@ public class Product {
 
     private BigDecimal price;
 
-    public Product(String name, BigDecimal price) {
+    private Integer quantity;
+
+    public Product(String name, BigDecimal price, Integer quantity) {
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
     }
 
-    //todo: remove this getter
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getProductTotalPrice() {
+        return AmountUtil.setScaleAndRound(price.multiply(BigDecimal.valueOf(quantity)));
     }
 }

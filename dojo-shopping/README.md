@@ -2,4 +2,4 @@
 
 ### Class diagram
 
-![class-Ecommerce.png](..%2F..%2Fstudies-sandbox%2Fdojo-c%2B%2B%2Fclass-Ecommerce.png)
+![class-Ecommerce](https://github.com/gabrielSpassos/java-sandbox/assets/32275521/2949e30e-8ddd-4711-854d-e93cc098bfb2)

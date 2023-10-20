@@ -20,8 +20,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBankTransfer() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BANK_TRANSFER_CHECK_OUT, BigDecimal.valueOf(0), FIXED_DISCOUNT_TYPE, 1L);
@@ -32,8 +32,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBankTransferWithFixedDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BANK_TRANSFER_CHECK_OUT, BigDecimal.valueOf(10), FIXED_DISCOUNT_TYPE, 1L);
@@ -44,8 +44,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBankTransferWithPercentageDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BANK_TRANSFER_CHECK_OUT, BigDecimal.valueOf(10), PERCENTAGE_DISCOUNT_TYPE, 1L);
@@ -56,8 +56,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithCreditCard() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, CREDIT_CARD_CHECK_OUT, BigDecimal.valueOf(0), FIXED_DISCOUNT_TYPE, 1L);
@@ -68,8 +68,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithCreditCardWithFixedDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, CREDIT_CARD_CHECK_OUT, BigDecimal.valueOf(10), FIXED_DISCOUNT_TYPE, 1L);
@@ -80,8 +80,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithCreditCardWithPercentageDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, CREDIT_CARD_CHECK_OUT, BigDecimal.valueOf(10), PERCENTAGE_DISCOUNT_TYPE, 1L);
@@ -92,8 +92,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBuyNowPayLater() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BUY_NOW_PAY_LATER_CHECK_OUT, BigDecimal.valueOf(0), FIXED_DISCOUNT_TYPE, 1L);
@@ -104,8 +104,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBuyNowPayLaterWithInstallments() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BUY_NOW_PAY_LATER_CHECK_OUT, BigDecimal.valueOf(0), FIXED_DISCOUNT_TYPE, 2L);
@@ -116,8 +116,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBuyNowPayLaterWithFixedDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BUY_NOW_PAY_LATER_CHECK_OUT, BigDecimal.valueOf(10), FIXED_DISCOUNT_TYPE, 1L);
@@ -128,8 +128,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBuyNowPayLaterWithPercentageDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 REGULAR_CUSTOMER_TYPE, BUY_NOW_PAY_LATER_CHECK_OUT, BigDecimal.valueOf(10), PERCENTAGE_DISCOUNT_TYPE, 1L);
@@ -140,8 +140,8 @@ class ShoppingCartTest {
     @Test
     void shouldPayWithBuyNowPayLaterWithGoldCustomer() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00")));
-        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00")));
+        shoppingCart.addProduct(new Product("tshirt", new BigDecimal("20.00"), 1));
+        shoppingCart.addProduct(new Product("pants", new BigDecimal("30.00"), 1));
 
         BigDecimal finalAmount = shoppingCart.checkout(
                 GOLD_CUSTOMER_TYPE, BUY_NOW_PAY_LATER_CHECK_OUT, BigDecimal.valueOf(0), FIXED_DISCOUNT_TYPE, 1L);
@@ -151,8 +151,8 @@ class ShoppingCartTest {
 
     @Test
     void shouldRemoveProductFromCart() {
-        Product tshirt = new Product("tshirt", new BigDecimal("20.00"));
-        Product pants = new Product("pants", new BigDecimal("30.00"));
+        Product tshirt = new Product("tshirt", new BigDecimal("20.00"), 1);
+        Product pants = new Product("pants", new BigDecimal("30.00"), 1);
 
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.addProduct(tshirt);
@@ -167,7 +167,7 @@ class ShoppingCartTest {
 
     @Test
     void shouldThrowErrorToRemoveProductFromCart() {
-        Product pants = new Product("pants", new BigDecimal("30.00"));
+        Product pants = new Product("pants", new BigDecimal("30.00"), 1);
         ShoppingCart shoppingCart = new ShoppingCart();
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
