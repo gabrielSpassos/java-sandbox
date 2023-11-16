@@ -1,0 +1,9 @@
+version: '3'
+services:
+  cassandra:
+    image: bitnami/cassandra:latest
+    environment:
+      - CASSANDRA_TRANSPORT_PORT_NUMBER=7000
+      - CASSANDRA_CQL_PORT_NUMBER=9042
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
