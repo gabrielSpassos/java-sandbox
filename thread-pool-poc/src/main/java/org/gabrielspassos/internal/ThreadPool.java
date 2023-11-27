@@ -2,46 +2,45 @@ package org.gabrielspassos.internal;
 
 import org.gabrielspassos.external.Task;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ThreadPool {
 
+    private static final int MAX_POOL_SIZE = 5;
+
     private final ConcurrentLinkedQueue<Task> tasks;
-    private final ConcurrentLinkedQueue<Thread> threads;
+    private final ConcurrentLinkedQueue<GabrielThread> threads;
 
     public ThreadPool() {
         this.tasks = new ConcurrentLinkedQueue<>();
-        this.threads = Stream.generate(Thread::new)
-                .limit(5)
-                .collect(Collectors.toCollection(ConcurrentLinkedQueue::new));
+        this.threads = initializeThreads();
     }
 
-    public void addTask(Task task) {
-        threads.stream()
-                .filter(thread -> Thread.State.NEW.equals(thread.getState())
-                        || Thread.State.TERMINATED.equals(thread.getState()))
-                .map(thread -> {
-                    threads.remove(thread);
-                    Runnable runnable = task::execute;
-                    Thread newThread = new Thread(runnable);
-                    threads.add(newThread);
-                    newThread.run();
-                    return task;
-                })
-                .findFirst()
-                .orElseGet(() -> {
-                    tasks.add(task);
-                    return task;
-                });
+    public Task addTask(Task task) {
+        tasks.add(task);
+        return task;
+    }
+
+    protected Optional<Task> getFirstTaskOnQueue() {
+        return Optional.ofNullable(tasks.poll());
     }
 
     protected ConcurrentLinkedQueue<Task> getTasks() {
         return tasks;
     }
 
-    protected ConcurrentLinkedQueue<Thread> getThreads() {
+    protected ConcurrentLinkedQueue<GabrielThread> getThreads() {
+        return threads;
+    }
+
+    private ConcurrentLinkedQueue<GabrielThread> initializeThreads() {
+        final ConcurrentLinkedQueue<GabrielThread> threads = new ConcurrentLinkedQueue<>();
+        for (int i = 1; i <= MAX_POOL_SIZE; i++) {
+            GabrielThread thread = new GabrielThread(String.valueOf(i), this);
+            threads.add(thread);
+            thread.start(); //todo: why this works with start and not with run?
+        }
         return threads;
     }
 

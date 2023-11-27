@@ -1,7 +1,7 @@
 package org.gabrielspassos.internal;
 
-import org.gabrielspassos.task.TaskA;
-import org.gabrielspassos.task.TaskB;
+import org.gabrielspassos.task.TaskWithDelay;
+import org.gabrielspassos.task.TaskWithoutDelay;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +12,7 @@ class ThreadPoolTest {
     void shouldAddTaskToThreadPool() {
         ThreadPool threadPool = new ThreadPool();
 
-        threadPool.addTask(new TaskA());
+        threadPool.addTask(new TaskWithoutDelay());
 
         assertEquals(5, threadPool.getThreads().size());
         assertEquals(0, threadPool.getTasks().size());
@@ -22,8 +22,8 @@ class ThreadPoolTest {
     void shouldAddTwoTaskToThreadPool() {
         ThreadPool threadPool = new ThreadPool();
 
-        threadPool.addTask(new TaskA());
-        threadPool.addTask(new TaskA());
+        threadPool.addTask(new TaskWithDelay());
+        threadPool.addTask(new TaskWithDelay());
 
         assertEquals(5, threadPool.getThreads().size());
         assertEquals(0, threadPool.getTasks().size());
@@ -33,10 +33,8 @@ class ThreadPoolTest {
     void shouldAddMultipleTaskToThreadPool() {
         ThreadPool threadPool = new ThreadPool();
 
-        for (int i = 0; i < 10 ; i++) {
-            threadPool.addTask(new TaskB());
-            threadPool.addTask(new TaskB());
-            threadPool.addTask(new TaskB());
+        for (int i = 0; i < 1000 ; i++) {
+            threadPool.addTask(new TaskWithDelay());
         }
 
         assertEquals(5, threadPool.getThreads().size());

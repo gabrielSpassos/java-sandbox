@@ -5,16 +5,11 @@ import org.gabrielspassos.external.Task;
 
 import java.time.LocalDate;
 
-public class TaskA implements Task<PersonDTO> {
+public class TaskWithoutDelay implements Task<PersonDTO> {
 
     @Override
     public PersonDTO execute() {
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
-            System.out.println("Error "+ e);
-        }
-        PersonDTO personDTO = new PersonDTO("Josh", LocalDate.parse("1996-03-27"));
+        PersonDTO personDTO = new PersonDTO("Julio", LocalDate.parse("1992-05-19"));
         System.out.println("Task result: " + personDTO);
         return personDTO;
     }
