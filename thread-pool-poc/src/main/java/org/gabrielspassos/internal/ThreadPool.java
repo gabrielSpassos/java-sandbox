@@ -2,7 +2,6 @@ package org.gabrielspassos.internal;
 
 import org.gabrielspassos.external.Task;
 
-import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ThreadPool {
@@ -14,7 +13,12 @@ public class ThreadPool {
 
     public ThreadPool() {
         this.tasks = new ConcurrentLinkedQueue<>();
-        this.threads = initializeThreads();
+        this.threads = initializeThreads(MAX_POOL_SIZE);
+    }
+
+    public ThreadPool(Integer poolSize) {
+        this.tasks = new ConcurrentLinkedQueue<>();
+        this.threads = initializeThreads(poolSize);
     }
 
     public Task addTask(Task task) {
@@ -22,24 +26,33 @@ public class ThreadPool {
         return task;
     }
 
-    protected Optional<Task> getFirstTaskOnQueue() {
-        return Optional.ofNullable(tasks.poll());
+    public boolean removeThread(GabrielThread thread) {
+        return threads.remove(thread);
     }
 
-    protected ConcurrentLinkedQueue<Task> getTasks() {
-        return tasks;
+    public boolean stopThreads() throws InterruptedException {
+        while (!threads.isEmpty()) {
+            if (tasks.isEmpty()) {
+                for (GabrielThread thread : threads) {
+                    thread.stopThread();
+                }
+            }
+
+            Thread.sleep(1);
+        }
+        return true;
     }
 
-    protected ConcurrentLinkedQueue<GabrielThread> getThreads() {
-        return threads;
+    protected Task getFirstTaskOnQueue() {
+        return tasks.poll();
     }
 
-    private ConcurrentLinkedQueue<GabrielThread> initializeThreads() {
+    private ConcurrentLinkedQueue<GabrielThread> initializeThreads(Integer poolSize) {
         final ConcurrentLinkedQueue<GabrielThread> threads = new ConcurrentLinkedQueue<>();
-        for (int i = 1; i <= MAX_POOL_SIZE; i++) {
+        for (int i = 1; i <= poolSize; i++) {
             GabrielThread thread = new GabrielThread(String.valueOf(i), this);
             threads.add(thread);
-            thread.start(); //todo: why this works with start and not with run?
+            thread.start();
         }
         return threads;
     }

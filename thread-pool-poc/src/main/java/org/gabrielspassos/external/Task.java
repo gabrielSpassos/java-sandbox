@@ -1,7 +1,7 @@
 package org.gabrielspassos.external;
 
-public interface Task<R> {
+public interface Task {
 
-    R execute();
+    void execute();
 
 }
