@@ -1,21 +1,17 @@
 package com.gabrielspassos.integration.tests;
 
 import com.gabrielspassos.RoomRentService;
-import com.gabrielspassos.UserService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RoomRentIntegrationTest {
+public class RoomRentIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void shouldRentRoomWithValidUser() {
-        UserService userService = new UserService();
+    void shouldRentRoomWithValidUser() {
         RoomRentService roomRentService = new RoomRentService();
-
-        UUID user = userService.createUser();
 
         UUID room = roomRentService.rentRoom(user);
 

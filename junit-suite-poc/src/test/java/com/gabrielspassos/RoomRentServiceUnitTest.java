@@ -1,19 +1,21 @@
 package com.gabrielspassos;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RoomRentServiceUnitTest {
+
+class RoomRentServiceUnitTest {
 
     private RoomRentService roomRentService = new RoomRentService();
 
     @Test
-    public void shouldRentRoom() {
+    void shouldRentRoom() {
         UUID user = UUID.randomUUID();
 
         UUID room = roomRentService.rentRoom(user);
@@ -22,7 +24,7 @@ public class RoomRentServiceUnitTest {
     }
 
     @Test
-    public void shouldFailToRentRoomWithInvalidUser() {
+    void shouldFailToRentRoomWithInvalidUser() {
         IllegalArgumentException exception
                 = assertThrows(IllegalArgumentException.class, () -> roomRentService.rentRoom(null));
 

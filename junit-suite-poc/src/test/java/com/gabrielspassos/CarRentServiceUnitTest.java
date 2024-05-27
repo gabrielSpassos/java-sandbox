@@ -1,20 +1,21 @@
 package com.gabrielspassos;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class CarRentServiceUnitTest {
+class CarRentServiceUnitTest {
 
     CarRentService carRentService = new CarRentService();
 
     @Test
-    public void shouldRentCar() {
+    void shouldRentCar() {
         UUID user = UUID.randomUUID();
 
         UUID carRent = carRentService.rentCar(user);
@@ -23,7 +24,7 @@ public class CarRentServiceUnitTest {
     }
 
     @Test
-    public void shouldFailToRentCarWithInvalidUser() {
+    void shouldFailToRentCarWithInvalidUser() {
         IllegalArgumentException exception
                 = assertThrows(IllegalArgumentException.class, () -> carRentService.rentCar(null));
 

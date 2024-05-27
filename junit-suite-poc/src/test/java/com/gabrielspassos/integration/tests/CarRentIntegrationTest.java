@@ -1,21 +1,17 @@
 package com.gabrielspassos.integration.tests;
 
 import com.gabrielspassos.CarRentService;
-import com.gabrielspassos.UserService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CarRentIntegrationTest {
+public class CarRentIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void shouldRentCarWithValidUser() {
-        UserService userService = new UserService();
+    void shouldRentCarWithValidUser() {
         CarRentService carRentService = new CarRentService();
-
-        UUID user = userService.createUser();
 
         UUID car = carRentService.rentCar(user);
 

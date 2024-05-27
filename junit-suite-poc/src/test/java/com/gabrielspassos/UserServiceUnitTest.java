@@ -1,17 +1,19 @@
 package com.gabrielspassos;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserServiceUnitTest {
+
+class UserServiceUnitTest {
 
     UserService userService = new UserService();
 
     @Test
-    public void shouldCreateUser() {
+    void shouldCreateUser() {
         UUID user = userService.createUser();
 
         assertNotNull(user);

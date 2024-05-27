@@ -5,5 +5,6 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectPackages({"com.gabrielspassos.integration.tests"})
-public class BaseIntegrationTestSuite {
+class BaseIntegrationTestSuite {
+
 }
