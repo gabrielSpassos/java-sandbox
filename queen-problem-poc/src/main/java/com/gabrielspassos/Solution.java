@@ -1,7 +1,5 @@
 package com.gabrielspassos;
 
-import java.util.Objects;
-
 public class Solution {
 
     private static final String QUEEN = "Q";
@@ -51,21 +49,21 @@ public class Solution {
     private boolean isSafe(String[][] matrix, int row, int column) {
         // Check this row on left side
         for (int i = 0; i < column; i++) {
-            if (Objects.equals(matrix[row][i], QUEEN)) {
+            if (QUEEN.equals(matrix[row][i])) {
                 return false;
             }
         }
 
         // Check upper diagonal on left side
         for (int i = row, j = column; i >= 0 && j >= 0; i--, j--) {
-            if (Objects.equals(matrix[i][j], QUEEN)) {
+            if (QUEEN.equals(matrix[i][j])) {
                 return false;
             }
         }
 
         // Check lower diagonal on left side
         for (int i = row, j = column; j >= 0 && i < matrix.length; i++, j--) {
-            if (Objects.equals(matrix[i][j], QUEEN)) {
+            if (QUEEN.equals(matrix[i][j])) {
                 return false;
             }
         }
