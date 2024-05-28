@@ -1,6 +1,6 @@
 package com.gabrielspassos;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Testcontainers
 public class RedisBackedCacheIntTest {
 
-    private RedisBackedCache underTest;
+    private static RedisBackedCache underTest;
 
     @Container
-    public GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:6-alpine"))
+    public static GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:6-alpine"))
             .withExposedPorts(6379);
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void setUp() {
         String address = redis.getHost();
         Integer port = redis.getFirstMappedPort();
 
