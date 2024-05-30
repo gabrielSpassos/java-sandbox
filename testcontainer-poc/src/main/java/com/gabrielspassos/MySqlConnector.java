@@ -15,10 +15,11 @@ public class MySqlConnector {
 
     public boolean insert(String key, String value) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO MAP (KEY, VALUE) VALUES (?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO MAP (`KEY`, VALUE) VALUES (?, ?)");
             preparedStatement.setString(1, key);
             preparedStatement.setString(2, value);
-            return preparedStatement.execute();
+            preparedStatement.execute();
+            return true;
         } catch (Exception e) {
             System.out.println("Failed to insert");
             throw new RuntimeException(e);
@@ -28,7 +29,7 @@ public class MySqlConnector {
     public String get(String key) {
         try {
             String value = null;
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM MAP WHERE KEY = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM MAP WHERE `KEY` = ?");
             preparedStatement.setString(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
