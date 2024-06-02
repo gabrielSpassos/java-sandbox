@@ -192,3 +192,5 @@ Setting up podman env
 
 Process finished with exit code 0
 ```
+![Screenshot 2024-06-02 at 20 32 37](https://github.com/gabrielSpassos/java-sandbox/assets/32275521/95bf48b6-6ec4-4f5f-ab95-67661bf852c3)
+
