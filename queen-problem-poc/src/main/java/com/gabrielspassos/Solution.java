@@ -16,7 +16,7 @@ public class Solution {
         return matrix;
     }
 
-    private Boolean solveQueensProblem(String[][] matrix, int column, int nQueensCount) {
+    Boolean solveQueensProblem(String[][] matrix, int column, int nQueensCount) {
         if (column >= nQueensCount) {
             return true;
         }
@@ -46,7 +46,7 @@ public class Solution {
         return false;
     }
 
-    private boolean isSafe(String[][] matrix, int row, int column) {
+    boolean isSafe(String[][] matrix, int row, int column) {
         // Check this row on left side
         for (int i = 0; i < column; i++) {
             if (QUEEN.equals(matrix[row][i])) {
