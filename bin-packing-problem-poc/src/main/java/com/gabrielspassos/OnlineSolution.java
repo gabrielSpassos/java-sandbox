@@ -62,4 +62,41 @@ public class OnlineSolution {
         return result;
     }
 
+    /*
+      The idea is to places the next item in the *tightest* spot.
+      That is, put it in the bin so that the smallest empty space is left.
+     */
+    public Integer bestFit(List<Integer> weights, Integer binCapacity) {
+        int result = 0;
+
+        // Create an array to store remaining space in bins there can be at most n bins
+        // Initialize it with 0
+        List<Integer> binRemainingCapacityList = IntStream.of(new int[weights.size()]).boxed().collect(Collectors.toList());
+
+        for (Integer weight : weights) {
+            int j;
+            int minSpaceLeft = binCapacity + 1;
+            int bestBinIndex = 0;
+
+            for (j = 0; j < result; j++) {
+                if (binRemainingCapacityList.get(j) >= weight
+                        && binRemainingCapacityList.get(j) - weight < minSpaceLeft) {
+                    bestBinIndex = j;
+                    minSpaceLeft = binRemainingCapacityList.get(j) - weight;
+                }
+            }
+
+            // If no bin could accommodate weight[i] create a new bin
+            if (minSpaceLeft == binCapacity + 1) {
+                binRemainingCapacityList.set(result, binCapacity - weight);
+                result++;
+            } else {
+                // Assign the item to best bin
+                binRemainingCapacityList.set(bestBinIndex, binRemainingCapacityList.get(bestBinIndex) - weight);
+            }
+        }
+
+        return result;
+    }
+
 }
