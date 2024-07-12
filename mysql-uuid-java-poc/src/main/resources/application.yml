@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: mysql-uuid-java-poc
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: pass
