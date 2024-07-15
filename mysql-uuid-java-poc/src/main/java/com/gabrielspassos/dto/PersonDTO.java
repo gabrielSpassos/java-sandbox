@@ -1,31 +1,29 @@
-package com.gabrielspassos.domain;
+package com.gabrielspassos.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import com.gabrielspassos.domain.PersonEntity;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table("person")
-public class PersonEntity {
+public class PersonDTO {
 
-    @Id
-    @Column("id")
     private Long id;
-
-    @Column("uuid")
     private UUID uuid;
-
-    @Column("first_name")
     private String firstName;
-
-    @Column("last_name")
     private String lastName;
-
-    @Column("created_at")
     private Timestamp createdAt;
+
+    public PersonDTO() {
+    }
+
+    public PersonDTO(PersonEntity personEntity) {
+        this.id = personEntity.getId();
+        this.uuid = personEntity.getUuid();
+        this.firstName = personEntity.getFirstName();
+        this.lastName = personEntity.getLastName();
+        this.createdAt = personEntity.getCreatedAt();
+    }
 
     public Long getId() {
         return id;
@@ -71,12 +69,12 @@ public class PersonEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonEntity that = (PersonEntity) o;
-        return Objects.equals(id, that.id)
-                && Objects.equals(uuid, that.uuid)
-                && Objects.equals(firstName, that.firstName)
-                && Objects.equals(lastName, that.lastName)
-                && Objects.equals(createdAt, that.createdAt);
+        PersonDTO personDTO = (PersonDTO) o;
+        return Objects.equals(id, personDTO.id)
+                && Objects.equals(uuid, personDTO.uuid)
+                && Objects.equals(firstName, personDTO.firstName)
+                && Objects.equals(lastName, personDTO.lastName)
+                && Objects.equals(createdAt, personDTO.createdAt);
     }
 
     @Override
@@ -86,7 +84,7 @@ public class PersonEntity {
 
     @Override
     public String toString() {
-        return "PersonEntity{" +
+        return "PersonDTO{" +
                 "id=" + id +
                 ", uuid=" + uuid +
                 ", firstName='" + firstName + '\'' +

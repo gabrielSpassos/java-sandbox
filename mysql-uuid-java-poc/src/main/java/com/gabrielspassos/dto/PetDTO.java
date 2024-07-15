@@ -1,24 +1,13 @@
-package com.gabrielspassos.domain;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+package com.gabrielspassos.dto;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table("pet")
-public class PetEntity {
+public class PetDTO {
 
-    @Id
-    @Column("id")
     private UUID id;
-
-    @Column("name")
     private String name;
-
-    @Column("created_at")
     private Timestamp createdAt;
 
     public UUID getId() {
@@ -49,10 +38,10 @@ public class PetEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PetEntity petEntity = (PetEntity) o;
-        return Objects.equals(id, petEntity.id)
-                && Objects.equals(name, petEntity.name)
-                && Objects.equals(createdAt, petEntity.createdAt);
+        PetDTO petDTO = (PetDTO) o;
+        return Objects.equals(id, petDTO.id)
+                && Objects.equals(name, petDTO.name)
+                && Objects.equals(createdAt, petDTO.createdAt);
     }
 
     @Override
@@ -62,7 +51,7 @@ public class PetEntity {
 
     @Override
     public String toString() {
-        return "PetEntity{" +
+        return "PetDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", createdAt=" + createdAt +
