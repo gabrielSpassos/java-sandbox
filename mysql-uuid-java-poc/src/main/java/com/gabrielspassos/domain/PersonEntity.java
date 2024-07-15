@@ -6,7 +6,6 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.UUID;
 
 @Table("person")
 public class PersonEntity {
@@ -16,7 +15,7 @@ public class PersonEntity {
     private Long id;
 
     @Column("uuid")
-    private UUID uuid;
+    private String uuid;
 
     @Column("first_name")
     private String firstName;
@@ -35,11 +34,11 @@ public class PersonEntity {
         this.id = id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

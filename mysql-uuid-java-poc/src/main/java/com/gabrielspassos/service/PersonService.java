@@ -8,6 +8,8 @@ import com.gabrielspassos.exception.NotFoundException;
 import com.gabrielspassos.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,9 +28,10 @@ public class PersonService {
 
     public PersonDTO createPerson(CreatePersonRequest request) {
         var personEntity = new PersonEntity();
-        personEntity.setUuid(UUID.randomUUID());
+        personEntity.setUuid(UUID.randomUUID().toString());
         personEntity.setFirstName(request.getFirstName());
         personEntity.setLastName(request.getLastName());
+        personEntity.setCreatedAt(Timestamp.from(ZonedDateTime.now().toInstant()));
 
         var savedPerson = personRepository.save(personEntity);
         return new PersonDTO(savedPerson);
@@ -46,7 +49,7 @@ public class PersonService {
     }
 
     public PersonDTO findPersonByUUID(UUID uuid) {
-        return personRepository.findByUuid(uuid)
+        return personRepository.findByUuid(uuid.toString())
                 .map(PersonDTO::new)
                 .orElseThrow(() -> new NotFoundException(PERSON_NOT_FOUND, String.format("person not found with uuid: %s", uuid)));
     }
@@ -54,7 +57,7 @@ public class PersonService {
     public PersonDTO updatePerson(Long id, UpdatePersonRequest request) {
         var personEntity = findById(id);
 
-        personEntity.setUuid(request.getUuid());
+        personEntity.setUuid(request.getUuid().toString());
         personEntity.setFirstName(request.getFirstName());
         personEntity.setLastName(request.getLastName());
 

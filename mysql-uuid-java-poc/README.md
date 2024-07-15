@@ -2,6 +2,28 @@
 
 > The goal of this poc is verify the backward compatibility between java (21) and MySQL 8+ UUID()
 
+# Output
+```shell
+List people
+[{"id":1,"uuid":"6465d805-42c2-11ef-bd9e-86b97898346e","firstName":"Gabriel","lastName":"Passos","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":2,"uuid":"646bb450-42c2-11ef-bd9e-86b97898346e","firstName":"Joao","lastName":"Ninguem","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":3,"uuid":"60b15f8f-0f9c-4242-b9d7-6dfa1d98f633","firstName":"Joe","lastName":"Doe","createdAt":"2024-07-15T18:53:34.000+00:00"}]\n
+Creating person
+{"id":4,"uuid":"a6a3b889-87ed-4a42-95d3-b928c10647fe","firstName":"Mary","lastName":"Smith","createdAt":"2024-07-15T15:58:02.787+00:00"}\n
+List people
+[{"id":1,"uuid":"6465d805-42c2-11ef-bd9e-86b97898346e","firstName":"Gabriel","lastName":"Passos","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":2,"uuid":"646bb450-42c2-11ef-bd9e-86b97898346e","firstName":"Joao","lastName":"Ninguem","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":3,"uuid":"60b15f8f-0f9c-4242-b9d7-6dfa1d98f633","firstName":"Joe","lastName":"Doe","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":4,"uuid":"a6a3b889-87ed-4a42-95d3-b928c10647fe","firstName":"Mary","lastName":"Smith","createdAt":"2024-07-15T15:58:03.000+00:00"}]\n
+Get Person from Id 2
+{"id":2,"uuid":"646bb450-42c2-11ef-bd9e-86b97898346e","firstName":"Joao","lastName":"Ninguem","createdAt":"2024-07-15T18:53:34.000+00:00"}\n
+Get Person from UUID
+{"id":3,"uuid":"60b15f8f-0f9c-4242-b9d7-6dfa1d98f633","firstName":"Joe","lastName":"Doe","createdAt":"2024-07-15T18:53:34.000+00:00"}\n
+Update person from Id 2
+{"id":2,"uuid":"959af7a1-9e20-4a65-a681-e3163cc34666","firstName":"Joao","lastName":"Silva","createdAt":"2024-07-15T18:53:34.000+00:00"}\n
+List people
+[{"id":1,"uuid":"6465d805-42c2-11ef-bd9e-86b97898346e","firstName":"Gabriel","lastName":"Passos","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":2,"uuid":"959af7a1-9e20-4a65-a681-e3163cc34666","firstName":"Joao","lastName":"Silva","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":3,"uuid":"60b15f8f-0f9c-4242-b9d7-6dfa1d98f633","firstName":"Joe","lastName":"Doe","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":4,"uuid":"a6a3b889-87ed-4a42-95d3-b928c10647fe","firstName":"Mary","lastName":"Smith","createdAt":"2024-07-15T15:58:03.000+00:00"}]\n
+Delete person from id 2
+{"id":2,"uuid":"959af7a1-9e20-4a65-a681-e3163cc34666","firstName":"Joao","lastName":"Silva","createdAt":"2024-07-15T18:53:34.000+00:00"}\n
+List people
+[{"id":1,"uuid":"6465d805-42c2-11ef-bd9e-86b97898346e","firstName":"Gabriel","lastName":"Passos","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":3,"uuid":"60b15f8f-0f9c-4242-b9d7-6dfa1d98f633","firstName":"Joe","lastName":"Doe","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":4,"uuid":"a6a3b889-87ed-4a42-95d3-b928c10647fe","firstName":"Mary","lastName":"Smith","createdAt":"2024-07-15T15:58:03.000+00:00"}]\n
+```
+
 # Usage
 
 1. Run DB
@@ -9,7 +31,14 @@
 ./run-db.sh
 ```
 
-# Outputs:
+2. Start the server
+
+3. Run the curl to manipulate person entity
+```bash
+./run-person-requests
+```
+
+# Outcomes
 
 1. The database column type is `VARCHAR(36)`
 2. The insert of the database with mysql `UUID()` worked successfully
@@ -125,6 +154,7 @@ java.sql.SQLException: Incorrect string value: '\xAC\xED\x00\x05sr...' for colum
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.25.jar:10.1.25]
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 ```
+5. Handle `UUID` as `String` on java side work successfully
 
 # TODO
 
