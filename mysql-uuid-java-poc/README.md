@@ -24,6 +24,25 @@ List people
 [{"id":1,"uuid":"6465d805-42c2-11ef-bd9e-86b97898346e","firstName":"Gabriel","lastName":"Passos","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":3,"uuid":"60b15f8f-0f9c-4242-b9d7-6dfa1d98f633","firstName":"Joe","lastName":"Doe","createdAt":"2024-07-15T18:53:34.000+00:00"},{"id":4,"uuid":"a6a3b889-87ed-4a42-95d3-b928c10647fe","firstName":"Mary","lastName":"Smith","createdAt":"2024-07-15T15:58:03.000+00:00"}]\n
 ```
 
+```shell
+List pets
+[{"id":"98246fb0-4aa3-11ef-a063-bac245ab893f","name":"Toby","createdAt":"2024-07-25T19:33:16.000+00:00"},{"id":"e1e183be-96c3-4946-b598-31422fc041f4","name":"Mel","createdAt":"2024-07-25T19:33:16.000+00:00"}]\n
+Creating pet
+{"id":"d279e5b2-313e-4071-967d-6244a5c2a349","name":"Buddy","createdAt":"2024-07-30T16:19:16.544+00:00"}\n
+List pets
+[{"id":"98246fb0-4aa3-11ef-a063-bac245ab893f","name":"Toby","createdAt":"2024-07-25T19:33:16.000+00:00"},{"id":"d279e5b2-313e-4071-967d-6244a5c2a349","name":"Buddy","createdAt":"2024-07-30T16:19:17.000+00:00"},{"id":"e1e183be-96c3-4946-b598-31422fc041f4","name":"Mel","createdAt":"2024-07-25T19:33:16.000+00:00"}]\n
+Get pet by id e1e183be-96c3-4946-b598-31422fc041f4
+{"id":"e1e183be-96c3-4946-b598-31422fc041f4","name":"Mel","createdAt":"2024-07-25T19:33:16.000+00:00"}\n
+Update pet by id e1e183be-96c3-4946-b598-31422fc041f4
+{"id":"e1e183be-96c3-4946-b598-31422fc041f4","name":"mel","createdAt":"2024-07-25T19:33:16.000+00:00"}\n
+List pets
+[{"id":"98246fb0-4aa3-11ef-a063-bac245ab893f","name":"Toby","createdAt":"2024-07-25T19:33:16.000+00:00"},{"id":"d279e5b2-313e-4071-967d-6244a5c2a349","name":"Buddy","createdAt":"2024-07-30T16:19:17.000+00:00"},{"id":"e1e183be-96c3-4946-b598-31422fc041f4","name":"mel","createdAt":"2024-07-25T19:33:16.000+00:00"}]\n
+Delete pet by id e1e183be-96c3-4946-b598-31422fc041f4
+{"id":"e1e183be-96c3-4946-b598-31422fc041f4","name":"mel","createdAt":"2024-07-25T19:33:16.000+00:00"}\n
+List pets
+[{"id":"98246fb0-4aa3-11ef-a063-bac245ab893f","name":"Toby","createdAt":"2024-07-25T19:33:16.000+00:00"},{"id":"d279e5b2-313e-4071-967d-6244a5c2a349","name":"Buddy","createdAt":"2024-07-30T16:19:17.000+00:00"}]\n
+```
+
 # Usage
 
 1. Run DB
@@ -154,11 +173,12 @@ java.sql.SQLException: Incorrect string value: '\xAC\xED\x00\x05sr...' for colum
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.25.jar:10.1.25]
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 ```
-5. Handle `UUID` as `String` on java side work successfully
+5. Handle `UUID` as `String` on java side work successfully, and solve issue #4
 6. Issue using the repository.save() using the UUID (string) as ID 
 ```
 org.springframework.dao.IncorrectUpdateSemanticsDataAccessException: Failed to update entity [PetEntity{id=4e40091c-9bc4-468e-b1e7-8172b03505c8, name='Buddy', createdAt=2024-07-30 12:35:09.618796}]; Id [4e40091c-9bc4-468e-b1e7-8172b03505c8] not found in database
 ```
+7. Implementing `Persistable<ID>` with the method `isNew` we can bypass the issue #6
 
 # TODO
 

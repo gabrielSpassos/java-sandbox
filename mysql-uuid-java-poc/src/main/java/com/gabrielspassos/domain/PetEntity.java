@@ -1,6 +1,8 @@
 package com.gabrielspassos.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -8,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Table("pet")
-public class PetEntity {
+public class PetEntity implements Persistable<String> {
 
     @Id
     @Column("id")
@@ -19,6 +21,9 @@ public class PetEntity {
 
     @Column("created_at")
     private Timestamp createdAt;
+
+    @Transient
+    private boolean isNew;
 
     public String getId() {
         return id;
@@ -44,27 +49,38 @@ public class PetEntity {
         this.createdAt = createdAt;
     }
 
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+
+    @Override
+    public boolean isNew() {
+        return isNew;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PetEntity petEntity = (PetEntity) o;
-        return Objects.equals(id, petEntity.id)
+        return isNew == petEntity.isNew
+                && Objects.equals(id, petEntity.id)
                 && Objects.equals(name, petEntity.name)
                 && Objects.equals(createdAt, petEntity.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, createdAt);
+        return Objects.hash(id, name, createdAt, isNew);
     }
 
     @Override
     public String toString() {
         return "PetEntity{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", createdAt=" + createdAt +
+                ", isNew=" + isNew +
                 '}';
     }
 }

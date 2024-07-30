@@ -30,6 +30,7 @@ public class PetService {
         petEntity.setId(UUID.randomUUID().toString());
         petEntity.setName(request.getName());
         petEntity.setCreatedAt(Timestamp.from(ZonedDateTime.now().toInstant()));
+        petEntity.setIsNew(true);
 
         var savedPet = petRepository.save(petEntity);
         return new PetDTO(savedPet);
