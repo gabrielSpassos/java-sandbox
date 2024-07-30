@@ -155,10 +155,15 @@ java.sql.SQLException: Incorrect string value: '\xAC\xED\x00\x05sr...' for colum
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 ```
 5. Handle `UUID` as `String` on java side work successfully
+6. Issue using the repository.save() using the UUID (string) as ID 
+```
+org.springframework.dao.IncorrectUpdateSemanticsDataAccessException: Failed to update entity [PetEntity{id=4e40091c-9bc4-468e-b1e7-8172b03505c8, name='Buddy', createdAt=2024-07-30 12:35:09.618796}]; Id [4e40091c-9bc4-468e-b1e7-8172b03505c8] not found in database
+```
 
 # TODO
 
-- [X] Create database script
+- [x] Create database script
 - [x] Map Entities
-- [x] Create CRUD operations
+- [x] Create CRUD operations for Person
+- [x] Create CRUD operations for Pet
 - [ ] Tests

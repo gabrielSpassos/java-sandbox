@@ -39,5 +39,5 @@ echo "use mydb; insert into person (uuid,first_name,last_name) values (uuid(),'J
 echo "use mydb; insert into person (uuid,first_name,last_name) values ('60b15f8f-0f9c-4242-b9d7-6dfa1d98f633','Joe','Doe');" | mysql -uroot -ppass -h127.0.0.1 -P3306
 
 echo "Inserting data into pet table... "
-echo "use mydb; insert into pet (id,name) values (uuid(),'Mel');" | mysql -uroot -ppass -h127.0.0.1 -P3306
+echo "use mydb; insert into pet (id,name) values ('e1e183be-96c3-4946-b598-31422fc041f4','Mel');" | mysql -uroot -ppass -h127.0.0.1 -P3306
 echo "use mydb; insert into pet (id,name) values (uuid(),'Toby');" | mysql -uroot -ppass -h127.0.0.1 -P3306

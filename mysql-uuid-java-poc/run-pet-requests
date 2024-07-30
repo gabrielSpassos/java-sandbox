@@ -1,0 +1,57 @@
+#!/bin/bash
+
+echo "List pets"
+curl --location 'http://localhost:8080/v1/pets' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json'
+echo "\n"
+
+echo "Creating pet"
+curl --location 'http://localhost:8080/v1/pets' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Buddy"
+}'
+echo "\n"
+
+echo "List pets"
+curl --location 'http://localhost:8080/v1/pets' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json'
+echo "\n"
+
+echo "Get pet by id e1e183be-96c3-4946-b598-31422fc041f4"
+curl --location 'http://localhost:8080/v1/pets/e1e183be-96c3-4946-b598-31422fc041f4' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json'
+echo "\n"
+
+echo "Update pet by id e1e183be-96c3-4946-b598-31422fc041f4"
+curl --location --request PUT 'http://localhost:8080/v1/pets/e1e183be-96c3-4946-b598-31422fc041f4' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "mel"
+}'
+echo "\n"
+
+echo "List pets"
+curl --location 'http://localhost:8080/v1/pets' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json'
+echo "\n"
+
+echo "Delete pet by id e1e183be-96c3-4946-b598-31422fc041f4"
+curl --location --request DELETE 'http://localhost:8080/v1/pets/e1e183be-96c3-4946-b598-31422fc041f4' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json'
+echo "\n"
+
+echo "List pets"
+curl --location 'http://localhost:8080/v1/pets' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json'
+echo "\n"
+
+

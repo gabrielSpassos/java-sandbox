@@ -71,7 +71,7 @@ public class PersonService {
         return new PersonDTO(personEntity);
     }
 
-    private PersonEntity findById (Long id) {
+    private PersonEntity findById(Long id) {
         return personRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PERSON_NOT_FOUND, String.format("person not found with id: %s", id)));
     }
