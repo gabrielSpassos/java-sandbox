@@ -46,6 +46,7 @@ HTTP Status 417 (Expectation Failed)
 ### Logs
 
 > Check the logs folder on the root of the project
+![Screenshot 2024-07-30 at 10 39 45](https://github.com/user-attachments/assets/f36f044b-7057-49d1-aee3-1046cc49782f)
 
 - Access logs
 ```
