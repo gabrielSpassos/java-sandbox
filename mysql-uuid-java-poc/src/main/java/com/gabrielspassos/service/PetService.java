@@ -4,6 +4,7 @@ import com.gabrielspassos.api.request.PetRequest;
 import com.gabrielspassos.domain.PetEntity;
 import com.gabrielspassos.dto.PetDTO;
 import com.gabrielspassos.exception.NotFoundException;
+import com.gabrielspassos.mapper.PetMapper;
 import com.gabrielspassos.repository.PetRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,18 +34,18 @@ public class PetService {
         petEntity.setIsNew(true);
 
         var savedPet = petRepository.save(petEntity);
-        return new PetDTO(savedPet);
+        return PetMapper.mapEntityToDTO(savedPet);
     }
 
     public List<PetDTO> findPets() {
         return StreamSupport.stream(petRepository.findAll().spliterator(), false)
-                .map(PetDTO::new)
+                .map(PetMapper::mapEntityToDTO)
                 .collect(Collectors.toList());
     }
 
     public PetDTO findPetById(String id) {
         var petEntity = findById(id);
-        return new PetDTO(petEntity);
+        return PetMapper.mapEntityToDTO(petEntity);
     }
 
     public PetDTO updatePet(String id, PetRequest request) {
@@ -53,13 +54,13 @@ public class PetService {
         petEntity.setName(request.getName());
 
         var updatedPet = petRepository.save(petEntity);
-        return new PetDTO(updatedPet);
+        return PetMapper.mapEntityToDTO(updatedPet);
     }
 
     public PetDTO deletePerson(String id) {
         var petEntity = findById(id);
         petRepository.delete(petEntity);
-        return new PetDTO(petEntity);
+        return PetMapper.mapEntityToDTO(petEntity);
     }
 
     private PetEntity findById(String id) {

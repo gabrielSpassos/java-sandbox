@@ -1,27 +1,18 @@
 package com.gabrielspassos.dto;
 
-import com.gabrielspassos.domain.PersonEntity;
-
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.UUID;
 
 public class PersonDTO {
 
     private Long id;
-    private String uuid;
+    private UUID uuid;
     private String firstName;
     private String lastName;
     private Timestamp createdAt;
 
     public PersonDTO() {
-    }
-
-    public PersonDTO(PersonEntity personEntity) {
-        this.id = personEntity.getId();
-        this.uuid = personEntity.getUuid();
-        this.firstName = personEntity.getFirstName();
-        this.lastName = personEntity.getLastName();
-        this.createdAt = personEntity.getCreatedAt();
     }
 
     public Long getId() {
@@ -32,11 +23,11 @@ public class PersonDTO {
         this.id = id;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 

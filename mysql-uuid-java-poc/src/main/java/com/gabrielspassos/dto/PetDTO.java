@@ -1,30 +1,23 @@
 package com.gabrielspassos.dto;
 
-import com.gabrielspassos.domain.PetEntity;
-
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.UUID;
 
 public class PetDTO {
 
-    private String id;
+    private UUID id;
     private String name;
     private Timestamp createdAt;
 
     public PetDTO() {
     }
 
-    public PetDTO(PetEntity petEntity) {
-        this.id = petEntity.getId();
-        this.name = petEntity.getName();
-        this.createdAt = petEntity.getCreatedAt();
-    }
-
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
