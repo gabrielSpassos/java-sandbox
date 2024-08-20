@@ -1,13 +1,16 @@
-package com.gabrielspassos;
+package com.gabrielspassos.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabrielspassos.api.request.CreatePersonRequest;
 import com.gabrielspassos.api.request.UpdatePersonRequest;
+import com.gabrielspassos.repository.PersonRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -16,6 +19,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,16 +34,26 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PersonControllerIntegrationTests {
 
+    @Autowired
+    private PersonRepository personRepository;
+
     private static HttpClient httpClient;
     private static ObjectMapper mapper;
 
     @LocalServerPort
     private int randomServerPort;
 
+    private List<Long> personIds = new ArrayList<>();
+
     @BeforeAll
     static void beforeAll() {
         httpClient = HttpClient.newBuilder().build();
         mapper = new ObjectMapper();
+    }
+
+    @AfterEach
+    void cleanUp() {
+        personIds.forEach(id -> personRepository.deleteById(id));
     }
 
     @Test
@@ -230,7 +245,7 @@ public class PersonControllerIntegrationTests {
         assertFalse(jsonObject.isNull("createdAt"));
     }
 
-    private HttpResponse<String> createPerson(CreatePersonRequest createPersonRequest) throws IOException, InterruptedException {
+    private HttpResponse<String> createPerson(CreatePersonRequest createPersonRequest) throws IOException, InterruptedException, JSONException {
         var url = String.format("http://localhost:%s/v1/people", randomServerPort);
 
         HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -240,6 +255,12 @@ public class PersonControllerIntegrationTests {
                 .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(createPersonRequest)))
                 .build();
 
-        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> createPersonJsonResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+        var createPersonJsonObject = new JSONObject(createPersonJsonResponse.body());
+        var personId = createPersonJsonObject.getLong("id");
+        personIds.add(personId);
+
+        return createPersonJsonResponse;
     }
 }
