@@ -179,6 +179,7 @@ java.sql.SQLException: Incorrect string value: '\xAC\xED\x00\x05sr...' for colum
 org.springframework.dao.IncorrectUpdateSemanticsDataAccessException: Failed to update entity [PetEntity{id=4e40091c-9bc4-468e-b1e7-8172b03505c8, name='Buddy', createdAt=2024-07-30 12:35:09.618796}]; Id [4e40091c-9bc4-468e-b1e7-8172b03505c8] not found in database
 ```
 7. Implementing `Persistable<ID>` with the method `isNew` we can bypass the issue #6
+8. The `UUID.fromString()` works properly with both UUID, from MySQL and Java
 
 # TODO
 
@@ -186,4 +187,4 @@ org.springframework.dao.IncorrectUpdateSemanticsDataAccessException: Failed to u
 - [x] Map Entities
 - [x] Create CRUD operations for Person
 - [x] Create CRUD operations for Pet
-- [ ] Tests
+- [x] Tests
