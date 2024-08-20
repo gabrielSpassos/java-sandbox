@@ -17,7 +17,7 @@ public final class PersonMapper {
         }
 
         PersonDTO personDTO = new PersonDTO();
-        personDTO.setId(personDTO.getId());
+        personDTO.setId(personEntity.getId());
         personDTO.setUuid(UUID.fromString(personEntity.getUuid()));
         personDTO.setFirstName(personEntity.getFirstName());
         personDTO.setLastName(personEntity.getLastName());
