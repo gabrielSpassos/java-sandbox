@@ -1,6 +1,6 @@
 # Java MySQL UUID Compatibility POC
 
-> The goal of this poc is verify the backward compatibility between java (21) and MySQL 8+ UUID()
+> The goal of this poc is to verify the backward compatibility between java (21) and MySQL 8+ UUID()
 
 # Output
 ```shell
@@ -55,6 +55,11 @@ List pets
 3. Run the curl to manipulate person entity
 ```bash
 ./run-person-requests
+```
+
+3. Run the curl to manipulate pet entity
+```bash
+./run-pet-requests
 ```
 
 # Outcomes
