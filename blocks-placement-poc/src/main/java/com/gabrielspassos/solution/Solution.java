@@ -35,9 +35,17 @@ public class Solution {
 
     private Boolean isPossibleToPlaceBlock(ArrayList<Integer> obstacles, int maxLimit, int size) {
         var distances = new ArrayList<Integer>();
-        for (int i = 0; i < obstacles.size(); i++) {
-            var distance = START == i ? obstacles.get(i) - START : obstacles.get(i) - obstacles.get(i - 1);
+
+        List<Integer> filteredObstacle = new ArrayList<>(obstacles.stream().filter(obstacle -> obstacle <= maxLimit).toList());
+        filteredObstacle.add(maxLimit);
+
+        for (int i = 0; i < filteredObstacle.size(); i++) {
+            var distance = START == i ? filteredObstacle.get(i) - START : filteredObstacle.get(i) - filteredObstacle.get(i - 1);
             distances.add(distance);
+        }
+
+        if (distances.isEmpty()) {
+            distances.add(maxLimit);
         }
 
         return distances.stream().anyMatch(distance -> size <= distance);

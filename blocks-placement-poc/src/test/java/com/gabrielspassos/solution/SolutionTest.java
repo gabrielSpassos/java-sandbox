@@ -30,4 +30,26 @@ class SolutionTest {
         assertEquals(expected, results);
     }
 
+    @Test
+    public void shouldReturnExample3() {
+        var queries = new int[][]{{2, 1, 1}};
+        var expected = List.of(true);
+        var solution = new Solution();
+
+        var results = solution.getResults(queries);
+
+        assertEquals(expected, results);
+    }
+
+    @Test
+    public void shouldReturnExample4() {
+        var queries = new int[][]{{1, 1}, {2, 4, 3}};
+        var expected = List.of(true);
+        var solution = new Solution();
+
+        var results = solution.getResults(queries);
+
+        assertEquals(expected, results);
+    }
+
 }
