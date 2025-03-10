@@ -1,8 +1,21 @@
 package com.gabrielspassos;
 
+import sun.nio.ch.DirectBuffer;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import static com.gabrielspassos.CharSequenceAccess.nativeCharSequenceAccess;
+import static com.gabrielspassos.UnsafeAccess.BOOLEAN_BASE;
+import static com.gabrielspassos.UnsafeAccess.BYTE_BASE;
+import static com.gabrielspassos.UnsafeAccess.CHAR_BASE;
+import static com.gabrielspassos.UnsafeAccess.FALSE_BYTE_VALUE;
+import static com.gabrielspassos.UnsafeAccess.INT_BASE;
+import static com.gabrielspassos.UnsafeAccess.LONG_BASE;
+import static com.gabrielspassos.UnsafeAccess.SHORT_BASE;
+import static com.gabrielspassos.UnsafeAccess.TRUE_BYTE_VALUE;
+import static com.gabrielspassos.Util.VALID_STRING_HASH;
+import static com.gabrielspassos.Util.checkArrayOffs;
 
 public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
@@ -167,35 +180,6 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
-     * Returns a 64-bit hash function implementing the
-     * <a href="https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp">MurmurHash3
-     * algorithm</a> without seed values. This implementation produces equal results for equal input
-     * on platforms with different {@link ByteOrder}, but is slower on big-endian platforms than on
-     * little-endian.
-     *
-     * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm without seed values
-     * @see #murmur_3(long)
-     */
-    public static LongHashFunction murmur_3() {
-        return MurmurHash_3.asLongHashFunctionWithoutSeed();
-    }
-
-    /**
-     * Returns a 64-bit hash function implementing the
-     * <a href="https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp">MurmurHash3
-     * algorithm</a> with the given seed value. This implementation produces equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
-     *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm with the given seed value
-     * @see #murmur_3()
-     */
-    public static LongHashFunction murmur_3(long seed) {
-        return MurmurHash_3.asLongHashFunctionWithSeed(seed);
-    }
-
-    /**
      * Returns a hash function implementing the <a href="https://github.com/Cyan4973/xxHash">xxHash
      * algorithm</a> without a seed value (0 is used as default seed value). This implementation
      * produces equal results for equal input on platforms with different {@link
@@ -220,118 +204,6 @@ public abstract class LongHashFunction implements Serializable {
      */
     public static LongHashFunction xx(long seed) {
         return XxHash.asLongHashFunctionWithSeed(seed);
-    }
-
-    /**
-     * Returns a hash function implementing the <a href="https://github.com/Cyan4973/xxHash">XXH3 64bit
-     * algorithm</a> without a seed value (0 is used as default seed value). This implementation
-     * produces equal results for equal input on platforms with different {@link
-     * ByteOrder}, but is slower on big-endian platforms than on little-endian.
-     *
-     * @return a {@code LongHashFunction} implementing the XXH3 64-bit algorithm without a seed value
-     * @see #xx3(long)
-     */
-    public static LongHashFunction xx3() {
-        return XXH3.asLongHashFunctionWithoutSeed();
-    }
-
-    /**
-     * Returns a hash function implementing the <a href="https://github.com/Cyan4973/xxHash">XXH3 64bit
-     * algorithm</a> with the given seed value. This implementation produces equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
-     *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the XXH3 64-bit algorithm with the given seed value
-     * @see #xx3()
-     */
-    public static LongHashFunction xx3(final long seed) {
-        return XXH3.asLongHashFunctionWithSeed(seed);
-    }
-
-    /**
-     * Returns a hash function implementing the <a href="https://github.com/Cyan4973/xxHash">XXH128 low
-     * 64bit algorithm</a> without a seed value (0 is used as default seed value). This
-     * implementation produces equal results for equal input on platforms with different {@link
-     * ByteOrder}, but is slower on big-endian platforms than on little-endian.
-     *
-     * @return a {@code LongHashFunction} implementing the XXH128 low 64bit algorithm without a seed value
-     * @see #xx128low(long)
-     */
-    public static LongHashFunction xx128low() {
-        return XXH3.asLongTupleLowHashFunctionWithoutSeed();
-    }
-
-    /**
-     * Returns a hash function implementing the <a href="https://github.com/Cyan4973/xxHash">XXH128 low
-     * 64bit algorithm</a> with the given seed value. This implementation produces equal results for
-     * equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
-     * platforms than on little-endian.
-     *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the XXH128 low 64bit algorithm with the given seed value
-     * @see #xx128low()
-     */
-    public static LongHashFunction xx128low(final long seed) {
-        return XXH3.asLongTupleLowHashFunctionWithSeed(seed);
-    }
-
-    /**
-     * Returns a hash function implementing the
-     * <a href="https://github.com/wangyi-fudan/wyhash/blob/9f68c1b10166a54c17f55b284c21bd455fd0f7e2/wyhash.h">
-     * wyhash algorithm, version 3</a> without a seed value (0 is used as default seed value). This
-     * implementation produces equal results for equal input on platforms with different {@link
-     * ByteOrder}, but is slower on big-endian platforms than on little-endian.
-     *
-     * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, without a seed value
-     * @see #wy_3(long)
-     */
-    public static LongHashFunction wy_3() {
-        return WyHash.asLongHashFunctionWithoutSeed();
-    }
-
-    /**
-     * Returns a hash function implementing the
-     * <a href="https://github.com/wangyi-fudan/wyhash/blob/9f68c1b10166a54c17f55b284c21bd455fd0f7e2/wyhash.h">
-     * wyhash algorithm, version 3</a> with the given seed value. This implementation produces equal
-     * results for equal input on platforms with different {@link ByteOrder}, but is slower on
-     * big-endian platforms than on little-endian.
-     *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, with the given seed value
-     * @see #wy_3()
-     */
-    public static LongHashFunction wy_3(long seed) {
-        return WyHash.asLongHashFunctionWithSeed(seed);
-    }
-
-    /**
-     * Returns a hash function implementing the 64 bit version of
-     * <a href="https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> without
-     * a seed value (0 is used as default seed value), with the initialization vector for
-     * metrohash64_2. This implementation produces equal results for equal input on platforms with
-     * different {@link ByteOrder}, but is slower on big-endian platforms than on little-endian.
-     *
-     * @return a {@code LongHashFunction} implementing the 64 bit version of metrohash algorithm without a seed value
-     * @see #metro(long)
-     */
-    public static LongHashFunction metro() {
-        return MetroHash.asLongHashFunctionWithoutSeed();
-    }
-
-    /**
-     * Returns a hash function implementing the 64 bit version of
-     * <a href="https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> with the given
-     * seed value, with the initialization vector for metrohash64_2. This implementation produces
-     * equal results for equal input on platforms with different {@link ByteOrder}, but is slower on
-     * big-endian platforms than on little-endian.
-     *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the 64 bit version of metrohash algorithm with the given seed value
-     * @see #metro()
-     */
-    public static LongHashFunction metro(long seed) {
-        return MetroHash.asLongHashFunctionWithSeed(seed);
     }
 
     /**
@@ -452,7 +324,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the boolean array to be hashed
      * @return the hash code for the given boolean array
      */
-    public long hashBooleans(@NotNull boolean[] input) {
+    public long hashBooleans(boolean[] input) {
         return unsafeHash(input, BOOLEAN_BASE, input.length);
     }
 
@@ -469,7 +341,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
      *                                   or {@code len < 0}
      */
-    public long hashBooleans(@NotNull boolean[] input, int off, int len) {
+    public long hashBooleans(boolean[] input, int off, int len) {
         checkArrayOffs(input.length, off, len);
         return unsafeHash(input, BOOLEAN_BASE + off, len);
     }
@@ -480,7 +352,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the byte array to be hashed
      * @return the hash code for the given byte array
      */
-    public long hashBytes(@NotNull byte[] input) {
+    public long hashBytes(byte[] input) {
         return unsafeHash(input, BYTE_BASE, input.length);
     }
 
@@ -497,7 +369,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
      *                                   or {@code len < 0}
      */
-    public long hashBytes(@NotNull byte[] input, int off, int len) {
+    public long hashBytes(byte[] input, int off, int len) {
         checkArrayOffs(input.length, off, len);
         return unsafeHash(input, BYTE_BASE + off, len);
     }
@@ -529,12 +401,12 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.capacity()}
      *                                   or {@code len < 0}
      */
-    public long hashBytes(@NotNull ByteBuffer input, int off, int len) {
+    public long hashBytes(ByteBuffer input, int off, int len) {
         checkArrayOffs(input.capacity(), off, len);
         return hashByteBuffer(input, off, len);
     }
 
-    private long hashByteBuffer(@NotNull ByteBuffer input, int off, int len) {
+    private long hashByteBuffer(ByteBuffer input, int off, int len) {
         if (input.hasArray()) {
             return unsafeHash(input.array(), BYTE_BASE + input.arrayOffset() + off, len);
         } else if (input instanceof DirectBuffer) {
@@ -564,7 +436,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the char array to be hashed
      * @return the hash code for the given char array
      */
-    public long hashChars(@NotNull char[] input) {
+    public long hashChars(char[] input) {
         return unsafeHash(input, CHAR_BASE, input.length * 2L);
     }
 
@@ -583,7 +455,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
      *                                   or {@code len < 0}
      */
-    public long hashChars(@NotNull char[] input, int off, int len) {
+    public long hashChars(char[] input, int off, int len) {
         checkArrayOffs(input.length, off, len);
         return unsafeHash(input, CHAR_BASE + (off * 2L), len * 2L);
     }
@@ -594,7 +466,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the String to be hashed
      * @return the hash code for the given String
      */
-    public long hashChars(@NotNull String input) {
+    public long hashChars(String input) {
         return VALID_STRING_HASH.longHash(input, this, 0, input.length());
     }
 
@@ -613,7 +485,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length()}
      *                                   or {@code len < 0}
      */
-    public long hashChars(@NotNull String input, int off, int len) {
+    public long hashChars(String input, int off, int len) {
         checkArrayOffs(input.length(), off, len);
         return VALID_STRING_HASH.longHash(input, this, off, len);
     }
@@ -624,7 +496,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the StringBuilder to be hashed
      * @return the hash code for the given StringBuilder
      */
-    public long hashChars(@NotNull StringBuilder input) {
+    public long hashChars(StringBuilder input) {
         return hashNativeChars(input);
     }
 
@@ -643,7 +515,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length()}
      *                                   or {@code len < 0}
      */
-    public long hashChars(@NotNull StringBuilder input, int off, int len) {
+    public long hashChars(StringBuilder input, int off, int len) {
         checkArrayOffs(input.length(), off, len);
         return hashNativeChars(input, off, len);
     }
@@ -676,7 +548,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the short array to be hashed
      * @return the hash code for the given short array
      */
-    public long hashShorts(@NotNull short[] input) {
+    public long hashShorts(short[] input) {
         return unsafeHash(input, SHORT_BASE, input.length * 2L);
     }
 
@@ -695,7 +567,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
      *                                   or {@code len < 0}
      */
-    public long hashShorts(@NotNull short[] input, int off, int len) {
+    public long hashShorts(short[] input, int off, int len) {
         checkArrayOffs(input.length, off, len);
         return unsafeHash(input, SHORT_BASE + (off * 2L), len * 2L);
     }
@@ -706,7 +578,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the integer array to be hashed
      * @return the hash code for the given integer array
      */
-    public long hashInts(@NotNull int[] input) {
+    public long hashInts(int[] input) {
         return unsafeHash(input, INT_BASE, input.length * 4L);
     }
 
@@ -725,7 +597,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
      *                                   or {@code len < 0}
      */
-    public long hashInts(@NotNull int[] input, int off, int len) {
+    public long hashInts(int[] input, int off, int len) {
         checkArrayOffs(input.length, off, len);
         return unsafeHash(input, INT_BASE + (off * 4L), len * 4L);
     }
@@ -736,7 +608,7 @@ public abstract class LongHashFunction implements Serializable {
      * @param input the long array to be hashed
      * @return the hash code for the given long array
      */
-    public long hashLongs(@NotNull long[] input) {
+    public long hashLongs(long[] input) {
         return unsafeHash(input, LONG_BASE, input.length * 8L);
     }
 
@@ -755,7 +627,7 @@ public abstract class LongHashFunction implements Serializable {
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
      *                                   or {@code len < 0}
      */
-    public long hashLongs(@NotNull long[] input, int off, int len) {
+    public long hashLongs(long[] input, int off, int len) {
         checkArrayOffs(input.length, off, len);
         return unsafeHash(input, LONG_BASE + (off * 8L), len * 8L);
     }
