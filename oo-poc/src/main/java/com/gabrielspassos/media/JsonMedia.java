@@ -1,4 +1,4 @@
-package com.gabrielspassos;
+package com.gabrielspassos.media;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

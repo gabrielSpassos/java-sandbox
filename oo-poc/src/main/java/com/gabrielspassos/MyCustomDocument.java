@@ -1,5 +1,7 @@
 package com.gabrielspassos;
 
+import com.gabrielspassos.media.Media;
+
 import java.util.HashMap;
 
 public class MyCustomDocument {
