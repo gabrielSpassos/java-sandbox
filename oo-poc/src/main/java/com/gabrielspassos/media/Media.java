@@ -1,9 +1,9 @@
 package com.gabrielspassos.media;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface Media {
 
-    String print(HashMap<String, String> content);
+    String print(Map<String, String> content);
 
 }

@@ -2,7 +2,7 @@ package com.gabrielspassos.media;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class XmlMedia implements Media {
 
@@ -13,7 +13,7 @@ public class XmlMedia implements Media {
     }
 
     @Override
-    public String print(HashMap<String, String> content) {
+    public String print(Map<String, String> content) {
         try {
             return xmlMapper.writeValueAsString(content);
         } catch (Exception e) {
