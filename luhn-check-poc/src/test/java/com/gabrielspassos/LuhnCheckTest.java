@@ -28,6 +28,11 @@ class LuhnCheckTest {
     }
 
     @Test
+    public void testValidCardNumber2() {
+        assertTrue(LuhnCheck.isValid("79927398713"));
+    }
+
+    @Test
     public void testInvalidCardNumber() {
         assertFalse(LuhnCheck.isValid("17893729975"));
     }
