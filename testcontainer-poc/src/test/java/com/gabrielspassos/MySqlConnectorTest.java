@@ -13,17 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 class MySqlConnectorTest {
 
-//    @Container
-//    private final static MySQLContainer mySQLContainer = new MySQLContainer<>(DockerImageName.parse("arm64v8/mysql")
-//            .asCompatibleSubstituteFor("mysql"));
-
     @Container
-    public static MySQLContainer mySQLContainer = new MySQLContainer<>(DockerImageName.parse("arm64v8/mysql").asCompatibleSubstituteFor("mysql"))
+    private static MySQLContainer mySQLContainer = new MySQLContainer<>(DockerImageName.parse("arm64v8/mysql")
+            .asCompatibleSubstituteFor("mysql"))
+            .withUsername("root")
+            .withPassword("")
             .withExposedPorts(3306)
-            .withInitScript("schema.sql")
-            .withConnectTimeoutSeconds(3600)
-            .withStartupTimeoutSeconds(3600)
-            .withStartupAttempts(10);
+            .withInitScript("schema.sql");
 
     @BeforeAll
     public static void setUp() {
@@ -39,12 +35,9 @@ class MySqlConnectorTest {
     void shouldInsertAndGet() {
         String address = mySQLContainer.getHost();
         String port = mySQLContainer.getFirstMappedPort().toString();
-//        String schema = mySQLContainer.getDatabaseName();
-//        String username = mySQLContainer.getUsername();
-//        String password = mySQLContainer.getPassword();
-        String schema = "test";
-        String username = "test";
-        String password = "test";
+        String schema = mySQLContainer.getDatabaseName();
+        String username = mySQLContainer.getUsername();
+        String password = mySQLContainer.getPassword();
 
         MySqlConnector underTest = new MySqlConnector(address, port, schema, username, password);
 
