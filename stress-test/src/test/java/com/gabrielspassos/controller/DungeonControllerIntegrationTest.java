@@ -42,9 +42,9 @@ public class DungeonControllerIntegrationTest {
         // Given
         var id = UUID.randomUUID().toString();
         CalculateDungeonHealthRequest request = new CalculateDungeonHealthRequest(id, List.of(
-            List.of(0, -2, 0),
-            List.of(-3, -5, 0),
-            List.of(0, -10, 0)
+            List.of(-2, -3, 3),
+            List.of(-5, -10, 1),
+            List.of(10, 30, -5)
         ));
 
         // When
@@ -61,7 +61,7 @@ public class DungeonControllerIntegrationTest {
 
         // Then
         assertEquals(200, response.statusCode());
-        assertEquals("1", response.body());
+        assertEquals("7", response.body());
     }
 
 }
