@@ -1,5 +1,7 @@
 package com.gabrielspassos.service;
 
+import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
+import com.gabrielspassos.controller.response.CalculateDungeonHealthResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -8,9 +10,11 @@ import java.util.List;
 @Service
 public class DungeonService {
 
-    public int calculateMinimumHealth(List<List<Integer>> dungeon) {
+    public CalculateDungeonHealthResponse calculateMinimumHealth(CalculateDungeonHealthRequest request) {
+        var dungeon = request.getDungeon();
+
         if (null == dungeon || dungeon.isEmpty() || dungeon.getFirst().isEmpty()) {
-            return 1; // If the dungeon is empty, the knight needs at least 1 health point
+            return new CalculateDungeonHealthResponse(request.getId(), 1);
         }
 
         int m = dungeon.size();
@@ -52,7 +56,7 @@ public class DungeonService {
         System.out.print("Remaining board: ");
         printDungeon(dp);
 
-        return dp[0][0];
+        return new CalculateDungeonHealthResponse(request.getId(), dp[0][0]);
     }
 
     private static void printDungeon(List<List<Integer>> dungeon) {

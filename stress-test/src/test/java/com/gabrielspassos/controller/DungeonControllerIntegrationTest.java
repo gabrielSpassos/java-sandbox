@@ -1,8 +1,9 @@
 package com.gabrielspassos.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
@@ -38,7 +40,7 @@ public class DungeonControllerIntegrationTest {
     }
 
     @Test
-    public void shouldCalculateMinimumDungeonHealth() throws IOException, InterruptedException {
+    public void shouldCalculateMinimumDungeonHealth() throws IOException, InterruptedException, JSONException {
         // Given
         var id = UUID.randomUUID().toString();
         CalculateDungeonHealthRequest request = new CalculateDungeonHealthRequest(id, List.of(
@@ -61,7 +63,10 @@ public class DungeonControllerIntegrationTest {
 
         // Then
         assertEquals(200, response.statusCode());
-        assertEquals("7", response.body());
+        assertNotNull(response.body());
+        var responseBody = new JSONObject(response.body());
+        assertEquals(id, responseBody.getString("id"));
+        assertEquals(7, responseBody.getInt("minimalHealth"));
     }
 
 }

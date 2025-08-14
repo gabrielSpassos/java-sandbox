@@ -1,6 +1,7 @@
 package com.gabrielspassos.controller;
 
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
+import com.gabrielspassos.controller.response.CalculateDungeonHealthResponse;
 import com.gabrielspassos.service.DungeonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ public class DungeonController {
     private DungeonService dungeonService;
 
     @PostMapping("/dungeons")
-    public ResponseEntity<Integer> calculateMinimumHealth(@RequestBody CalculateDungeonHealthRequest request) {
-        var minimalHealth = dungeonService.calculateMinimumHealth(request.getDungeon());
-        return ResponseEntity.ok(minimalHealth);
+    public ResponseEntity<CalculateDungeonHealthResponse> calculateMinimumHealth(@RequestBody CalculateDungeonHealthRequest request) {
+        var response = dungeonService.calculateMinimumHealth(request);
+        return ResponseEntity.ok(response);
     }
 
 }
