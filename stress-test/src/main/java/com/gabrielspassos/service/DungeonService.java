@@ -2,6 +2,8 @@ package com.gabrielspassos.service;
 
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
 import com.gabrielspassos.controller.response.CalculateDungeonHealthResponse;
+import com.gabrielspassos.dto.GameDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -9,6 +11,9 @@ import java.util.List;
 
 @Service
 public class DungeonService {
+
+    @Autowired
+    private GameService gameService;
 
     public CalculateDungeonHealthResponse calculateMinimumHealth(CalculateDungeonHealthRequest request) {
         var dungeon = request.getDungeon();
@@ -56,7 +61,12 @@ public class DungeonService {
         System.out.print("Remaining board: ");
         printDungeon(dp);
 
-        return new CalculateDungeonHealthResponse(request.getId(), dp[0][0]);
+        var executionId = request.getId();
+        var minimalHealth = dp[0][0];
+        var gameDTO = new GameDTO(executionId, dungeon, minimalHealth);
+        gameService.save(gameDTO);
+
+        return new CalculateDungeonHealthResponse(executionId, minimalHealth);
     }
 
     private static void printDungeon(List<List<Integer>> dungeon) {
