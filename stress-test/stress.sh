@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Stress Testing project..."
-./mvnw gatling:test
+./mvnw clean gatling:test
