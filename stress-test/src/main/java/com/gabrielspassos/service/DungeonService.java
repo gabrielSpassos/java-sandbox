@@ -1,8 +1,12 @@
 package com.gabrielspassos.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
 import com.gabrielspassos.controller.response.CalculateDungeonHealthResponse;
 import com.gabrielspassos.dto.GameDTO;
+import com.gabrielspassos.entity.GameEntity;
+import com.gabrielspassos.exceptions.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +19,26 @@ public class DungeonService {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    public List<CalculateDungeonHealthResponse> findAll() {
+        return gameService.findAll()
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
+    public CalculateDungeonHealthResponse findById(String id) {
+        var gameEntity = gameService.findByExecutionId(id);
+        return convertToResponse(gameEntity);
+    }
+
     public CalculateDungeonHealthResponse calculateMinimumHealth(CalculateDungeonHealthRequest request) {
         var dungeon = request.getDungeon();
 
         if (null == dungeon || dungeon.isEmpty() || dungeon.getFirst().isEmpty()) {
-            return new CalculateDungeonHealthResponse(request.getId(), 1);
+            return new CalculateDungeonHealthResponse(request.getId(), dungeon, 1);
         }
 
         int m = dungeon.size();
@@ -66,7 +85,7 @@ public class DungeonService {
         var gameDTO = new GameDTO(executionId, dungeon, minimalHealth);
         gameService.save(gameDTO);
 
-        return new CalculateDungeonHealthResponse(executionId, minimalHealth);
+        return new CalculateDungeonHealthResponse(executionId, dungeon, minimalHealth);
     }
 
     private static void printDungeon(List<List<Integer>> dungeon) {
@@ -75,5 +94,18 @@ public class DungeonService {
 
     private static void printDungeon(int[][] dp) {
         System.out.println(Arrays.deepToString(dp));
+    }
+
+    private CalculateDungeonHealthResponse convertToResponse(GameEntity gameEntity) {
+        List<List<Integer>> dungeon = convertToDungeon(gameEntity);
+        return new CalculateDungeonHealthResponse(gameEntity.getExecutionId(), dungeon, gameEntity.getMinimalHealth());
+    }
+
+    private List<List<Integer>> convertToDungeon(GameEntity gameEntity) {
+        try {
+            return objectMapper.readValue(gameEntity.getDungeon(), new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new HttpException(500, "Error parsing dungeon data");
+        }
     }
 }

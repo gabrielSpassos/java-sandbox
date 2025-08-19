@@ -5,3 +5,5 @@ create table if not exists game(
     minimal_health integer not null,
     execution_time timestamptz not null
 );
+
+create index if not exists idx_game_execution_id on game(execution_id);
