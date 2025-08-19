@@ -1,6 +1,6 @@
 # Java 23 + Spring + Stress Test
 
-- [ ] Java 23
+- [x] Java 23
 - [x] Spring Rest Interface
 - [x] Docker container
 - [x] Stress test
@@ -53,4 +53,30 @@ Generating reports...
 > t >= 1200 ms                                           0 (  0%)
 > failed                                                 0 (  0%)
 ================================================================================
+```
+
+## Usage
+
+* Load sdkman environment
+
+```bash
+sdk env
+```
+
+* Run solution
+
+```bash
+./run.sh
+```
+
+* Run stress test
+
+```bash
+./stress.sh
+```
+
+* Clean up
+
+```bash
+./clean.sh
 ```
