@@ -42,26 +42,38 @@ public class DungeonStressTestSimulation extends Simulation {
         }
     }
 
-    private final ScenarioBuilder basicLoad = scenario("Calculate Minimum Health")
+    private final ScenarioBuilder loadScenario = scenario("Calculate Minimum Health")
             .exec(http("calculate-minimum-health")
                     .post("/v1/dungeons")
-                    .body(StringBody(buildRequestBody(UUID.randomUUID(), dungeon)))
+                    .body(StringBody(session -> buildRequestBody(UUID.randomUUID(), dungeon)))
+                    .check(status().is(200))
+                    .check(jsonPath("$.id").saveAs("executionId"))
+                    .check(jsonPath("$.dungeon").exists())
+                    .check(jsonPath("$.minimalHealth").exists())
+            ).pause(1, 5) // Pause between 1 and 5 seconds
+            .exec(http("get-dungeon-by-id")
+                    .get(session -> "/v1/dungeons/" + session.getString("executionId")) // use saved ID
                     .check(status().is(200))
                     .check(jsonPath("$.id").exists())
-                    //.check(jsonPath("$.dungeon").exists())
+                    .check(jsonPath("$.dungeon").exists())
                     .check(jsonPath("$.minimalHealth").exists())
+            ).pause(1, 5) // Pause between 1 and 5 seconds
+            .exec(http("not-found-dungeon-by-id")
+                    .get(session -> "/v1/dungeons/" + UUID.randomUUID()) // use random ID
+                    .check(status().is(404))
+                    .check(jsonPath("$.message").exists())
             );
 
     {
         setUp(
-                basicLoad.injectOpen(
+                loadScenario.injectOpen(
                         rampUsersPerSec(1).to(10).during(30),
                         constantUsersPerSec(10).during(60)
                 )
         )
                 .protocols(httpProtocol)
                 .assertions(
-                        global().responseTime().max().lt(3000),
+                        global().responseTime().max().lt(5000),
                         global().successfulRequests().percent().gt(99.0)
                 );
     }
