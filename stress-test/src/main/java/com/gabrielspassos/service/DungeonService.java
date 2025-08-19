@@ -38,7 +38,9 @@ public class DungeonService {
         var dungeon = request.getDungeon();
 
         if (null == dungeon || dungeon.isEmpty() || dungeon.getFirst().isEmpty()) {
-            return new CalculateDungeonHealthResponse(request.getId(), dungeon, 1);
+            var minimalHealth = 1;
+            createGame(request, minimalHealth);
+            return new CalculateDungeonHealthResponse(request.getId(), dungeon, minimalHealth);
         }
 
         int m = dungeon.size();
@@ -80,20 +82,23 @@ public class DungeonService {
         System.out.print("Remaining board: ");
         printDungeon(dp);
 
-        var executionId = request.getId();
         var minimalHealth = dp[0][0];
-        var gameDTO = new GameDTO(executionId, dungeon, minimalHealth);
-        gameService.save(gameDTO);
+        createGame(request, minimalHealth);
 
-        return new CalculateDungeonHealthResponse(executionId, dungeon, minimalHealth);
+        return new CalculateDungeonHealthResponse(request.getId(), dungeon, minimalHealth);
     }
 
-    private static void printDungeon(List<List<Integer>> dungeon) {
+    private void printDungeon(List<List<Integer>> dungeon) {
         System.out.println(dungeon);
     }
 
-    private static void printDungeon(int[][] dp) {
+    private void printDungeon(int[][] dp) {
         System.out.println(Arrays.deepToString(dp));
+    }
+
+    private GameEntity createGame(CalculateDungeonHealthRequest request, Integer minimalHealth) {
+        var gameDTO = new GameDTO(request.getId(), request.getDungeon(), minimalHealth);
+        return gameService.save(gameDTO);
     }
 
     private CalculateDungeonHealthResponse convertToResponse(GameEntity gameEntity) {

@@ -2,7 +2,6 @@ package com.gabrielspassos.stress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
-import io.gatling.javaapi.core.CheckBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;

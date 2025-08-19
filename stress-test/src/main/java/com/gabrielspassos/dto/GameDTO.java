@@ -2,6 +2,7 @@ package com.gabrielspassos.dto;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class GameDTO {
 
@@ -9,12 +10,9 @@ public class GameDTO {
     private List<List<Integer>> dungeon;
     private Integer minimalHealth;
 
-    public GameDTO() {
-    }
-
     public GameDTO(String executionId, List<List<Integer>> dungeon, Integer minimalHealth) {
         this.executionId = executionId;
-        this.dungeon = dungeon;
+        this.dungeon = Optional.ofNullable(dungeon).orElse(List.of());
         this.minimalHealth = minimalHealth;
     }
 
