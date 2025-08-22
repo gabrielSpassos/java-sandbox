@@ -31,36 +31,52 @@ services:
       java-stress-test-poc:
         ipv4_address: 10.5.0.3
 
-  influxdb:
-    image: influxdb:1.8
-    container_name: influxdb
+#  influxdb:
+#    image: influxdb:1.8
+#    container_name: influxdb
+#    ports:
+#      - "8086:8086"
+#    environment:
+#      - INFLUXDB_DB=gatling
+#      - INFLUXDB_USER=gatling
+#      - INFLUXDB_USER_PASSWORD=gatling
+#    volumes:
+#      - java_stress_test_poc_influxdb-data:/var/lib/influxdb
+#    networks:
+#      java-stress-test-poc:
+#        ipv4_address: 10.5.0.4
+
+#  influxdb-exporter:
+#    image: prom/influxdb-exporter
+#    container_name: influxdb-exporter
+#    depends_on:
+#      - influxdb
+#    ports:
+#      - "9122:9122"
+#    environment:
+#      - INFLUXDB_ADDR=http://influxdb:8086
+#      - INFLUXDB_DATABASE=gatling
+#      - INFLUXDB_USER=gatling
+#      - INFLUXDB_PASS=gatling
+#    networks:
+#      java-stress-test-poc:
+#        ipv4_address: 10.5.0.5
+
+  graphite-exporter:
+    image: prom/graphite-exporter:latest
+    container_name: graphite-exporter
     ports:
-      - "8086:8086"
-    environment:
-      - INFLUXDB_DB=gatling
-      - INFLUXDB_USER=gatling
-      - INFLUXDB_USER_PASSWORD=gatling
-    volumes:
-      - java_stress_test_poc_influxdb-data:/var/lib/influxdb
+      - "9108:9108"   # Prometheus metrics endpoint
+      - "2003:2003"   # Graphite plaintext TCP port
     networks:
       java-stress-test-poc:
         ipv4_address: 10.5.0.4
 
-  influxdb-exporter:
-    image: prom/influxdb-exporter
-    container_name: influxdb-exporter
-    ports:
-      - "9122:9122"
-    command:
-      - "--influxdb-url=http://influxdb:8086"
-      - "--influxdb.database=gatling"
-    networks:
-      java-stress-test-poc:
-        ipv4_address: 10.5.0.5
-
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    depends_on:
+      - graphite-exporter
     ports:
       - "9090:9090"
     volumes:
@@ -72,6 +88,8 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    depends_on:
+      - prometheus
     ports:
       - "3000:3000"
     environment:
@@ -79,13 +97,14 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - java_stress_test_poc_grafana_data:/var/lib/grafana
+      - ./infra/datasources:/etc/grafana/provisioning/datasources
     networks:
       java-stress-test-poc:
         ipv4_address: 10.5.0.7
 
 volumes:
   java_stress_test_poc_postgres_data:
-  java_stress_test_poc_influxdb-data:
+#  java_stress_test_poc_influxdb-data:
   java_stress_test_poc_grafana_data:
 
 networks:

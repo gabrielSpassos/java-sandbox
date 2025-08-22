@@ -2,6 +2,6 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: "influxdb-exporter"
+  - job_name: 'graphite'
     static_configs:
-      - targets: ["influxdb-exporter:9122"]
+      - targets: ['graphite-exporter:9108']

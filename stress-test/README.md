@@ -80,3 +80,14 @@ sdk env
 ```bash
 ./clean.sh
 ```
+
+* Prometheus
+  * http://localhost:9000
+
+* Grafana
+  * http://localhost:3000
+  * user: admin
+  * password: admin
+
+* Graphite Exporter
+  * http://localhost:9109/metrics

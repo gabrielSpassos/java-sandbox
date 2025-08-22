@@ -1,0 +1,7 @@
+<configuration>
+    <logger name="io.gatling.data.graphite" level="DEBUG"/>
+    <logger name="io.gatling.core.config" level="DEBUG"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
