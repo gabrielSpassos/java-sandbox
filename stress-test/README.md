@@ -90,4 +90,4 @@ sdk env
   * password: admin
 
 * Graphite Exporter
-  * http://localhost:9109/metrics
+  * http://localhost:9108/metrics
