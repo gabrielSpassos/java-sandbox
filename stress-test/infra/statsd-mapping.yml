@@ -1,0 +1,5 @@
+mappings:
+  - match: "gatling.*"
+    name: "gatling_${1}"
+    labels:
+      metric_type: "gatling"

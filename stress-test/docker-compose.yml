@@ -31,43 +31,17 @@ services:
       java-stress-test-poc:
         ipv4_address: 10.5.0.3
 
-#  influxdb:
-#    image: influxdb:1.8
-#    container_name: influxdb
-#    ports:
-#      - "8086:8086"
-#    environment:
-#      - INFLUXDB_DB=gatling
-#      - INFLUXDB_USER=gatling
-#      - INFLUXDB_USER_PASSWORD=gatling
-#    volumes:
-#      - java_stress_test_poc_influxdb-data:/var/lib/influxdb
-#    networks:
-#      java-stress-test-poc:
-#        ipv4_address: 10.5.0.4
-
-#  influxdb-exporter:
-#    image: prom/influxdb-exporter
-#    container_name: influxdb-exporter
-#    depends_on:
-#      - influxdb
-#    ports:
-#      - "9122:9122"
-#    environment:
-#      - INFLUXDB_ADDR=http://influxdb:8086
-#      - INFLUXDB_DATABASE=gatling
-#      - INFLUXDB_USER=gatling
-#      - INFLUXDB_PASS=gatling
-#    networks:
-#      java-stress-test-poc:
-#        ipv4_address: 10.5.0.5
-
-  graphite-exporter:
-    image: prom/graphite-exporter:latest
-    container_name: graphite-exporter
+  statsd-exporter:
+    image: prom/statsd-exporter:latest
+    container_name: statsd-exporter
     ports:
-      - "9108:9108"   # Prometheus metrics endpoint
-      - "2003:2003"   # Graphite plaintext TCP port
+      - "9102:9102"
+      - "9125:9125/udp"
+    volumes:
+      - ./infra/statsd-mapping.yml:/tmp/statsd-mapping.yml
+    command:
+        - '--statsd.mapping-config=/tmp/statsd-mapping.yml'
+        - '--log.level=debug'
     networks:
       java-stress-test-poc:
         ipv4_address: 10.5.0.4
@@ -76,7 +50,7 @@ services:
     image: prom/prometheus
     container_name: prometheus
     depends_on:
-      - graphite-exporter
+      - statsd-exporter
     ports:
       - "9090:9090"
     volumes:
@@ -104,7 +78,6 @@ services:
 
 volumes:
   java_stress_test_poc_postgres_data:
-#  java_stress_test_poc_influxdb-data:
   java_stress_test_poc_grafana_data:
 
 networks:
