@@ -31,8 +31,54 @@ services:
       java-stress-test-poc:
         ipv4_address: 10.5.0.3
 
+  statsd-exporter:
+    image: prom/statsd-exporter:latest
+    container_name: statsd-exporter
+    ports:
+      - "9102:9102"
+      - "9125:9125/udp"
+    volumes:
+      - ./infra/statsd-mapping.yml:/tmp/statsd-mapping.yml
+    command:
+        - '--statsd.mapping-config=/tmp/statsd-mapping.yml'
+        - '--log.level=debug'
+    networks:
+      java-stress-test-poc:
+        ipv4_address: 10.5.0.4
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    depends_on:
+      - statsd-exporter
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      java-stress-test-poc:
+        ipv4_address: 10.5.0.6
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - java_stress_test_poc_grafana_data:/var/lib/grafana
+      - ./infra/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      java-stress-test-poc:
+        ipv4_address: 10.5.0.7
+
 volumes:
   java_stress_test_poc_postgres_data:
+  java_stress_test_poc_grafana_data:
 
 networks:
   java-stress-test-poc:
