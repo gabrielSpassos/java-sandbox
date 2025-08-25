@@ -84,6 +84,13 @@
 
 		<dependency>
 			<groupId>io.gatling</groupId>
+			<artifactId>gatling-core</artifactId>
+			<version>${gatling.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.gatling</groupId>
 			<artifactId>gatling-recorder</artifactId>
 			<version>${gatling.version}</version>
 			<scope>test</scope>
