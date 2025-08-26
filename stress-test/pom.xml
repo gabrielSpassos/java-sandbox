@@ -22,6 +22,7 @@
 		<test.containers.version>1.21.3</test.containers.version>
 		<gatling.version>3.12.0</gatling.version>
 		<gatling.maven.plugin.version>4.20.1</gatling.maven.plugin.version>
+		<prometheus.version>0.16.0</prometheus.version>
 	</properties>
 
 	<dependencies>
@@ -93,6 +94,20 @@
 			<groupId>io.gatling</groupId>
 			<artifactId>gatling-recorder</artifactId>
 			<version>${gatling.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_pushgateway</artifactId>
+			<version>${prometheus.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient</artifactId>
+			<version>${prometheus.version}</version>
 			<scope>test</scope>
 		</dependency>
 

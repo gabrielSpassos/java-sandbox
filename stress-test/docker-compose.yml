@@ -30,27 +30,19 @@ services:
     networks:
       java-stress-test-poc:
         ipv4_address: 10.5.0.3
-
-  statsd-exporter:
-    image: prom/statsd-exporter:latest
-    container_name: statsd-exporter
+        
+  prometheus-pushgateway:
+    image: prom/pushgateway:latest
+    container_name: prometheus-pushgateway
     ports:
-      - "9102:9102"
-      - "9125:9125/udp"
-    volumes:
-      - ./infra/statsd-mapping.yml:/tmp/statsd-mapping.yml
-    command:
-        - '--statsd.mapping-config=/tmp/statsd-mapping.yml'
-        - '--log.level=debug'
+      - "9091:9091"
     networks:
       java-stress-test-poc:
-        ipv4_address: 10.5.0.4
+        ipv4_address: 10.5.0.5
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
-    depends_on:
-      - statsd-exporter
     ports:
       - "9090:9090"
     volumes:

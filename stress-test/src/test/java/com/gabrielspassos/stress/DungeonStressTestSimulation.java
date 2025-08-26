@@ -2,6 +2,7 @@ package com.gabrielspassos.stress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
+import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -50,7 +51,13 @@ public class DungeonStressTestSimulation extends Simulation {
                     .check(jsonPath("$.id").saveAs("executionId"))
                     .check(jsonPath("$.dungeon").exists())
                     .check(jsonPath("$.minimalHealth").exists())
+                    .check(responseTimeInMillis().saveAs("calculateResponseTime"))
             ).pause(1, 5) // Pause between 1 and 5 seconds
+            .exec(session -> {
+                String calculateResponseTime = session.getString("calculateResponseTime");
+                return session.set("responseTimeMetric", String.valueOf(calculateResponseTime));
+            })
+            .exec(sendMetricToPrometheus("dungeon_calculate_response_time_ms", "#{responseTimeMetric}"))
             .exec(http("get-dungeon-by-id")
                     .get(session -> "/v1/dungeons/" + session.getString("executionId")) // use saved ID
                     .check(status().is(200))
@@ -63,6 +70,17 @@ public class DungeonStressTestSimulation extends Simulation {
                     .check(status().is(404))
                     .check(jsonPath("$.message").exists())
             );
+
+    private ChainBuilder sendMetricToPrometheus(String metricName, String value) {
+        String metricData = String.format("%s %s\n", metricName, value);
+
+        return exec(http("Push Metric")
+                .put("http://localhost:9091/metrics/job/dungeon_stress_test")
+                .body(StringBody(metricData))
+                .header("Content-Type", "text/plain")
+                .check(status().is(200))
+        );
+    }
 
     {
         setUp(
