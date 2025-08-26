@@ -52,24 +52,35 @@ public class DungeonStressTestSimulation extends Simulation {
                     .check(jsonPath("$.dungeon").exists())
                     .check(jsonPath("$.minimalHealth").exists())
                     .check(responseTimeInMillis().saveAs("calculateResponseTime"))
-            ).pause(1, 5) // Pause between 1 and 5 seconds
-            .exec(session -> {
+            ).exec(session -> {
                 String calculateResponseTime = session.getString("calculateResponseTime");
-                return session.set("responseTimeMetric", String.valueOf(calculateResponseTime));
+                return session.set("calculateResponseTimeMetric", calculateResponseTime);
             })
-            .exec(sendMetricToPrometheus("dungeon_calculate_response_time_ms", "#{responseTimeMetric}"))
+            .exec(sendMetricToPrometheus("dungeon_calculate_response_time_ms", "#{calculateResponseTimeMetric}"))
+            .pause(1, 5) // Pause between 1 and 5 seconds
             .exec(http("get-dungeon-by-id")
                     .get(session -> "/v1/dungeons/" + session.getString("executionId")) // use saved ID
                     .check(status().is(200))
                     .check(jsonPath("$.id").exists())
                     .check(jsonPath("$.dungeon").exists())
                     .check(jsonPath("$.minimalHealth").exists())
-            ).pause(1, 5) // Pause between 1 and 5 seconds
+                    .check(responseTimeInMillis().saveAs("getResultResponseTime"))
+            ).exec(session -> {
+                String getResultResponseTime = session.getString("getResultResponseTime");
+                return session.set("getResponseTimeMetric", getResultResponseTime);
+            })
+            .exec(sendMetricToPrometheus("dungeon_get_response_time_ms", "#{getResponseTimeMetric}"))
+            .pause(1, 5) // Pause between 1 and 5 seconds
             .exec(http("not-found-dungeon-by-id")
                     .get(session -> "/v1/dungeons/" + UUID.randomUUID()) // use random ID
                     .check(status().is(404))
                     .check(jsonPath("$.message").exists())
-            );
+                    .check(responseTimeInMillis().saveAs("getResultResponseTime"))
+            ).exec(session -> {
+                String getResultResponseTime = session.getString("getResultResponseTime");
+                return session.set("getResponseTimeMetric", getResultResponseTime);
+            })
+            .exec(sendMetricToPrometheus("dungeon_get_response_time_ms", "#{getResponseTimeMetric}"));
 
     private ChainBuilder sendMetricToPrometheus(String metricName, String value) {
         String metricData = String.format("%s %s\n", metricName, value);
