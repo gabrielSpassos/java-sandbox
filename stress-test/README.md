@@ -82,12 +82,13 @@ sdk env
 ```
 
 * Prometheus
-  * http://localhost:9000
+  * http://localhost:9090
+
+* Prometheus Push Gateway Exporter
+  * http://localhost:9091/metrics
 
 * Grafana
   * http://localhost:3000
   * user: admin
   * password: admin
 
-* Graphite Exporter
-  * http://localhost:9108/metrics
