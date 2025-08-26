@@ -2,6 +2,7 @@ package com.gabrielspassos.stress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabrielspassos.controller.request.CalculateDungeonHealthRequest;
+import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -50,19 +51,47 @@ public class DungeonStressTestSimulation extends Simulation {
                     .check(jsonPath("$.id").saveAs("executionId"))
                     .check(jsonPath("$.dungeon").exists())
                     .check(jsonPath("$.minimalHealth").exists())
-            ).pause(1, 5) // Pause between 1 and 5 seconds
+                    .check(responseTimeInMillis().saveAs("calculateResponseTime"))
+            ).exec(session -> {
+                String calculateResponseTime = session.getString("calculateResponseTime");
+                return session.set("calculateResponseTimeMetric", calculateResponseTime);
+            })
+            .exec(sendMetricToPrometheus("dungeon_calculate_response_time_ms", "#{calculateResponseTimeMetric}"))
+            .pause(1, 5) // Pause between 1 and 5 seconds
             .exec(http("get-dungeon-by-id")
                     .get(session -> "/v1/dungeons/" + session.getString("executionId")) // use saved ID
                     .check(status().is(200))
                     .check(jsonPath("$.id").exists())
                     .check(jsonPath("$.dungeon").exists())
                     .check(jsonPath("$.minimalHealth").exists())
-            ).pause(1, 5) // Pause between 1 and 5 seconds
+                    .check(responseTimeInMillis().saveAs("getResultResponseTime"))
+            ).exec(session -> {
+                String getResultResponseTime = session.getString("getResultResponseTime");
+                return session.set("getResponseTimeMetric", getResultResponseTime);
+            })
+            .exec(sendMetricToPrometheus("dungeon_get_response_time_ms", "#{getResponseTimeMetric}"))
+            .pause(1, 5) // Pause between 1 and 5 seconds
             .exec(http("not-found-dungeon-by-id")
                     .get(session -> "/v1/dungeons/" + UUID.randomUUID()) // use random ID
                     .check(status().is(404))
                     .check(jsonPath("$.message").exists())
-            );
+                    .check(responseTimeInMillis().saveAs("getResultResponseTime"))
+            ).exec(session -> {
+                String getResultResponseTime = session.getString("getResultResponseTime");
+                return session.set("getResponseTimeMetric", getResultResponseTime);
+            })
+            .exec(sendMetricToPrometheus("dungeon_get_response_time_ms", "#{getResponseTimeMetric}"));
+
+    private ChainBuilder sendMetricToPrometheus(String metricName, String value) {
+        String metricData = String.format("%s %s\n", metricName, value);
+
+        return exec(http("Push Metric")
+                .put("http://localhost:9091/metrics/job/dungeon_stress_test")
+                .body(StringBody(metricData))
+                .header("Content-Type", "text/plain")
+                .check(status().is(200))
+        );
+    }
 
     {
         setUp(

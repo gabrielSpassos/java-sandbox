@@ -80,3 +80,15 @@ sdk env
 ```bash
 ./clean.sh
 ```
+
+* Prometheus
+  * http://localhost:9090
+
+* Prometheus Push Gateway Exporter
+  * http://localhost:9091/metrics
+
+* Grafana
+  * http://localhost:3000
+  * user: admin
+  * password: admin
+
