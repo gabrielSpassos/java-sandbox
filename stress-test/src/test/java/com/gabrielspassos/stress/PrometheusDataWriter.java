@@ -11,10 +11,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.format.DateTimeFormatter;
 
-public abstract class PrometheusDataWriter extends DataWriter<ConsoleData> {
+public class PrometheusDataWriter extends DataWriter<ConsoleData> {
 
     public PrometheusDataWriter() {
         super("custom-prometheus");
+        System.out.println("Custom Prometheus Data Writer instantiated");
     }
 
     @Override
@@ -36,6 +37,21 @@ public abstract class PrometheusDataWriter extends DataWriter<ConsoleData> {
         } catch (Exception e) {
             System.out.println("Error to push data to prometheus! " + e.getMessage());
         }
+    }
+
+    @Override
+    public void onCrash(String cause, ConsoleData data) {
+        System.out.println("Crash! Cause: " + cause);
+    }
+
+    @Override
+    public void onStop(ConsoleData data) {
+        System.out.println("Stopped!");
+    }
+
+    @Override
+    public void onMessage(DataWriterMessage.LoadEvent message, ConsoleData data) {
+        System.out.println("Load Event: " + message);
     }
 
     private void pushToPrometheus(ConsoleData data) throws Exception {
