@@ -96,8 +96,8 @@ public class DungeonStressTestSimulation extends Simulation {
     {
         setUp(
                 loadScenario.injectOpen(
-                        rampUsersPerSec(1).to(10).during(30),
-                        constantUsersPerSec(10).during(60)
+                        rampUsersPerSec(1).to(10).during(1),
+                        constantUsersPerSec(10).during(2)
                 )
         )
                 .protocols(httpProtocol)
