@@ -36,35 +36,46 @@ docker-compose up --build k6
 ```
 
 ```
-TOTAL RESULTS
-k6  |
-k6  |     checks_total.......: 100     4.902/s
-k6  |     checks_succeeded...: 100.00% 100 out of 100
-k6  |     checks_failed......: 0.00%   0 out of 100
-k6  |
-k6  |     ✓ dungeon calculated
-k6  |
-k6  |     HTTP
-k6  |     http_req_duration..............: avg=18.51ms min=9.37ms med=16.38ms max=49.07ms p(90)=25.7ms p(95)=27.75ms
-k6  |       { expected_response:true }...: avg=18.51ms min=9.37ms med=16.38ms max=49.07ms p(90)=25.7ms p(95)=27.75ms
-k6  |     http_req_failed................: 0.00% 0 out of 100
-k6  |     http_reqs......................: 100   4.902/s
-k6  |
-k6  |     EXECUTION
-k6  |     iteration_duration.............: avg=1.01s   min=1s     med=1.01s   max=1.05s   p(90)=1.02s  p(95)=1.02s
-k6  |     iterations.....................: 100   4.902/s
-k6  |     vus............................: 5     min=5        max=5
-k6  |     vus_max........................: 5     min=5        max=5
-k6  |
-k6  |     NETWORK
-k6  |     data_received..................: 23 kB 1.1 kB/s
-k6  |     data_sent......................: 23 kB 1.1 kB/s
-k6  |
-k6  |
-k6  |
-k6  |
-k6  | running (20.4s), 0/5 VUs, 100 complete and 0 interrupted iterations
-k6  | default ✓ [ 100% ] 5 VUs  20s
+  █ THRESHOLDS
+
+    checks
+    ✓ 'rate>0.99' rate=100.00%
+
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=21.22ms
+
+
+  █ TOTAL RESULTS
+
+    checks_total.......: 402     7.634979/s
+    checks_succeeded...: 100.00% 402 out of 402
+    checks_failed......: 0.00%   0 out of 402
+
+    ✓ status is 200
+    ✓ response time < 500ms
+    ✓ status is 404
+
+    HTTP
+    http_req_duration..............: avg=9.37ms  min=2.51ms med=8.69ms  max=31.18ms p(90)=17.01ms p(95)=21.22ms
+      { expected_response:true }...: avg=10.77ms min=3.02ms med=10.01ms max=31.18ms p(90)=19.97ms p(95)=22.29ms
+    http_req_failed................: 33.33% 67 out of 201
+    http_reqs......................: 201    3.817489/s
+
+    EXECUTION
+    iteration_duration.............: avg=4.4s    min=2.38s  med=4.34s   max=6.54s   p(90)=5.71s   p(95)=6.16s
+    iterations.....................: 67     1.272496/s
+    vus............................: 2      min=1         max=10
+    vus_max........................: 10     min=10        max=10
+
+    NETWORK
+    data_received..................: 45 kB  848 B/s
+    data_sent......................: 32 kB  603 B/s
+
+
+
+
+running (0m52.7s), 00/10 VUs, 67 complete and 0 interrupted iterations
+default ✓ [ 100% ] 00/10 VUs  50s
 ```
 
 ## Usage
