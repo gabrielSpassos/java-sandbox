@@ -1,0 +1,93 @@
+version: '1'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: java_k6_stress_test_poc
+    ports:
+      - "5432:5432"
+    volumes:
+      - java_k6_stress_test_poc_postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      java-k6-stress-test-poc:
+        ipv4_address: 10.5.0.2
+
+  dungeon-service:
+    container_name: dungeon-service
+    depends_on:
+      - postgres
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_URL: postgres
+    networks:
+      java-k6-stress-test-poc:
+        ipv4_address: 10.5.0.3
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--web.enable-remote-write-receiver"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      java-k6-stress-test-poc:
+        ipv4_address: 10.5.0.6
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - java_k6_stress_test_poc_grafana_data:/var/lib/grafana
+      - ./infra/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      java-k6-stress-test-poc:
+        ipv4_address: 10.5.0.7
+
+  k6:
+    image: grafana/k6:latest
+    container_name: k6
+    depends_on:
+      - dungeon-service
+      - prometheus
+      - grafana
+    volumes:
+      - ./src/test/k6/load.js:/scripts/load.js
+    networks:
+      java-k6-stress-test-poc:
+        ipv4_address: 10.5.0.4
+    environment:
+      K6_PROMETHEUS_RW_SERVER_URL: http://prometheus:9090/api/v1/write
+      K6_PROMETHEUS_RW_TREND_STATS: p(95),p(99),min,max,avg
+      K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM: "false"
+    command: >
+      run --out experimental-prometheus-rw /scripts/load.js
+
+volumes:
+  java_k6_stress_test_poc_postgres_data:
+  java_k6_stress_test_poc_grafana_data:
+
+networks:
+  java-k6-stress-test-poc:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
