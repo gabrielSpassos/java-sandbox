@@ -15,7 +15,7 @@ public class CalculatorController {
     @Autowired
     private CalculatorService calculatorService;
 
-    @PostMapping
+    @PostMapping("/v1/add")
     public ResponseEntity<CalculatorResponse> add(@RequestBody CalculatorRequest request) {
         var result = calculatorService.add(request.getA(), request.getB());
         return ResponseEntity.ok(new CalculatorResponse(result));
