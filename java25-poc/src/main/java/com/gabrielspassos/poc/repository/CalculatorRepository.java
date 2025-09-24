@@ -15,7 +15,4 @@ public class CalculatorRepository {
         return value;
     }
 
-    public List<Integer> findAll() {
-        return new ArrayList<>(dataStore);
-    }
 }
