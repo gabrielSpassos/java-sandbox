@@ -7,6 +7,14 @@ public class CalculatorRequest {
     private int a;
     private int b;
 
+    public CalculatorRequest() {
+    }
+
+    public CalculatorRequest(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+
     public int getA() {
         return a;
     }

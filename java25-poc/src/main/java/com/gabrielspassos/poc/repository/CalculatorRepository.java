@@ -10,8 +10,9 @@ public class CalculatorRepository {
 
     private final List<Integer> dataStore = new ArrayList<>();
 
-    public void save(int value) {
+    public Integer save(int value) {
         dataStore.add(value);
+        return value;
     }
 
     public List<Integer> findAll() {
