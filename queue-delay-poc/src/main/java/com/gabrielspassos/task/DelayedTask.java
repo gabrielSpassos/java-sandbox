@@ -1,5 +1,6 @@
 package com.gabrielspassos.task;
 
+import java.util.concurrent.TimeoutException;
 import java.util.random.RandomGenerator;
 
 public interface DelayedTask<T> extends Task<T> {
@@ -20,6 +21,8 @@ public interface DelayedTask<T> extends Task<T> {
             Thread.sleep(delay);
             return executeWithDelay(input);
         } catch (InterruptedException e) {
+            IO.println("Interrupted task ");
+            e.printStackTrace();
             Thread.currentThread().interrupt();
             return false;
         }
