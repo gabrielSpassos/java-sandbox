@@ -1,35 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--suppress JSUnresolvedLibraryURL -->
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <title>Chat WebSocket</title>
 
     <!-- External libraries -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.2.0/bundles/stomp.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
-    <!-- Your application JS -->
+    <!-- JS file -->
     <script src="/main.js" defer></script>
 </head>
-
-<body onload="disconnect()">
-<div>
-    <div>
-        <input type="text" id="from" placeholder="Choose a nickname"/>
-    </div>
-    <br/>
-
-    <div>
-        <button id="connect" onclick="connect()">Connect</button>
-        <button id="disconnect" disabled onclick="disconnect()">Disconnect</button>
-    </div>
-    <br/>
-
-    <div id="conversationDiv">
-        <input type="text" id="text" placeholder="Write a message..."/>
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <p id="response"></p>
-    </div>
-</div>
+<body>
+<h1>Chat WebSocket</h1>
+<label for="from">Nickname: </label><input type="text" id="from" placeholder="Choose a nickname" size="50" onfocus=this.value='' /><br/><br/>
+<label for="sessionId">SessionId: </label><input type="text" id="sessionId" placeholder="Send to SessionId here..." size="50" onfocus=this.value='' /><br/><br/>
+<input id="connect" type="button" onclick="connect()" value="Connect" />
+<input id="disconnect" type="button" onclick="disconnect()" value="Disconnect" /><br/><br/>
+<input id="sendMessage" type="button" onclick="sendMessage()" value="Send Messages" />
+<input id="sendPrivateMessage" type="button" onclick="sendPrivateMessage()" value="Send Private Messages" />
+<input id="clearMessages" type="button" onclick="clearMessage(messages)" value="Clear Messages" />
+<p><span  id="connection"></span></p>
+<p>Messages:<br/> <span  id="messages"></span></p>
 </body>
 </html>
