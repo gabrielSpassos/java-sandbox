@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS data (
+  id UUID NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+  data JSON NOT NULL,
+  data_b JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL
+);
