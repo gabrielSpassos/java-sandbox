@@ -1,6 +1,7 @@
 package com.gabrielspassos.entity;
 
 import com.gabrielspassos.dto.DataDTO;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Table(name = "data")
 public class DataEntity {
 
+    @Id
     @Column(value = "id")
     private UUID id;
 
