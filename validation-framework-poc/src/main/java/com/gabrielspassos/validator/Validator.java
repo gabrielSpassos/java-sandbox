@@ -1,6 +1,11 @@
 package com.gabrielspassos.validator;
 
+import com.gabrielspassos.structures.Pair;
+
+import java.util.List;
+
 public interface Validator<T> {
 
-    boolean validate(T object);
+    Pair<List<String>, Boolean> validate(T object);
+
 }

@@ -1,16 +1,21 @@
-package dto;
+package com.gabrielspassos.dto;
+
+import com.gabrielspassos.annotations.NotNull;
 
 import java.util.Objects;
 
 public class BasicDTO1 {
 
+    @NotNull
     private String name;
-    private int age;
+
+    @NotNull
+    private Integer age;
 
     public BasicDTO1() {
     }
 
-    public BasicDTO1(String name, int age) {
+    public BasicDTO1(String name, Integer age) {
         this.name = name;
         this.age = age;
     }
@@ -23,11 +28,11 @@ public class BasicDTO1 {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -35,7 +40,7 @@ public class BasicDTO1 {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BasicDTO1 basicDTO1 = (BasicDTO1) o;
-        return age == basicDTO1.age && Objects.equals(name, basicDTO1.name);
+        return Objects.equals(age, basicDTO1.age) && Objects.equals(name, basicDTO1.name);
     }
 
     @Override
