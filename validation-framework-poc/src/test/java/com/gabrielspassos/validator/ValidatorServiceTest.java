@@ -11,9 +11,13 @@ class ValidatorServiceTest {
     void shouldThrowErrorToValidateNullObject() {
         ValidatorService<BasicDTO1> validatorService = createValidatorService();
 
-        assertNotNull(validatorService);
+        var result = validatorService.validate(null);
 
-        assertThrows(IllegalArgumentException.class, () -> validatorService.validate(null));
+        assertNotNull(result);
+        assertNotNull(result.left());
+        assertFalse(result.left().isEmpty());
+        assertNotNull(result.right());
+        assertFalse(result.right());
     }
 
     @Test
@@ -21,9 +25,13 @@ class ValidatorServiceTest {
         BasicDTO1 dto1 = createBasicDTO1("Gabriel", 28);
         ValidatorService<BasicDTO1> validatorService = createValidatorService();
 
-        var validated = validatorService.validate(dto1);
+        var result = validatorService.validate(dto1);
 
-        assertTrue(validated);
+        assertNotNull(result);
+        assertNotNull(result.left());
+        assertTrue(result.left().isEmpty());
+        assertNotNull(result.right());
+        assertTrue(result.right());
     }
 
     private <T> ValidatorService<T> createValidatorService() {
