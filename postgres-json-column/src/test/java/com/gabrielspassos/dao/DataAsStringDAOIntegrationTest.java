@@ -15,6 +15,8 @@ public class DataAsStringDAOIntegrationTest extends BaseIntegrationTests {
     @Autowired
     private DataAsStringDAO dataAsStringDAO;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
     public void shouldSave() {
         var entity = createEntity();
@@ -28,16 +30,10 @@ public class DataAsStringDAOIntegrationTest extends BaseIntegrationTests {
         assertNotNull(savedEntity.getCreatedAt());
     }
 
-    private ObjectMapper createMapper() {
-        return new ObjectMapper();
-    }
-
     private DataAsStringEntity createEntity() {
-        var mapper = createMapper();
-
         var dataDTO = createDataDTO();
 
-        var jsonData = mapper.writeValueAsString(dataDTO);
+        var jsonData = objectMapper.writeValueAsString(dataDTO);
 
         var entity = new DataAsStringEntity();
         entity.setData(jsonData);

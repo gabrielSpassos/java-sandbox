@@ -1,6 +1,6 @@
 package com.gabrielspassos.entity;
 
-import com.gabrielspassos.dto.DataDTO;
+import org.postgresql.util.PGobject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -17,10 +17,10 @@ public class DataEntity {
     private UUID id;
 
     @Column(value = "data")
-    private DataDTO data;
+    private PGobject data;
 
     @Column(value = "data_b")
-    private DataDTO binaryData;
+    private PGobject binaryData;
 
     @Column(value = "created_at")
     private OffsetDateTime createdAt;
@@ -28,7 +28,7 @@ public class DataEntity {
     public DataEntity() {
     }
 
-    public DataEntity(UUID id, DataDTO data, DataDTO binaryData, OffsetDateTime createdAt) {
+    public DataEntity(UUID id, PGobject data, PGobject binaryData, OffsetDateTime createdAt) {
         this.id = id;
         this.data = data;
         this.binaryData = binaryData;
@@ -43,19 +43,19 @@ public class DataEntity {
         this.id = id;
     }
 
-    public DataDTO getData() {
+    public PGobject getData() {
         return data;
     }
 
-    public void setData(DataDTO data) {
+    public void setData(PGobject data) {
         this.data = data;
     }
 
-    public DataDTO getBinaryData() {
+    public PGobject getBinaryData() {
         return binaryData;
     }
 
-    public void setBinaryData(DataDTO binaryData) {
+    public void setBinaryData(PGobject binaryData) {
         this.binaryData = binaryData;
     }
 
