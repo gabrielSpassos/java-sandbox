@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Component
@@ -15,7 +17,15 @@ public class DataAsStringDAO {
     private DataAsStringRepository dataAsStringRepository;
 
     public DataAsStringEntity save(DataAsStringEntity dataAsStringEntity) {
-        return dataAsStringRepository.save(dataAsStringEntity);
+        var entityId = Optional.ofNullable(dataAsStringEntity.getId()).orElse(UUID.randomUUID());
+        dataAsStringRepository.insert(
+                entityId,
+                dataAsStringEntity.getData(),
+                dataAsStringEntity.getBinaryData(),
+                dataAsStringEntity.getCreatedAt()
+        );
+
+        return dataAsStringRepository.findById(entityId).orElseThrow(IllegalStateException::new);
     }
 
     public Boolean delete(DataAsStringEntity dataEntity) {
