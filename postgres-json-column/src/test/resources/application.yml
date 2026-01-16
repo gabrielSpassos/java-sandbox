@@ -1,3 +1,8 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+    hikari:
+      max-lifetime: 900000      # 15 minutes
+      idle-timeout: 600000      # 10 minutes
+      keepalive-time: 300000    # 5 minutes
+      validation-timeout: 5000

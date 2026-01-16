@@ -16,15 +16,19 @@ import java.util.UUID;
 
 @Testcontainers
 @SpringBootTest
-public class BaseIntegrationTests {
+public abstract class BaseIntegrationTests {
 
     @Container
-    private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
             .withDatabaseName("testdb")
             .withUsername("test")
             .withPassword("test")
             .withInitScript("schema.sql")
             .withReuse(true);
+
+    static {
+        postgres.start();
+    }
 
     @DynamicPropertySource
     static void registerDatasourceProperties(DynamicPropertyRegistry registry) {
