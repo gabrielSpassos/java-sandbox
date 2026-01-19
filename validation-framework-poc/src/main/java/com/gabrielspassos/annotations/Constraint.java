@@ -1,17 +1,16 @@
 package com.gabrielspassos.annotations;
 
-import com.gabrielspassos.validator.NotEmptyValidator;
+import com.gabrielspassos.validator.AnnotationValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = NotEmptyValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface NotEmpty {
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Constraint {
 
-    String message() default "Field must not be empty";
+    Class<? extends AnnotationValidator<?, ?>> validatedBy();
 
 }

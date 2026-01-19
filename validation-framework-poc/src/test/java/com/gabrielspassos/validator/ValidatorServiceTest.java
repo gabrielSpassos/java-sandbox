@@ -34,6 +34,20 @@ class ValidatorServiceTest {
         assertTrue(result.right());
     }
 
+    @Test
+    void shouldValidateNotNullAnnotationAndReturnInvalid() {
+        BasicDTO1 dto1 = createBasicDTO1(null, 28);
+        ValidatorService<BasicDTO1> validatorService = createValidatorService();
+
+        var result = validatorService.validate(dto1);
+
+        assertNotNull(result);
+        assertNotNull(result.left());
+        assertFalse(result.left().isEmpty());
+        assertNotNull(result.right());
+        assertFalse(result.right());
+    }
+
     private <T> ValidatorService<T> createValidatorService() {
         return new ValidatorService<>();
     }
