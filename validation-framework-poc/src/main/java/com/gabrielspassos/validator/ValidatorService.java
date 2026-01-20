@@ -5,6 +5,7 @@ import com.gabrielspassos.structures.Pair;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +31,13 @@ public class ValidatorService<T> implements Validator<T> {
 
                         Constraint constraint = annotation.annotationType().getAnnotation(Constraint.class);
 
-                        AnnotationValidator validator = constraint.validatedBy().getDeclaredConstructor().newInstance();
+                        AnnotationValidator annotationValidator = constraint.validatedBy().getDeclaredConstructor().newInstance();
 
                         Object value = field.get(object);
 
-                        if (!validator.isValid(annotation, value)) {
-                            errors.add("Field '" + field.getName() + "' is invalid.");
+                        if (!annotationValidator.isValid(annotation, value)) {
+                            var validationErrorMessage = extractMessage(annotation, field);
+                            errors.add(validationErrorMessage);
                         }
                     }
                 }
@@ -45,6 +47,17 @@ public class ValidatorService<T> implements Validator<T> {
             return new Pair<>(errors, isValid);
         } catch (Exception e) {
             return new Pair<>(List.of("Validation failed for class " + object.getClass().getName()), false);
+        }
+    }
+
+    private String extractMessage(Annotation annotation, Field field) {
+        try {
+            Method messageMethod = annotation.annotationType().getMethod("message");
+            return (String) messageMethod.invoke(annotation);
+        } catch (NoSuchMethodException e) {
+            return "Field " + field.getName() + " is invalid";
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read annotation message", e);
         }
     }
 }
