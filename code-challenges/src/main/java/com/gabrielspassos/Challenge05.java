@@ -1,6 +1,7 @@
 package com.gabrielspassos;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /*
@@ -43,7 +44,12 @@ Now can you refactor your code and do less ifs? Maybe introduce pointers?
 public class Challenge05 {
 
     private static final HashMap<String, Integer> POWER_MAP = new HashMap<>();
-    private static HashMap<String, Integer> LEADERBOARD = new HashMap<>();
+
+    private static final HashMap<String, Integer> LEADERBOARD = new HashMap<>();
+
+    private static final Integer WINNER_SCORE = 10;
+    private static final Integer DRAW_SCORE = 5;
+    private static final Integer LOOSER_SCORE = -5;
 
     static {
         POWER_MAP.put("John", 100);
@@ -65,6 +71,30 @@ public class Challenge05 {
         return optionalPower1.flatMap(power1 ->
                 optionalPower2.map(power2 -> power1 > power2 ? name1 : name2)
         );
+    }
+
+    public static String play(String name1, String name2) {
+        var optionalMostPowerful = getMostPowerful(name1, name2);
+        if (optionalMostPowerful.isEmpty()) {
+            throw new IllegalArgumentException("Invalid names to play");
+        }
+
+        if (name1.equals(name2)) {
+            LEADERBOARD.put(name1, LEADERBOARD.get(name1) + DRAW_SCORE);
+            LEADERBOARD.put(name2, LEADERBOARD.get(name2) + DRAW_SCORE);
+            return name1;
+        }
+
+        var winnerName = optionalMostPowerful.get();
+        var looserName = winnerName.equals(name1) ? name2 : name1;
+
+        LEADERBOARD.put(winnerName, LEADERBOARD.get(winnerName) + WINNER_SCORE);
+        LEADERBOARD.put(looserName, LEADERBOARD.get(looserName) + LOOSER_SCORE);
+        return winnerName;
+    }
+
+    protected static Map<String, Integer> getLeaderboard() {
+        return Map.copyOf(LEADERBOARD);
     }
 
 }

@@ -83,4 +83,44 @@ class Challenge05Test {
         var result2 = Challenge05.getMostPowerful("Gabriel", "Ringo");
         assertTrue(result2.isEmpty());
     }
+
+    @Test
+    void playGame() {
+        assertEquals("John", Challenge05.play("John", "Paul"));
+        var leaderboard1 = Challenge05.getLeaderboard();
+        assertEquals(10, leaderboard1.get("John"));
+        assertEquals(-5, leaderboard1.get("Paul"));
+        assertEquals(0, leaderboard1.get("George"));
+        assertEquals(0, leaderboard1.get("Ringo"));
+
+        assertEquals("John", Challenge05.play("John", "George"));
+        var leaderboard2 = Challenge05.getLeaderboard();
+        assertEquals(20, leaderboard2.get("John"));
+        assertEquals(-5, leaderboard2.get("Paul"));
+        assertEquals(-5, leaderboard2.get("George"));
+        assertEquals(0, leaderboard2.get("Ringo"));
+
+        assertEquals("Paul", Challenge05.play("Ringo", "Paul"));
+        var leaderboard3 = Challenge05.getLeaderboard();
+        assertEquals(20, leaderboard3.get("John"));
+        assertEquals(5, leaderboard3.get("Paul"));
+        assertEquals(-5, leaderboard3.get("George"));
+        assertEquals(-5, leaderboard3.get("Ringo"));
+    }
+
+    @Test
+    void shouldPlayWithDraw() {
+        assertEquals("Ringo", Challenge05.play("Ringo", "Ringo"));
+        var leaderboard3 = Challenge05.getLeaderboard();
+        assertEquals(0, leaderboard3.get("John"));
+        assertEquals(0, leaderboard3.get("Paul"));
+        assertEquals(0, leaderboard3.get("George"));
+        assertEquals(10, leaderboard3.get("Ringo"));
+    }
+
+    @Test
+    void shouldThrowErrorToPlay() {
+        assertThrows(IllegalArgumentException.class, () -> Challenge05.play("Ringo", "Gabriel"));
+        assertThrows(IllegalArgumentException.class, () -> Challenge05.play("Gabriel", "Paul"));
+    }
 }
