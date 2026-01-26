@@ -93,8 +93,13 @@ public class Challenge05 {
         return winnerName;
     }
 
-    protected static Map<String, Integer> getLeaderboard() {
+    static Map<String, Integer> getLeaderboard() {
         return Map.copyOf(LEADERBOARD);
+    }
+
+    static Boolean clearLeaderboard() {
+        LEADERBOARD.forEach((key, _) -> LEADERBOARD.put(key, 0));
+        return true;
     }
 
 }

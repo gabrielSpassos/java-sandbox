@@ -1,10 +1,16 @@
 package com.gabrielspassos;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class Challenge05Test {
+
+    @BeforeEach
+    void setup() {
+        Challenge05.clearLeaderboard();
+    }
 
     @Test
     void shouldReturnPowerByName() {
