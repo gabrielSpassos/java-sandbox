@@ -1,8 +1,6 @@
 package com.gabrielspassos.challenge15;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -47,7 +45,7 @@ public class Person {
     public Person(String name, Integer age) {
         this.name = name;
         this.age = age;
-        this.friends = new HashSet<>();
+        this.friends = new LinkedHashSet<>();
     }
 
     public String getName() {
@@ -68,6 +66,24 @@ public class Person {
 
     public Boolean addFriend(Person friend) {
         return friends.add(friend);
+    }
+
+    public Boolean removeFriend(Person friend) {
+        return friends.remove(friend);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(name, person.name)
+                && Objects.equals(age, person.age)
+                && Objects.equals(friends, person.friends);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age, friends);
     }
 
 }
