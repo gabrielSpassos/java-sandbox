@@ -39,4 +39,62 @@ class Challenge15Test {
         assertEquals(List.of("George", "Ringo"), john.getFriendsNames());
     }
 
+    @Test
+    void shouldReturnMostFriendly() {
+        var john = new Person("John", 30);
+        var paul = new Person("Paul", 29);
+        var george = new Person("George", 31);
+        var ringo = new Person("Ringo", 28);
+        john.addFriend(paul);
+        john.addFriend(george);
+
+        paul.addFriend(john);
+        paul.addFriend(george);
+        paul.addFriend(ringo);
+
+        george.addFriend(ringo);
+
+        assertEquals("Paul", john.mostFriendly());
+    }
+
+    @Test
+    void shouldReturnLessFriendly() {
+        var john = new Person("John", 30);
+        var paul = new Person("Paul", 29);
+        var george = new Person("George", 31);
+        var ringo = new Person("Ringo", 28);
+        john.addFriend(paul);
+        john.addFriend(george);
+
+        paul.addFriend(john);
+        paul.addFriend(george);
+        paul.addFriend(ringo);
+
+        george.addFriend(ringo);
+
+        ringo.addFriend(george);
+
+        assertEquals("George", john.lessFriendly());
+    }
+
+    @Test
+    void shouldReturnWhoHasTheOldestFriendly() {
+        var john = new Person("John", 30);
+        var paul = new Person("Paul", 29);
+        var george = new Person("George", 31);
+        var ringo = new Person("Ringo", 28);
+        john.addFriend(paul);
+        john.addFriend(george);
+
+        paul.addFriend(john);
+        paul.addFriend(george);
+        paul.addFriend(ringo);
+
+        george.addFriend(ringo);
+
+        ringo.addFriend(george);
+
+        assertEquals("George", john.whoHasOldestFriend());
+    }
+
 }

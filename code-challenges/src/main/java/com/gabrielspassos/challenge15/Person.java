@@ -72,6 +72,54 @@ public class Person {
         return friends.remove(friend);
     }
 
+    public String mostFriendly() {
+        var personToFriendsCount = personToFriendsCount();
+
+        return personToFriendsCount.entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElseThrow(IllegalStateException::new);
+    }
+
+    public String lessFriendly() {
+        var personToFriendsCount = personToFriendsCount();
+
+        return personToFriendsCount.entrySet()
+                .stream()
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElseThrow(IllegalStateException::new);
+    }
+
+    public String whoHasOldestFriend() {
+        var personToFriendsCount = friends.stream().collect(
+                Collectors.toMap(
+                        Person::getName,
+                        Person::getAge
+                )
+        );
+
+        return personToFriendsCount.entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElseThrow(IllegalStateException::new);
+    }
+
+
+    private Map<String, Integer> personToFriendsCount() {
+        var personToFriendsCount = friends.stream().collect(
+                Collectors.toMap(
+                        Person::getName,
+                        person -> person.getFriends().size()
+                )
+        );
+
+        personToFriendsCount.put(getName(), getFriends().size());
+        return personToFriendsCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
