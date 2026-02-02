@@ -15,7 +15,7 @@ The exterminator can walk from the bottown left corner to the top right corner t
 */
 public class Game {
 
-    private static final int[][] BOARD = new int[100][100];
+    private static final Character[][] BOARD = new Character[100][100];
     private static final int MOSQUITOS_INIT_COUNT = 10;
     private static final int EXTERMINATOR_COUNT = 1;
 
