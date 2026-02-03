@@ -20,33 +20,48 @@ public class Mosquito implements Character{
     public Character[][] move(Character[][] board) {
         this.moveCount++;
         var currentPosition = position;
+        Mosquito newMosquito = null;
 
         if (shouldReproduce(board)) {
-            var newMosquito = new Mosquito(currentPosition);
+            newMosquito = new Mosquito(currentPosition);
         }
 
         var mosquitoPossiblePositions = getMosquitoPossiblePositions(board).asArray();
-        var newPossiblePosition = mosquitoPossiblePositions[ThreadLocalRandom.current().nextInt(mosquitoPossiblePositions.length)];
-        var x = board[newPossiblePosition.row()][newPossiblePosition.column()];
-        //todo: check positions
+        var newPosition = getRandomPosition(mosquitoPossiblePositions);
+        var isPositionAlreadyFilled = isOtherMosquitoAtPosition(newPosition, board);
+
+        while (isPositionAlreadyFilled) {
+            newPosition = getRandomPosition(mosquitoPossiblePositions);
+            isPositionAlreadyFilled = isOtherMosquitoAtPosition(newPosition, board);
+        }
+
+        this.position = newPosition;
+
+        board[currentPosition.column()][currentPosition.row()] = newMosquito;
+        board[newPosition.column()][newPosition.row()] = this;
+
         return board;
     }
 
+    public Integer getMoveCount() {
+        return this.moveCount;
+    }
+
     private boolean shouldReproduce(Character[][] board) {
-        if (MOVE_COUNT_MIN_TO_REPRODUCE > moveCount) {
+        if (MOVE_COUNT_MIN_TO_REPRODUCE > getMoveCount()) {
             return false;
         }
 
         var mosquitosPosition = getMosquitoPossiblePositions(board);
 
-        return isOtherMosquitoAtPosition(mosquitosPosition.upPosition(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.downPosition(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.leftPosition(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.rightPosition(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.upDiagonalLeft(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.upDiagonalRight(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.downDiagonalLeft(), board)
-                || isOtherMosquitoAtPosition(mosquitosPosition.downDiagonalRight(), board);
+        return isOtherReproducibleMosquitoAtPosition(mosquitosPosition.upPosition(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.downPosition(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.leftPosition(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.rightPosition(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.upDiagonalLeft(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.upDiagonalRight(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.downDiagonalLeft(), board)
+                || isOtherReproducibleMosquitoAtPosition(mosquitosPosition.downDiagonalRight(), board);
     }
 
     private boolean isOtherMosquitoAtPosition(Position<Integer, Integer> position, Character[][] board) {
@@ -54,6 +69,18 @@ public class Mosquito implements Character{
                 .filter(character -> character instanceof Mosquito)
                 .filter(mosquito -> !mosquito.equals(this))
                 .isPresent();
+    }
+
+    private boolean isOtherReproducibleMosquitoAtPosition(Position<Integer, Integer> position, Character[][] board) {
+        return Optional.ofNullable(board[position.column()][position.row()])
+                .filter(character -> character instanceof Mosquito)
+                .filter(mosquito -> ((Mosquito) mosquito).getMoveCount() >= MOVE_COUNT_MIN_TO_REPRODUCE)
+                .filter(mosquito -> !mosquito.equals(this))
+                .isPresent();
+    }
+
+    private Position<Integer, Integer> getRandomPosition(Position<Integer, Integer>[] positions) {
+        return positions[ThreadLocalRandom.current().nextInt(positions.length)];
     }
 
     @Override
