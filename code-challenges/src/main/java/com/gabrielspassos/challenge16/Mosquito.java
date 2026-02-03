@@ -1,5 +1,7 @@
 package com.gabrielspassos.challenge16;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,7 +19,7 @@ public class Mosquito implements Character{
     }
 
     @Override
-    public Character[][] move(Character[][] board) {
+    public Pair<List<Character>, Character[][]> move(Character[][] board) {
         this.moveCount++;
         var currentPosition = position;
         Mosquito newMosquito = null;
@@ -40,7 +42,13 @@ public class Mosquito implements Character{
         board[currentPosition.column()][currentPosition.row()] = newMosquito;
         board[newPosition.column()][newPosition.row()] = this;
 
-        return board;
+        var list = new ArrayList<Mosquito>();
+
+        if (null != newMosquito) {
+            list.add(newMosquito);
+        }
+
+        return new Pair(list, board);
     }
 
     public Integer getMoveCount() {

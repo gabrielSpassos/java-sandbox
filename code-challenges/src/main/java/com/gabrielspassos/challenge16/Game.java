@@ -1,5 +1,13 @@
 package com.gabrielspassos.challenge16;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+
 /*
 The game should start with 10 mosquitos, 1 exterminator.
 The game should have a internal matrix of 100x100.
@@ -15,15 +23,71 @@ The exterminator can walk from the bottown left corner to the top right corner t
 */
 public class Game {
 
-    private static final Character[][] BOARD = new Character[100][100];
+    private static final int SIZE = 100;
     private static final int MOSQUITOS_INIT_COUNT = 10;
-    private static final int EXTERMINATOR_COUNT = 1;
+
+    private final Character[][] board = new Character[SIZE][SIZE];
+
+    private final List<Mosquito> mosquitos = new ArrayList<>();
+    private final Exterminator exterminator;
 
     private int killedMosquitos;
     private int aliveMosquitos;
 
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
     public Game() {
         this.killedMosquitos = 0;
         this.aliveMosquitos = 0;
+
+        exterminator = new Exterminator(new Position<>(0, 0));
+        board[0][0] = exterminator;
+
+        spawnInitialMosquitos();
+    }
+
+    public void start() {
+        scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private void tick() {
+
+        // 1) move mosquitos
+        moveMosquitos();
+
+        // 2) move exterminator (kills happen here)
+        //moveExterminator();
+
+        // 3) update counters
+        aliveMosquitos = mosquitos.size();
+
+        // debug
+        System.out.println("Alive=" + aliveMosquitos + " | Killed=" + killedMosquitos);
+    }
+
+    private void moveMosquitos() {
+        for (Mosquito m : new ArrayList<>(mosquitos)) {
+            var moveResult = m.move(board);
+            var newMosquitos = moveResult.left();
+            mosquitos.addAll((Collection<? extends Mosquito>) newMosquitos);
+        }
+    }
+
+    private void spawnInitialMosquitos() {
+        for (int i = 0; i < MOSQUITOS_INIT_COUNT; i++) {
+            var pos = randomPosition();
+            var m = new Mosquito(randomPosition());
+            mosquitos.add(m);
+
+            board[pos.column()][pos.row()] = m;
+        }
+
+        aliveMosquitos = mosquitos.size();
+    }
+
+    private Position<Integer, Integer> randomPosition() {
+        int r = ThreadLocalRandom.current().nextInt(SIZE);
+        int c = ThreadLocalRandom.current().nextInt(SIZE);
+        return new Position<>(r, c);
     }
 }
