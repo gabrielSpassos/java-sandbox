@@ -1,5 +1,6 @@
 package com.gabrielspassos.challenge16;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,15 +40,17 @@ public class Exterminator implements Character {
         var nextPosition = new Position<>(nextRow, nextCol);
 
         // 3 — kill mosquito if present
-        if (isMosquitoAtPosition(nextPosition, board)) {
+        var list = new ArrayList<>();
+        var optionalMosquito = getMosquitoAtPosition(nextPosition, board);
+        if (optionalMosquito.isPresent()) {
             board[nextPosition.column()][nextPosition.row()] = null;
+            list.add(optionalMosquito.get());
         }
 
         // 4 — place exterminator
         position = nextPosition;
         board[nextPosition.column()][nextPosition.row()] = this;
 
-        var list = List.of(this);
         return new Pair(list, board);
     }
 
@@ -55,10 +58,10 @@ public class Exterminator implements Character {
         return position;
     }
 
-    private boolean isMosquitoAtPosition(Position<Integer, Integer> position, Character[][] board) {
+    private Optional<Mosquito> getMosquitoAtPosition(Position<Integer, Integer> position, Character[][] board) {
         return Optional.ofNullable(board[position.column()][position.row()])
                 .filter(character -> character instanceof Mosquito)
-                .isPresent();
+                .map(character -> (Mosquito) character);
     }
 
 }

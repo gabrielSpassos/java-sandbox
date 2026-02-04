@@ -50,18 +50,22 @@ public class Game {
         scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
     }
 
-    private void tick() {
+    public void stop() {
+        scheduler.shutdownNow();
+    }
 
-        // 1) move mosquitos
+    public int getKilledMosquitos() {
+        return killedMosquitos;
+    }
+
+    public int getAliveMosquitos() {
+        return aliveMosquitos;
+    }
+
+    void tick() {
         moveMosquitos();
-
-        // 2) move exterminator (kills happen here)
-        //moveExterminator();
-
-        // 3) update counters
+        moveExterminator();
         aliveMosquitos = mosquitos.size();
-
-        // debug
         System.out.println("Alive=" + aliveMosquitos + " | Killed=" + killedMosquitos);
     }
 
@@ -69,8 +73,22 @@ public class Game {
         for (Mosquito m : new ArrayList<>(mosquitos)) {
             var moveResult = m.move(board);
             var newMosquitos = moveResult.left();
-            mosquitos.addAll((Collection<? extends Mosquito>) newMosquitos);
+            newMosquitos.forEach(character -> {
+                var mosquito = (Mosquito) character;
+                mosquitos.add(mosquito);
+            });
         }
+    }
+
+    private void moveExterminator() {
+        var moveResult = exterminator.move(board);
+        var killedMosquitosList = moveResult.left();
+
+        killedMosquitos += killedMosquitosList.size();
+        killedMosquitosList.forEach(character -> {
+            var mosquito = (Mosquito) character;
+            mosquitos.remove(mosquito);
+        });
     }
 
     private void spawnInitialMosquitos() {
