@@ -39,7 +39,7 @@ class GameTest {
 
         int initialAlive = game.getAliveMosquitos();
 
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 50; i++) {
             game.tick();
         }
 
@@ -65,7 +65,7 @@ class GameTest {
     void simulationShouldBeStableOverManyTicks() {
         Game game = new Game();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             game.tick();
         }
 

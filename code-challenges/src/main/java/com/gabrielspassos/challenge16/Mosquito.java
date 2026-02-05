@@ -107,9 +107,9 @@ public class Mosquito implements Character{
         var currentPosition = position;
 
         var upRowNumber = currentPosition.row() > 0 ? currentPosition.row() - 1 : currentPosition.row();
-        var downRowNumber = currentPosition.row() < board.length ? currentPosition.row() + 1 : currentPosition.row();
+        var downRowNumber = currentPosition.row() < board.length - 1 ? currentPosition.row() + 1 : currentPosition.row();
         var leftColumnNumber = currentPosition.column() > 0 ? currentPosition.column() - 1 : currentPosition.column();
-        var rightColumnNumber = currentPosition.column() < board.length ? currentPosition.column() + 1 : currentPosition.column();
+        var rightColumnNumber = currentPosition.column() < board.length - 1 ? currentPosition.column() + 1 : currentPosition.column();
 
         var upPosition = new Position<>(upRowNumber, currentPosition.column());
         var downPosition = new Position<>(downRowNumber, currentPosition.column());
