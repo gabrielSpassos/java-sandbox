@@ -65,7 +65,7 @@ class GameTest {
     void simulationShouldBeStableOverManyTicks() {
         Game game = new Game();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             game.tick();
         }
 

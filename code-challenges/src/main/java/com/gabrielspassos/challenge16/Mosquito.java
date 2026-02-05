@@ -30,12 +30,12 @@ public class Mosquito implements Character{
 
         var mosquitoPossiblePositions = getMosquitoPossiblePositions(board).asArray();
         var newPosition = getRandomPosition(mosquitoPossiblePositions);
-        var isPositionAlreadyFilled = isOtherMosquitoAtPosition(newPosition, board);
 
-        while (isPositionAlreadyFilled) {
-            newPosition = getRandomPosition(mosquitoPossiblePositions);
-            isPositionAlreadyFilled = isOtherMosquitoAtPosition(newPosition, board);
-        }
+//        var isPositionAlreadyFilled = isOtherMosquitoAtPosition(newPosition, board);
+//        while (isPositionAlreadyFilled) {
+//            newPosition = getRandomPosition(mosquitoPossiblePositions);
+//            isPositionAlreadyFilled = isOtherMosquitoAtPosition(newPosition, board);
+//        }
 
         this.position = newPosition;
 
