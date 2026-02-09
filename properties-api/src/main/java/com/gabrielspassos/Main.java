@@ -22,6 +22,8 @@ public class Main {
         });
 
         System.out.println("timeout -> " + properties.getProperty("timeout"));
+        System.out.println("withoutDefault -> " + properties.getProperty("withoutDefault"));
+        System.out.println("withDefault -> " + properties.getProperty("withDefault", "withDefault"));
 
         // From classpath file
         IO.println("\n\nRead Properties");
@@ -64,5 +66,13 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // System properties
+        IO.println("\n\nSystem Properties");
+        System.setProperty("is.poc", "true");
+        System.getProperties().forEach((key, value) -> {
+            IO.println(key + " -> " + value);
+        });
+
     }
 }
