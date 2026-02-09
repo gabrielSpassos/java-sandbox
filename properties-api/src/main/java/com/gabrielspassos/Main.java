@@ -1,5 +1,7 @@
 package com.gabrielspassos;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Main {
@@ -19,5 +21,19 @@ public class Main {
         });
 
         System.out.println("timeout -> " + properties.getProperty("timeout"));
+
+        // From classpath file
+        Properties classPathProperties = new Properties(defaults);
+        try (InputStream inputStream = Thread.currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream("application.properties")) {
+            classPathProperties.load(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        classPathProperties.forEach((key, value) -> {
+            IO.println(key + " -> " + value);
+        });
     }
 }
