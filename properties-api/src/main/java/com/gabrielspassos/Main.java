@@ -1,7 +1,7 @@
 package com.gabrielspassos;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class Main {
@@ -9,12 +9,13 @@ public class Main {
         IO.println("Properties API POC");
 
         // In memory
+        IO.println("In Memory Properties");
         Properties defaults = new Properties();
         defaults.setProperty("timeout", "30");
 
         Properties properties = new Properties(defaults);
         properties.setProperty("app.name", "properties-api");
-        properties.setProperty("app.port", "8080");
+        properties.setProperty("app.port", "8081");
 
         properties.forEach((key, value) -> {
             IO.println(key + " -> " + value);
@@ -23,7 +24,8 @@ public class Main {
         System.out.println("timeout -> " + properties.getProperty("timeout"));
 
         // From classpath file
-        Properties classPathProperties = new Properties(defaults);
+        IO.println("\n\nRead Properties");
+        Properties classPathProperties = new Properties();
         try (InputStream inputStream = Thread.currentThread()
                 .getContextClassLoader()
                 .getResourceAsStream("application.properties")) {
@@ -35,5 +37,32 @@ public class Main {
         classPathProperties.forEach((key, value) -> {
             IO.println(key + " -> " + value);
         });
+
+        IO.println("\n\nRead XML Properties");
+        Properties xmlClassPathProperties = new Properties();
+        try (InputStream inputStream = Thread.currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream("config.xml")) {
+            xmlClassPathProperties.loadFromXML(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        xmlClassPathProperties.forEach((key, value) -> {
+            IO.println(key + " -> " + value);
+        });
+
+        // Store
+        try (FileWriter writer = new FileWriter("src/main/resources/config.properties")) {
+            properties.store(writer, "Configurations");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (FileOutputStream output = new FileOutputStream("src/main/resources/config.xml")) {
+            properties.storeToXML(output, "Configurations", StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
