@@ -26,14 +26,41 @@ public class ReflectionsService {
             var user = constructor.newInstance("Gabriel", 28);
             IO.println("User instance by reflections: " + user);
 
+            Method getName = clazz.getMethod("getName");
+            Method getAge = clazz.getMethod("getAge");
             Method isAdult = clazz.getMethod("isAdult");
             Method greet = clazz.getMethod("greet", String.class);
             Method canDrink = clazz.getMethod("canDrink", String.class, int.class);
 
-            IO.println("isAdult reflections invoke: " + isAdult.invoke(user));
-            IO.println("greet reflections invoke: " + greet.invoke(user, "Hi"));
-            IO.println("canDrink in USA reflections invoke: " + canDrink.invoke(user, "USA", 21));
-            IO.println("canDrink in Brazil reflections invoke: " + canDrink.invoke(user, "Brazil", 18));
+            IO.println(String.format("User with age %s isAdult reflections invoke: %s",
+                    getAge.invoke(user), isAdult.invoke(user)));
+            IO.println(String.format("User with name %s greet reflections invoke: %s",
+                    getName.invoke(user), greet.invoke(user, "Hi")));
+            IO.println(String.format("User with age %s canDrink in USA reflections invoke: %s",
+                    getAge.invoke(user), canDrink.invoke(user, "USA", 21)));
+            IO.println(String.format("User with age %s canDrink in Brazil reflections invoke: %s",
+                    getAge.invoke(user), canDrink.invoke(user, "Brazil", 18)));
+
+            Method hiddenMethod = clazz.getDeclaredMethod("hiddenMethod");
+            hiddenMethod.setAccessible(true);
+            IO.println("private hiddenMethod reflections invoke: " + hiddenMethod.invoke(user));
+
+            Field age = clazz.getDeclaredField("age");
+            age.setAccessible(true);
+            age.set(user, 18);
+
+            Field name = clazz.getDeclaredField("name");
+            name.setAccessible(true);
+            name.set(user, "ReflectionName");
+
+            IO.println(String.format("User with age %s isAdult reflections invoke: %s",
+                    getAge.invoke(user), isAdult.invoke(user)));
+            IO.println(String.format("User with name %s greet reflections invoke: %s",
+                    getName.invoke(user), greet.invoke(user, "Hello")));
+            IO.println(String.format("User with age %s canDrink in USA reflections invoke: %s",
+                    getAge.invoke(user), canDrink.invoke(user, "USA", 21)));
+            IO.println(String.format("User with age %s canDrink in Brazil reflections invoke: %s",
+                    getAge.invoke(user), canDrink.invoke(user, "Brazil", 18)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

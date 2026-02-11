@@ -20,16 +20,8 @@ public class UserDTO {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getAge() {
         return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public boolean isAdult() {
@@ -46,6 +38,10 @@ public class UserDTO {
         }
 
         return this.age >= minAge;
+    }
+
+    private String hiddenMethod() {
+        return "This is a private method";
     }
 
     @Override
