@@ -33,6 +33,9 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                    <source>25</source>
+                    <target>25</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
 
