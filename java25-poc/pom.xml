@@ -33,9 +33,9 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${java.version}</release>
-                    <source>25</source>
-                    <target>25</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
@@ -45,6 +45,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <useModulePath>false</useModulePath>
+                    <argLine>--enable-preview</argLine>
                 </configuration>
             </plugin>
         </plugins>
