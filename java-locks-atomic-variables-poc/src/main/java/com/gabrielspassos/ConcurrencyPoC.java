@@ -1,8 +1,5 @@
 package com.gabrielspassos;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class ConcurrencyPoC {
 
     private static final int THREADS = 10;
@@ -20,64 +17,36 @@ public class ConcurrencyPoC {
     private static void runUnsafeCounter() throws InterruptedException {
         IO.println("Running UNSAFE counter...");
 
-        class Counter {
-            int value = 0;
-            void increment() {
-                value++; // not atomic
-            }
-        }
-
-        Counter counter = new Counter();
+        Counter counter = new UnsafeCounter();
         Thread[] threads = createThreads(counter::increment);
 
         startAndJoin(threads);
 
-        IO.println("Unsafe result: " + counter.value);
+        IO.println("Unsafe result: " + counter.getValue());
         IO.println();
     }
 
     private static void runLockCounter() throws InterruptedException {
         IO.println("Running LOCK counter...");
 
-        class Counter {
-            private int value = 0;
-            private final ReentrantLock lock = new ReentrantLock();
-
-            void increment() {
-                lock.lock();
-                try {
-                    value++;
-                } finally {
-                    lock.unlock();
-                }
-            }
-        }
-
-        Counter counter = new Counter();
+        Counter counter = new LockCounter();
         Thread[] threads = createThreads(counter::increment);
 
         startAndJoin(threads);
 
-        IO.println("Lock result: " + counter.value);
+        IO.println("Lock result: " + counter.getValue());
         IO.println();
     }
 
-    static void runAtomicCounter() throws InterruptedException {
+    private static void runAtomicCounter() throws InterruptedException {
         IO.println("Running ATOMIC counter...");
 
-        class Counter {
-            private final AtomicInteger value = new AtomicInteger(0);
-            void increment() {
-                value.incrementAndGet();
-            }
-        }
-
-        Counter counter = new Counter();
+        Counter counter = new AtomicCounter();
         Thread[] threads = createThreads(counter::increment);
 
         startAndJoin(threads);
 
-        IO.println("Atomic result: " + counter.value.get());
+        IO.println("Atomic result: " + counter.getValue());
         IO.println();
     }
 
