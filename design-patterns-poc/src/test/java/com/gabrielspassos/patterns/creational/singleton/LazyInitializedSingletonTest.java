@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class StaticBlockSingletonTest {
+class LazyInitializedSingletonTest {
 
     @Test
     void shouldHaveInstance() {
-        var instance = StaticBlockSingleton.getInstance();
+        var instance = LazyInitializedSingleton.getInstance();
 
         assertNotNull(instance);
     }
