@@ -5,17 +5,9 @@
 ### Tests
 
 ```shell
-[INFO] -------------------------------------------------------
-[INFO]  T E S T S
-[INFO] -------------------------------------------------------
-[INFO] Running StableValueTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.059 s -- in StableValueTest
-[INFO] Running SampleTest
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in SampleTest
-[INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
 [INFO] --- jar:3.4.1:jar (default-jar) @ java25-poc ---
@@ -27,7 +19,7 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  2.599 s
-[INFO] Finished at: 2026-02-16T07:39:35-03:00
+[INFO] Total time:  3.435 s
+[INFO] Finished at: 2026-02-17T07:52:54-03:00
 [INFO] ------------------------------------------------------------------------
 ```
