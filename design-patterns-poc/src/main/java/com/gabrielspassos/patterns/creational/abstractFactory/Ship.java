@@ -1,4 +1,4 @@
-package com.gabrielspassos.patterns.creational.factory;
+package com.gabrielspassos.patterns.creational.abstractFactory;
 
 public class Ship implements Transport {
 
