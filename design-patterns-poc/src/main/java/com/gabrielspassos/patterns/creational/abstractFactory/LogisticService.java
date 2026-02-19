@@ -2,14 +2,14 @@ package com.gabrielspassos.patterns.creational.abstractFactory;
 
 public class LogisticService {
 
-    private final TransportFactory transportFactory;
+    private final TransportAbstractFactory transportAbstractFactory;
 
-    public LogisticService (TransportFactory transportFactory) {
-        this.transportFactory = transportFactory;
+    public LogisticService (TransportAbstractFactory transportAbstractFactory) {
+        this.transportAbstractFactory = transportAbstractFactory;
     }
 
     public boolean transport() {
-        var transport = transportFactory.createTransport();
+        var transport = transportAbstractFactory.createTransport();
         return transport.deliver();
     }
 }

@@ -1,6 +1,6 @@
 package com.gabrielspassos.patterns.creational.abstractFactory;
 
-public class TruckLogistics implements TransportFactory {
+public class TruckLogistics implements TransportAbstractFactory {
 
     @Override
     public Transport createTransport() {

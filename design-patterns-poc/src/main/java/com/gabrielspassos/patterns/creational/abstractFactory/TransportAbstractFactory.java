@@ -1,6 +1,6 @@
 package com.gabrielspassos.patterns.creational.abstractFactory;
 
-public interface TransportFactory {
+public interface TransportAbstractFactory {
 
     Transport createTransport();
 
