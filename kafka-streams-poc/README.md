@@ -1,0 +1,7 @@
+# Kafka Streams
+
+## Outputs
+
+```bash
+
+```
