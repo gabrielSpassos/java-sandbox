@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.kafka.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -32,7 +33,10 @@ public class UserEventCountIntegrationTest {
 
     @BeforeAll
     public void setup() {
-        this.kafka = new KafkaContainer("confluentinc/cp-kafka:latest");
+        var dockerImage = DockerImageName
+                .parse("confluentinc/cp-kafka:latest")
+                .asCompatibleSubstituteFor("apache/kafka");
+        this.kafka = new KafkaContainer(dockerImage);
         this.kafka.start();
     }
 
