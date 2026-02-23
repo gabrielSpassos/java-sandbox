@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -36,7 +37,9 @@ public class UserEventCountIntegrationTest {
         var dockerImage = DockerImageName
                 .parse("confluentinc/cp-kafka:latest")
                 .asCompatibleSubstituteFor("apache/kafka");
-        this.kafka = new KafkaContainer(dockerImage);
+        this.kafka = new KafkaContainer(dockerImage)
+                .waitingFor(Wait.forListeningPort())
+                .withStartupTimeout(Duration.ofMinutes(2));
         this.kafka.start();
     }
 
