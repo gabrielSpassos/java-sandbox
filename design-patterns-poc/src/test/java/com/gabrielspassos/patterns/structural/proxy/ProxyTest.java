@@ -26,7 +26,7 @@ public class ProxyTest {
     @Test
     void shouldExecuteRmCommandWithAdmin() throws Exception {
         var commandExecutor = new CommandExecutorProxy("Gabriel", "admin");
-        
+
         var result1 = commandExecutor.runCommand("touch foo.txt");
         var result2 = commandExecutor.runCommand("rm foo.txt");
 
