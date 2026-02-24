@@ -1,8 +1,6 @@
 package com.gabrielspassos.patterns.structural.flyweight;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serial;
 
 import javax.swing.JButton;
