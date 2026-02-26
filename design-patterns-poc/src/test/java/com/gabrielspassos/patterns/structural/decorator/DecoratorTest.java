@@ -21,9 +21,16 @@ public class DecoratorTest {
     }
 
     @Test
-    void shouldCreateLuxurySportCar() {
+    void shouldCreateLuxurySportsCar() {
         Car luxuryCar = new LuxuryCar(new SportsCar(new BasicCar()));
 
         assertEquals("Luxury Car | Sports Car | Basic Car", luxuryCar.assemble());
+    }
+
+    @Test
+    void shouldCreateSportsLuxuryCar() {
+        Car sportsCar = new SportsCar(new LuxuryCar(new BasicCar()));
+
+        assertEquals("Sports Car | Luxury Car | Basic Car", sportsCar.assemble());
     }
 }
