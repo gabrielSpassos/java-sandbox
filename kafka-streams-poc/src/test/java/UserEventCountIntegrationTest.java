@@ -35,11 +35,11 @@ public class UserEventCountIntegrationTest {
     @BeforeAll
     public void setup() {
         var dockerImage = DockerImageName
-                .parse("confluentinc/cp-kafka:latest")
+                .parse("redpandadata/redpanda:v24.1.2")
                 .asCompatibleSubstituteFor("apache/kafka");
         this.kafka = new KafkaContainer(dockerImage)
                 .waitingFor(Wait.forListeningPort())
-                .withStartupTimeout(Duration.ofMinutes(2));
+                .withReuse(true);
         this.kafka.start();
     }
 
