@@ -5,6 +5,30 @@
 
 ## Outputs
 
+- [x] Singleton
+- [x] Factory
+- [x] Abstract Factory
+- [x] Builder
+- [x] Prototype
+- [x] Adapter
+- [x] Composite
+- [x] Proxy
+- [x] Flyweight
+- [x] Facade
+- [x] Bridge
+- [x] Decorator
+- [x] Template Method
+- [x] Mediator
+- [ ] Chain of Responsibility
+- [ ] Observer
+- [ ] Strategy
+- [ ] Command
+- [ ] State
+- [ ] Visitor
+- [ ] Interpreter
+- [ ] Iterator
+- [ ] Memento
+
 ### Tests
 
 ```bash
