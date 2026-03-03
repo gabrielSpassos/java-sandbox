@@ -19,7 +19,7 @@
 - [x] Decorator
 - [x] Template Method
 - [x] Mediator
-- [ ] Chain of Responsibility
+- [x] Chain of Responsibility
 - [ ] Observer
 - [ ] Strategy
 - [ ] Command
