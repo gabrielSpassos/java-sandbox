@@ -20,7 +20,7 @@
 - [x] Template Method
 - [x] Mediator
 - [x] Chain of Responsibility
-- [ ] Observer
+- [x] Observer
 - [ ] Strategy
 - [ ] Command
 - [ ] State
