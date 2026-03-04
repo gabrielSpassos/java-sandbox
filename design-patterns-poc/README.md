@@ -21,7 +21,7 @@
 - [x] Mediator
 - [x] Chain of Responsibility
 - [x] Observer
-- [ ] Strategy
+- [x] Strategy
 - [ ] Command
 - [ ] State
 - [ ] Visitor
