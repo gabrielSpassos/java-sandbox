@@ -23,7 +23,7 @@
 - [x] Observer
 - [x] Strategy
 - [x] Command
-- [ ] State
+- [x] State
 - [ ] Visitor
 - [ ] Interpreter
 - [ ] Iterator
