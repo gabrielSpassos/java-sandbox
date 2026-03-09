@@ -24,7 +24,7 @@
 - [x] Strategy
 - [x] Command
 - [x] State
-- [ ] Visitor
+- [x] Visitor
 - [ ] Interpreter
 - [ ] Iterator
 - [ ] Memento
