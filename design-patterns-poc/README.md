@@ -25,8 +25,7 @@
 - [x] Command
 - [x] State
 - [x] Visitor
-- [ ] Interpreter
-- [ ] Iterator
+- [x] Iterator
 - [ ] Memento
 
 ### Tests
