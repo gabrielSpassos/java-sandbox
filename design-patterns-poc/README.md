@@ -26,7 +26,7 @@
 - [x] State
 - [x] Visitor
 - [x] Iterator
-- [ ] Memento
+- [x] Memento
 
 ### Tests
 
