@@ -1,4 +1,4 @@
-package com.gabrielspassos.llm_distillation;
+package com.gabrielspassos.llm.distillation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
