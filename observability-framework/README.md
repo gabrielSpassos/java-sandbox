@@ -1,4 +1,4 @@
-# Observability Frameword
+# Observability Framework
 
 ## Outputs
 ```
