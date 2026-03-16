@@ -14,8 +14,15 @@ Max(ms): 93.169301
 -----
 ```
 
-### Tests 
-
-```shell
-
+```
+Metric: payment.process
+Count: 50
+Avg(ms): 101.90642044
+Max(ms): 183.900616
+-----
+Metric: payment.checkout
+Count: 50
+Avg(ms): 27.03702434
+Max(ms): 49.286641
+-----
 ```
