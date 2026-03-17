@@ -8,6 +8,8 @@ import service.PaymentService;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 class LatencyInterceptorTest {
 
     @Test
@@ -22,8 +24,10 @@ class LatencyInterceptorTest {
         Method processPayment = PaymentService.class.getMethod("processPayment");
 
         for (int i = 0; i < 50; i++) {
-            latencyInterceptor.invoke(paymentService, checkoutPayment, null);
-            latencyInterceptor.invoke(paymentService, processPayment, null);
+            Object checkout = latencyInterceptor.invoke(paymentService, checkoutPayment, null);
+            assertNotNull(checkout);
+            Object payment = latencyInterceptor.invoke(paymentService, processPayment, null);
+            assertNotNull(payment);
         }
 
         consoleReporter.report(latencyRegistry);

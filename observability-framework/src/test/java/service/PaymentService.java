@@ -5,10 +5,11 @@ import com.gabrielspassos.annotation.LatencyTracked;
 import java.util.List;
 import java.util.Random;
 
-public class PaymentService {
+public class PaymentService implements IPaymentService {
 
     private final Random random = new Random();
 
+    @Override
     @LatencyTracked("payment.checkout")
     public List<String> checkoutPayment() {
         simulateWork(50);
@@ -16,6 +17,7 @@ public class PaymentService {
         return List.of("itemA", "itemB");
     }
 
+    @Override
     @LatencyTracked("payment.process")
     public String processPayment() {
        if (!validatePayment()) {
