@@ -13,6 +13,12 @@ public class Main {
         context.setContextPath("/");
         context.setBaseResourceAsString("src/main/webapp");
 
+        // enable annotations (@WebServlet)
+        context.setAttribute(
+                "org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
+                ".*\\.jar$"
+        );
+
         server.setHandler(context);
 
         server.start();

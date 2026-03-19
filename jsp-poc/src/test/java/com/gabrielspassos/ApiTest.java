@@ -28,7 +28,7 @@ public class ApiTest {
 
     @Test
     void shouldReturnJson() throws Exception {
-        String response = Request.get("http://localhost:8080/api.jsp?f1=hello&f2=world")
+        String response = Request.get("http://localhost:8080/api?f1=hello&f2=world")
                 .execute()
                 .returnContent()
                 .asString();

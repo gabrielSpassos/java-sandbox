@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP JSON PoC</title>
+    <title>Servlet JSON POC</title>
 </head>
 <body>
 
@@ -19,7 +19,7 @@
         const f1 = document.getElementById("field1").value;
         const f2 = document.getElementById("field2").value;
 
-        fetch(`api.jsp?f1=${encodeURIComponent(f1)}&f2=${encodeURIComponent(f2)}`)
+        fetch(`/api?f1=${encodeURIComponent(f1)}&f2=${encodeURIComponent(f2)}`)
             .then(res => res.json())
             .then(data => {
                 document.getElementById("result").innerText =
