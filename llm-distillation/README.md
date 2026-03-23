@@ -14,6 +14,12 @@ Spring AI service
       └─ Train student model (outside Spring)
 ```
 
+## Usage
+
+```shell
+export OPENAI_API_KEY=my-secret
+```
+
 ## Output
 
 ```
