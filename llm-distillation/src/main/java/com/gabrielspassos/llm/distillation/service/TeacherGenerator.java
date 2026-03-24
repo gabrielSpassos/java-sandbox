@@ -8,8 +8,8 @@ public class TeacherGenerator {
 
     private final ChatClient chatClient;
 
-    public TeacherGenerator(ChatClient.Builder builder) {
-        this.chatClient = builder.build();
+    public TeacherGenerator(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     public String generateAnswer(String question) {
