@@ -47,6 +47,14 @@ public class SegmentTree {
         return result;
     }
 
+    public long[] getTree() {
+        return this.tree;
+    }
+
+    public long getSize() {
+        return this.size;
+    }
+
     @Override
     public String toString() {
         return "SegmentTree{" +
