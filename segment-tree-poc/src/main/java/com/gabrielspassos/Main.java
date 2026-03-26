@@ -4,7 +4,7 @@ public class Main {
     static void main() {
         IO.println("Segment Tree POC!");
 
-        long[] data = {2, 4, 5, 7, 8, 9};
+        long[] data = {1, 4, 5, 9, 10, 12};
 
         SegmentTree segmentTree = new SegmentTree(data);
 
