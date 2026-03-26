@@ -18,6 +18,7 @@ public class Main {
         long query1 = segmentTree.query(1, 5);
         IO.println("Query [1, 5]: " + query1);
 
+        IO.println("Update index: 2 value: 10");
         segmentTree.update(2, 10);
         IO.println(segmentTree);
 

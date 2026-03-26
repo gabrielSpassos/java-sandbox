@@ -21,6 +21,7 @@ SegmentTree{tree=[0, 41, 36, 5, 14, 22, 1, 4, 5, 9, 10, 12]}
         ├── 1
         └── 4
 Query [1, 5]: 28
+Update index: 2 value: 10
 SegmentTree{tree=[0, 46, 41, 5, 19, 22, 1, 4, 10, 9, 10, 12]}
 └── 46
     ├── 41
