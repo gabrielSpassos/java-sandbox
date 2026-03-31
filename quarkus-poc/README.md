@@ -4,7 +4,7 @@
 
 * Run
 ```shell
-mvn quarkus:dev
+mvn clean quarkus:dev
 ```
 
 * Call API
@@ -14,6 +14,7 @@ curl http://localhost:8080/greet/Gabriel
 
 ## Outputs
 ```json
+{"message":"Hello Gabriel from Quarkus"}
 ```
 
 ### Tests 
