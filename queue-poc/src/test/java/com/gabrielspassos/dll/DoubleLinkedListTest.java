@@ -34,5 +34,5 @@ class DoubleLinkedListTest {
 
         assertNull(doubleLinkedList.removeFromBeginning());
     }
-    
+
 }

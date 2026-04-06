@@ -5,7 +5,7 @@ import com.gabrielspassos.dll.IDoubleLinkedList;
 
 import java.util.Optional;
 
-public class ILinkedQueue<T> implements IQueue<T> {
+public class LinkedQueue<T> implements IQueue<T> {
 
     private final IDoubleLinkedList<T> doubleLinkedList = new DoubleLinkedList<>();
     private int size;
@@ -20,7 +20,9 @@ public class ILinkedQueue<T> implements IQueue<T> {
     @Override
     public Optional<T> dequeue() {
         var result = Optional.ofNullable(doubleLinkedList.removeFromBeginning());
-        size--;
+        if (0 < size) {
+            size--;
+        }
         return result;
     }
 
