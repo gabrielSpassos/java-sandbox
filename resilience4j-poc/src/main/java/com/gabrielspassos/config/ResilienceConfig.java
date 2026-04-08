@@ -4,6 +4,8 @@ import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
+import io.github.resilience4j.timelimiter.TimeLimiter;
+import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 
 import java.time.Duration;
 
@@ -29,6 +31,14 @@ public class ResilienceConfig {
                 .build();
 
         return Retry.of("externalClient", config);
+    }
+
+    public static TimeLimiter timeLimiter() {
+        TimeLimiterConfig config = TimeLimiterConfig.custom()
+                .timeoutDuration(Duration.ofSeconds(1))
+                .build();
+
+        return TimeLimiter.of(config);
     }
 
 }

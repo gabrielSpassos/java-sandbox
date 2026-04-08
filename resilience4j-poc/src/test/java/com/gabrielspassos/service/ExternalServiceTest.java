@@ -8,6 +8,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeoutException;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,5 +85,28 @@ class ExternalServiceTest {
         }
 
         assertTrue(circuitHasOpenAtLeastOnce);
+    }
+
+    @Test
+    void shouldHaveATimeLimiterOnAsyncRequest() {
+        stubFor(get("/external")
+                .inScenario("delay")
+                .willReturn(aResponse()
+                        .withFixedDelay(3000) // 3 seconds
+                        .withBody("slow response")));
+
+        var service = new ExternalService();
+
+        long start = System.currentTimeMillis();
+        CompletionStage<String> result = service.fetchInfoWithResilienceAsync("http://localhost:8089/external");
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            result.toCompletableFuture().join();
+        });
+
+        long duration = System.currentTimeMillis() - start;
+
+        assertInstanceOf(TimeoutException.class, exception.getCause());
+        assertTrue(duration < 2000);
     }
 }
