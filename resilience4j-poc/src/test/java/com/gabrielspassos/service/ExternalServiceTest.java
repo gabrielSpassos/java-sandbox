@@ -2,6 +2,7 @@ package com.gabrielspassos.service;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,15 +65,22 @@ class ExternalServiceTest {
         String uri = "http://localhost:8089/external";
         stubFor(get("/external").willReturn(serverError().withBody("server error")));
 
+        boolean circuitHasOpenAtLeastOnce = false;
         var service = new ExternalService();
 
         // Force failures
-        for (int i = 0; i < 1; i++) {
-            service.fetchInfoWithResilience(uri);
+        for (int i = 0; i < 10; i++) {
+            String result = service.fetchInfoWithResilience(uri);
+
+            assertNotNull(result);
+
+            CircuitBreaker.State circuitBreakerState = service.getCircuitBreakerState();
+
+            if (CircuitBreaker.State.OPEN.equals(circuitBreakerState)) {
+                circuitHasOpenAtLeastOnce = true;
+            }
         }
 
-        String result = service.fetchInfoWithResilience(uri);
-
-        assertNotNull(result);
+        assertTrue(circuitHasOpenAtLeastOnce);
     }
 }
