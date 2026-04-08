@@ -3,6 +3,7 @@ package com.gabrielspassos.service;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,5 +109,32 @@ class ExternalServiceTest {
 
         assertInstanceOf(TimeoutException.class, exception.getCause());
         assertTrue(duration < 2000);
+    }
+
+    @Test
+    void shouldRateLimitRequests() {
+        stubFor(get("/external")
+                .inScenario("rateLimit")
+                .willReturn(ok("success")));
+
+        var service = new ExternalService();
+
+        CompletionStage<String> asyncResult1 = service.fetchInfoWithResilienceAsync("http://localhost:8089/external");
+        CompletionStage<String> asyncResult2 = service.fetchInfoWithResilienceAsync("http://localhost:8089/external");
+        CompletionStage<String> asyncResult3 = service.fetchInfoWithResilienceAsync("http://localhost:8089/external");
+
+        String result1 = asyncResult1.toCompletableFuture().join();
+        assertEquals("success", result1);
+
+        String result2 = asyncResult2.toCompletableFuture().join();
+        assertEquals("success", result2);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            asyncResult3.toCompletableFuture().join();
+        });
+
+        assertInstanceOf(RequestNotPermitted.class, exception.getCause());
+
+        verify(2, getRequestedFor(urlEqualTo("/external")));
     }
 }

@@ -2,6 +2,8 @@ package com.gabrielspassos.config;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.timelimiter.TimeLimiter;
@@ -38,7 +40,17 @@ public class ResilienceConfig {
                 .timeoutDuration(Duration.ofSeconds(1))
                 .build();
 
-        return TimeLimiter.of(config);
+        return TimeLimiter.of("externalClient", config);
+    }
+
+    public static RateLimiter rateLimiter() {
+        RateLimiterConfig config = RateLimiterConfig.custom()
+                .limitForPeriod(2)
+                .limitRefreshPeriod(Duration.ofSeconds(1))
+                .timeoutDuration(Duration.ZERO)
+                .build();
+
+        return RateLimiter.of("externalService", config);
     }
 
 }
