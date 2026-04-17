@@ -30,4 +30,15 @@ class SegmentTreeV2Test {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void shouldQuerySegmentTree() {
+        int[] input = {5, 8, 7, 2, 10, 2, 2};
+
+        SegmentTreeV2 segmentTreeV2 = new SegmentTreeV2(input);
+
+        assertEquals(36, segmentTreeV2.query(0, 6));
+        assertEquals(22, segmentTreeV2.query(0, 3));
+        assertEquals(14, segmentTreeV2.query(4, 6));
+    }
+
 }
