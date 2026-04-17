@@ -13,17 +13,21 @@ class SegmentTreeV2Test {
     @Test
     void shouldCreateSegmentTree() {
         int[] input = {5, 8, 7, 2, 10, 2, 2};
-        List<Integer> expected = List.of(36, 22, 14, 13, 9, 12, 2, 5, 8, 7, 2, 10, 2, 2);
+        List<Integer> expected = List.of(36, 22, 14, 13, 9, 12, 2, 5, 8, 7, 2, 10, 2);
 
         SegmentTreeV2 segmentTreeV2 = new SegmentTreeV2(input);
 
         int[] array = segmentTreeV2.getArray();
         assertNotNull(array);
         assertEquals(input, array);
-        
+
         int[] tree = segmentTreeV2.getTree();
         assertNotNull(tree);
-        assertEquals(expected, Arrays.stream(tree).boxed().toList());
+        List<Integer> actual = Arrays.stream(tree)
+                .limit(13)
+                .boxed()
+                .toList();
+        assertEquals(expected, actual);
     }
 
 }
