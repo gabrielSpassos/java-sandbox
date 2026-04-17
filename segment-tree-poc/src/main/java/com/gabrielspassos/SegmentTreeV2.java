@@ -2,63 +2,75 @@ package com.gabrielspassos;
 
 public class SegmentTreeV2 {
 
-    private int n;
-    private int A[];
-    private int ST[];
+    private final int n;
+    private final int[] array;
+    private final int[] tree;
 
     public SegmentTreeV2(int[] input) {
         this.n = input.length;
-        this.A = input;
-        this.ST = new int[4 * n];
-    }
-
-    public void build(int node, int L, int R) {
-        if (L == R) {
-            ST[node] = A[L];
-        } else {
-            int mid = (L + R) / 2;
-
-            build(2 * node, L, mid);
-
-            build(2 * node + 1, mid + 1, R);
-
-            ST[node] = ST[2 * node] + ST[2 * node + 1];
-        }
+        this.array = input;
+        this.tree = new int[4 * n];
+        build(0, 0, n - 1);
     }
 
     public int[] getTree() {
-        return this.ST;
+        return this.tree;
     }
 
-    public void update(int node, int L, int R, int idx, int val) {
-        if (L == R) {
-            A[idx] += val;
-            ST[node] += val;
+    public int[] getArray() {
+        return array;
+    }
+
+    public void update(int idx, int newValue) {
+        update(0, 0, n - 1, idx, newValue);
+    }
+
+    public int query(int left, int right) {
+        return query(0, 0, n - 1, left, right);
+    }
+
+    private void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = array[start];
         } else {
-            int mid = (L + R) / 2;
+            int mid = (start + end) / 2;
 
-            if (L <= idx && idx <= mid) {
-                update(2 * node, L, mid, idx, val);
-            } else {
-                update(2 * node + 1, mid + 1, R, idx, val);
-            }
+            build(2 * node + 1, start, mid);
+            build(2 * node + 2, mid + 1, end);
 
-            ST[node] = ST[2 * node] + ST[2 * node + 1];
+            tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
         }
     }
 
-    public int query(int node, int tl, int tr, int l, int r) {
-        if (r < tl || tr < l) {
+    private void update(int node, int start, int end, int idx, int newValue) {
+        if (start == end) {
+            array[idx] = newValue;
+            tree[node] = newValue;
+        } else {
+            int mid = (start + end) / 2;
+
+            if (idx <= mid) {
+                update(2 * node + 1, start, mid, idx, newValue);
+            } else {
+                update(2 * node + 2, mid + 1, end, idx, newValue);
+            }
+
+            tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+        }
+    }
+
+    private int query(int node, int start, int end, int left, int right) {
+        if (right < start || left > end) {
             return 0;
         }
 
-        if (l <= tl && tr <= r) {
-            return ST[node];
+        if (left <= start && end <= right) {
+            return tree[node];
         }
 
-        int tm = (tl + tr) / 2;
+        int mid = (start + end) / 2;
 
-        return query(2 * node, tl, tm, l, r)
-                + query(2 * node + 1, tm + 1, tr, l, r);
+        return query(2 * node + 1, start, mid, left, right)
+                + query(2 * node + 2, mid + 1, end, left, right);
     }
 }
