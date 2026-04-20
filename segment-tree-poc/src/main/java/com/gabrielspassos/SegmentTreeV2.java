@@ -9,7 +9,7 @@ public class SegmentTreeV2 {
     public SegmentTreeV2(int[] input) {
         this.n = input.length;
         this.array = input;
-        this.tree = new int[4 * n];
+        this.tree = new int[2 * n];
         build(0, 0, n - 1);
     }
 
