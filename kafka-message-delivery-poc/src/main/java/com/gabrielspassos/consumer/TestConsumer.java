@@ -20,12 +20,11 @@ public class TestConsumer {
     @KafkaListener(topics = "delivery-test", containerFactory = "kafkaListenerFactory")
     public void consume(String message, Acknowledgment ack) {
         IO.println("Processing: " + message);
+        processed.add(message);
 
         if (message.equals("msg-5") && processed.size() < 5) {
             throw new RuntimeException("Simulated crash");
         }
-
-        processed.add(message);
 
         ack.acknowledge();
     }
