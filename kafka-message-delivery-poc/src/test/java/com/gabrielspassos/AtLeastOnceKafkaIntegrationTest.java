@@ -19,12 +19,13 @@ class AtLeastOnceKafkaIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void testAtLeastOnce() throws Exception {
-        kafkaTemplate.send("delivery-test", "msg-5");
+        String message = "error-induction";
+        kafkaTemplate.send("delivery-at-least-once-test", message);
 
         Thread.sleep(5000);
 
-        long count = testConsumer.getProcessed().stream()
-                .filter(m -> m.equals("msg-5"))
+        long count = testConsumer.getProcessedAtLeastOnce().stream()
+                .filter(m -> m.equals(message))
                 .count();
 
         assertTrue(count >= 2);

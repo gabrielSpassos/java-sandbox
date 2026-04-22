@@ -3,7 +3,6 @@ package com.gabrielspassos.consumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -11,22 +10,37 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class TestConsumer {
 
-    private final List<String> processed = new CopyOnWriteArrayList<>();
+    private final List<String> processedAtLeastOnce = new CopyOnWriteArrayList<>();
+    private final List<String> processedAtMostOnce = new CopyOnWriteArrayList<>();
 
-    public List<String> getProcessed() {
-        return processed;
+    public List<String> getProcessedAtLeastOnce() {
+        return processedAtLeastOnce;
     }
 
-    @KafkaListener(topics = "delivery-test", containerFactory = "kafkaListenerFactory")
-    public void consume(String message, Acknowledgment ack) {
-        IO.println("Processing: " + message);
-        processed.add(message);
+    public List<String> getProcessedAtMostOnce() {
+        return processedAtMostOnce;
+    }
 
-        if (message.equals("msg-5") && processed.size() < 5) {
+    @KafkaListener(topics = "delivery-at-least-once-test", containerFactory = "kafkaListenerFactory")
+    public void consumeAtLeastOnce(String message, Acknowledgment ack) {
+        IO.println("Processing: " + message);
+        processedAtLeastOnce.add(message);
+
+        if (message.equals("error-induction") && processedAtLeastOnce.size() < 5) {
             throw new RuntimeException("Simulated crash");
         }
 
         ack.acknowledge();
+    }
+
+    @KafkaListener(topics = "delivery-at-most-once-test", containerFactory = "kafkaListenerFactory")
+    public void consumeAtMostOnce(String message) {
+        IO.println("Processing: " + message);
+        processedAtMostOnce.add(message);
+
+        if (message.equals("error-induction") && processedAtMostOnce.size() < 5) {
+            throw new RuntimeException("Simulated crash");
+        }
     }
 
 }

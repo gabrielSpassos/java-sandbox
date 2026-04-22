@@ -19,10 +19,10 @@ class AtMostOnceKafkaIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void testAtMostOnce() throws Exception {
-        kafkaTemplate.send("delivery-test", "msg-5");
+        kafkaTemplate.send("delivery-at-most-once-test", "error-induction");
 
         Thread.sleep(5000);
 
-        assertTrue(testConsumer.getProcessed().size() <= 1);
+        assertTrue(testConsumer.getProcessedAtMostOnce().size() <= 1);
     }
 }

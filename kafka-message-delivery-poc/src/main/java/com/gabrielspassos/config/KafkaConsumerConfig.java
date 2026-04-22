@@ -39,11 +39,16 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerFactory(
+            @Value("${app.mode}") String mode,
             ConsumerFactory<String, String> cf) {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
         factory.setConsumerFactory(cf);
 
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        if ("AT_MOST_ONCE".equals(mode)) {
+            factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
+        } else {
+            factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        }
 
         return factory;
     }
