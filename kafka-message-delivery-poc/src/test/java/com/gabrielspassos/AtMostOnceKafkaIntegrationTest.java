@@ -1,0 +1,28 @@
+package com.gabrielspassos;
+
+import com.gabrielspassos.consumer.TestConsumer;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@TestPropertySource(properties = "app.mode=AT_MOST_ONCE")
+class AtMostOnceKafkaIntegrationTest extends BaseIntegrationTest {
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Autowired
+    private TestConsumer testConsumer;
+
+    @Test
+    void testAtMostOnce() throws Exception {
+        kafkaTemplate.send("delivery-test", "msg-5");
+
+        Thread.sleep(3000);
+
+        assertTrue(testConsumer.getProcessed().size() <= 1);
+    }
+}

@@ -1,4 +1,4 @@
-package com.gabrielspassos.kafka_message_delivery_poc;
+package com.gabrielspassos;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

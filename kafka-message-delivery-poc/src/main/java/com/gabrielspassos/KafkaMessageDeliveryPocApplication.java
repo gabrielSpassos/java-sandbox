@@ -1,4 +1,4 @@
-package com.gabrielspassos.kafka_message_delivery_poc;
+package com.gabrielspassos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
