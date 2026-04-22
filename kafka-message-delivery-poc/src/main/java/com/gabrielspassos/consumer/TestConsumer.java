@@ -34,7 +34,8 @@ public class TestConsumer {
     }
 
     @KafkaListener(topics = "delivery-at-most-once-test", containerFactory = "kafkaListenerFactory")
-    public void consumeAtMostOnce(String message) {
+    public void consumeAtMostOnce(String message, Acknowledgment ack) {
+        ack.acknowledge();
         IO.println("Processing: " + message);
         processedAtMostOnce.add(message);
 
