@@ -64,8 +64,6 @@ public class TestConsumer {
         if (record.value().equals("error-induction")) {
             throw new RuntimeException("fail before commit");
         }
-
-        kafkaTemplate.send("delivery-exactly-once-output", record.value());
     }
 
 }
