@@ -8,9 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.transaction.KafkaTransactionManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Configuration
 public class KafkaProducerConfig {
@@ -36,7 +38,7 @@ public class KafkaProducerConfig {
             case "EXACTLY_ONCE" -> {
                 props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
                 props.put(ProducerConfig.ACKS_CONFIG, "all");
-                props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "tx-id");
+                props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "tx-" + UUID.randomUUID());
             }
         }
 
@@ -46,6 +48,11 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate(ProducerFactory<String, String> pf) {
         return new KafkaTemplate<>(pf);
+    }
+
+    @Bean
+    public KafkaTransactionManager<String, String> kafkaTransactionManager(ProducerFactory<String, String> pf) {
+        return new KafkaTransactionManager<>(pf);
     }
 
 }

@@ -2,8 +2,10 @@ package com.gabrielspassos.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,6 +15,7 @@ public class TestConsumer {
 
     private final List<String> processedAtLeastOnce = new CopyOnWriteArrayList<>();
     private final List<String> processedAtMostOnce = new CopyOnWriteArrayList<>();
+    private final List<String> processedExactlyOnce = new CopyOnWriteArrayList<>();
 
     public List<String> getProcessedAtLeastOnce() {
         return processedAtLeastOnce;
@@ -20,6 +23,10 @@ public class TestConsumer {
 
     public List<String> getProcessedAtMostOnce() {
         return processedAtMostOnce;
+    }
+
+    public List<String> getProcessedExactlyOnce() {
+        return processedExactlyOnce;
     }
 
     @KafkaListener(topics = "delivery-at-least-once-test", containerFactory = "kafkaListenerFactory")
@@ -43,6 +50,22 @@ public class TestConsumer {
         if (message.equals("error-induction") && processedAtMostOnce.size() < 5) {
             throw new RuntimeException("Simulated crash");
         }
+    }
+
+    @KafkaListener(topics = "delivery-exactly-once-input", containerFactory = "kafkaListenerFactory")
+    @Transactional
+    public void consumeExactlyOnce(
+            ConsumerRecord<String, String> record,
+            KafkaTemplate<String, String> kafkaTemplate
+    ) {
+        System.out.println("Processing offset=" + record.offset());
+        processedExactlyOnce.add(record.value());
+
+        if (record.value().equals("error-induction")) {
+            throw new RuntimeException("fail before commit");
+        }
+
+        kafkaTemplate.send("delivery-exactly-once-output", record.value());
     }
 
 }
