@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestPropertySource(properties = "app.mode=AT_MOST_ONCE")
 class AtMostOnceKafkaIntegrationTest extends BaseIntegrationTest {
@@ -23,6 +23,6 @@ class AtMostOnceKafkaIntegrationTest extends BaseIntegrationTest {
 
         Thread.sleep(5000);
 
-        assertTrue(testConsumer.getProcessedAtMostOnce().size() <= 1);
+        assertEquals(1, testConsumer.getProcessedAtMostOnce().size());
     }
 }
