@@ -1,3 +1,19 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: outbox-pattern
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/outbox
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
