@@ -13,3 +13,10 @@ docker compose up
 ```bash
 docker compose down -v 
 ```
+
+## Access
+
+* Kafka UI -> http://localhost:8081
+* Postgres DB -> http://localhost:8082
+  * login: admin@admin.com
+  * password: admin
