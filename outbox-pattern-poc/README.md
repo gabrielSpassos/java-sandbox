@@ -20,3 +20,10 @@ docker compose down -v
 * Postgres DB -> http://localhost:8082
   * login: admin@admin.com
   * password: admin
+
+## API
+```bash
+curl -X POST "http://localhost:8080/orders?description=test-order" \
+  -H "Content-Type: application/json" \
+  -v
+```
