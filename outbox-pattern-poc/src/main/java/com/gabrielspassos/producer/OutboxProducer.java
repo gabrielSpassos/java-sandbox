@@ -18,7 +18,7 @@ public class OutboxProducer {
 
     @Transactional
     public void publish() {
-        var events = repository.findUnprocessed();
+        var events = repository.findByProcessedIsFalse();
 
         for (var event : events) {
             kafkaTemplate.send("orders-topic", event.getAggregateId().toString(), event.getPayload());
