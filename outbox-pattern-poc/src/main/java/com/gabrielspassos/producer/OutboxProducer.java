@@ -23,6 +23,7 @@ public class OutboxProducer {
         for (var event : events) {
             kafkaTemplate.send("orders-topic", event.getAggregateId().toString(), event.getPayload());
             event.markProcessed();
+            repository.save(event);
         }
     }
 

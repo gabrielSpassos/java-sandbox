@@ -27,26 +27,24 @@ public class OrderService {
 
     @Transactional
     public void createOrder(String description) {
-        UUID orderId = UUID.randomUUID();
-
-        OrderEntity order = new OrderEntity(orderId, description, Instant.now());
-        orderRepository.save(order);
+        OrderEntity order = new OrderEntity(description, Instant.now());
+        OrderEntity savedOrder = orderRepository.save(order);
 
         var eventPayload = objectMapper.writeValueAsString(Map.of(
-                "orderId", orderId,
+                "orderId", savedOrder.getId(),
                 "description", description
         ));
 
         OutboxEntity outbox = new OutboxEntity(
-                UUID.randomUUID(),
                 "Order",
-                orderId,
+                savedOrder.getId(),
                 "OrderCreated",
                 eventPayload,
                 Instant.now(),
                 false
         );
 
-        outboxRepository.save(outbox);
+        OutboxEntity savedOutbox = outboxRepository.save(outbox);
+        System.out.println(savedOutbox);
     }
 }

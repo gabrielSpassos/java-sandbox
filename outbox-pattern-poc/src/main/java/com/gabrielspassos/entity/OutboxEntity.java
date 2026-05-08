@@ -23,9 +23,8 @@ public class OutboxEntity {
     public OutboxEntity() {
     }
 
-    public OutboxEntity(UUID id, String aggregateType, UUID aggregateId, String eventType,
+    public OutboxEntity(String aggregateType, UUID aggregateId, String eventType,
                         String payload, Instant createdAt, boolean processed) {
-        this.id = id;
         this.aggregateType = aggregateType;
         this.aggregateId = aggregateId;
         this.eventType = eventType;

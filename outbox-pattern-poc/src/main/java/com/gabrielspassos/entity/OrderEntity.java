@@ -20,8 +20,7 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(UUID id, String description, Instant createdAt) {
-        this.id = id;
+    public OrderEntity(String description, Instant createdAt) {
         this.description = description;
         this.createdAt = createdAt;
     }
