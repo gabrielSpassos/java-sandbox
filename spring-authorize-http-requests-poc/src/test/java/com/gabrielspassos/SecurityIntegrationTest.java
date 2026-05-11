@@ -20,20 +20,20 @@ public class SecurityIntegrationTest {
 
     @Test
     void shouldAllowPublicAccess() throws Exception {
-        mockMvc.perform(get("/public/hello"))
+        mockMvc.perform(get("/v1/public/hello"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Hello Public!"));
     }
 
     @Test
     void shouldRejectUnauthenticatedUserEndpoint() throws Exception {
-        mockMvc.perform(get("/user/hello"))
+        mockMvc.perform(get("/v1/user/hello"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void shouldAllowUserRole() throws Exception {
-        mockMvc.perform(get("/user/hello")
+        mockMvc.perform(get("/v1/user/hello")
                         .with(httpBasic("user", "password")))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Hello User!"));
@@ -41,14 +41,14 @@ public class SecurityIntegrationTest {
 
     @Test
     void shouldDenyUserAccessToAdmin() throws Exception {
-        mockMvc.perform(get("/admin/hello")
+        mockMvc.perform(get("/v1/admin/hello")
                         .with(httpBasic("user", "password")))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void shouldAllowAdminAccess() throws Exception {
-        mockMvc.perform(get("/admin/hello")
+        mockMvc.perform(get("/v1/admin/hello")
                         .with(httpBasic("admin", "password")))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Hello Admin!"));
@@ -56,14 +56,14 @@ public class SecurityIntegrationTest {
 
     @Test
     void shouldRejectInvalidCredentials() throws Exception {
-        mockMvc.perform(get("/user/hello")
+        mockMvc.perform(get("/v1/user/hello")
                         .with(httpBasic("user", "wrong")))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void shouldReturn403ForWrongRole() throws Exception {
-        mockMvc.perform(get("/admin/hello")
+        mockMvc.perform(get("/v1/admin/hello")
                         .with(httpBasic("user", "password")))
                 .andExpect(status().isForbidden());
     }
