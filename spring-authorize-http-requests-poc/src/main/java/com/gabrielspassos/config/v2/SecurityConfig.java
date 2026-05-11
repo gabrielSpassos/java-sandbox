@@ -1,10 +1,10 @@
-package com.gabrielspassos.config;
+package com.gabrielspassos.config.v2;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,16 +12,15 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/public/**").permitAll()
-                        .requestMatchers("/v1/user/**").hasRole("USER")
-                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
@@ -31,19 +30,27 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService users() {
-        UserDetails user = User.builder()
-                .username("user")
+
+        UserDetails analyst = User.builder()
+                .username("analyst")
                 .password("{noop}password")
-                .roles("USER")
+                .authorities(
+                        "invoice:read",
+                        "report:generate"
+                )
                 .build();
 
         UserDetails admin = User.builder()
                 .username("admin")
                 .password("{noop}password")
-                .roles("ADMIN")
+                .authorities(
+                        "invoice:read",
+                        "invoice:write",
+                        "invoice:delete",
+                        "report:generate"
+                )
                 .build();
 
-        return new InMemoryUserDetailsManager(user, admin);
+        return new InMemoryUserDetailsManager(analyst, admin);
     }
-
 }
