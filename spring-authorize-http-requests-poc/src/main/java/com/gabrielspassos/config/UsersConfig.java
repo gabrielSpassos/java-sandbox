@@ -10,7 +10,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class UsersConfig {
 
-    @Bean(name = "pathUsers")
+    @Bean
     public UserDetailsService users() {
         UserDetails user = User.builder()
                 .username("user")
@@ -21,8 +21,9 @@ public class UsersConfig {
         UserDetails admin = User.builder()
                 .username("admin")
                 .password("{noop}password")
-                .roles("ADMIN")
+                //.roles("ADMIN") override by the authorities
                 .authorities(
+                        "ROLE_ADMIN",
                         "invoice:read",
                         "invoice:write",
                         "invoice:delete",
