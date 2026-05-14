@@ -1,4 +1,4 @@
-package com.gabrielspassos.debezium_poc;
+package com.gabrielspassos.debezium.poc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

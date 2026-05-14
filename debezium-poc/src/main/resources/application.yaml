@@ -1,3 +1,7 @@
 spring:
   application:
     name: debezium-poc
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ordersdb
+    username: postgres
+    password: postgres

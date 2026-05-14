@@ -1,4 +1,4 @@
-package com.gabrielspassos.debezium_poc;
+package com.gabrielspassos.debezium.poc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
