@@ -4,7 +4,7 @@ services:
     image: postgres:latest
     container_name: debezium-postgres
     environment:
-      POSTGRES_DB: debezium
+      POSTGRES_DB: ordersdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
