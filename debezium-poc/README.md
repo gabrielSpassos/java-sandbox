@@ -14,3 +14,17 @@ PostgreSQL  ---> Debezium ---> Kafka Topic
 ### Links
 
 * Kafka UI: http://localhost:8081/
+
+### Start
+```bash
+docker compose up
+./start.sh
+./register-postgres-connector.sh
+./save-order.sh
+```
+
+### Clean Up
+
+```bash
+docker compose down -v --remove-orphans
+```
