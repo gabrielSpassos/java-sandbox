@@ -292,3 +292,11 @@ docker compose down -v --remove-orphans
 	}
 }
 ```
+
+### Trade-Offs
+
+| Topic       | Scheduler (`@Scheduled` polling)                                                | Debezium + CDC                                                               |
+|-------------|---------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| Latency     | Higher since is based on the polling configuration to run                       | Near real time                                                               |
+| Complexity  | No extra component or infra setup                                               | Requires more components, and infra setup                                    |
+| Error Prune | Requires some state management, but has build-in retry mechanism (next polling) | Depends on db logs, which may have different configs from the db data itself |
