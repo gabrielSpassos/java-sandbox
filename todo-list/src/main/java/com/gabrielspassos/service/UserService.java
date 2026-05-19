@@ -1,0 +1,26 @@
+package com.gabrielspassos.service;
+
+import com.gabrielspassos.entity.UserEntity;
+import com.gabrielspassos.exception.NotFoundException;
+import com.gabrielspassos.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public UserEntity createUser(String name) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName(name);
+
+        return userRepository.save(userEntity);
+    }
+
+    public UserEntity findByName(String name) {
+        return userRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException("User not found", "USER_NOT_FOUND"));
+    }
+}
