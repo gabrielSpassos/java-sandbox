@@ -12,7 +12,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserEntity createUser(String name) {
+    public UserEntity create(String name) {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(name);
 
