@@ -9,11 +9,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "users")
-public class UserEntity {
+public class ListEntity {
 
     @Id
     @Column(value = "id")
     private UUID id;
+
+    @Column(value = "user_id")
+    private UUID userId;
 
     @Column(value = "name")
     private String name;
@@ -27,6 +30,14 @@ public class UserEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -48,19 +59,20 @@ public class UserEntity {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        UserEntity that = (UserEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(createdAt, that.createdAt);
+        ListEntity that = (ListEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(name, that.name) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, createdAt);
+        return Objects.hash(id, userId, name, createdAt);
     }
 
     @Override
     public String toString() {
-        return "UserEntity{" +
+        return "ListEntity{" +
                 "id=" + id +
+                ", userId=" + userId +
                 ", name='" + name + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
