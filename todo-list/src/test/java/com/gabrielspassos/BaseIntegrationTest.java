@@ -15,7 +15,8 @@ public class BaseIntegrationTest {
     static PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:latest")
             .withDatabaseName("todo")
             .withUsername("user")
-            .withPassword("pass");
+            .withPassword("pass")
+            .withInitScript("schema.sql");
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
