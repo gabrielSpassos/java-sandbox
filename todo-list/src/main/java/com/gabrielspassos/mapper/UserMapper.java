@@ -1,6 +1,6 @@
 package com.gabrielspassos.mapper;
 
-import com.gabrielspassos.controller.response.UserResponse;
+import com.gabrielspassos.controller.v1.response.UserResponse;
 import com.gabrielspassos.entity.UserEntity;
 
 public class UserMapper {

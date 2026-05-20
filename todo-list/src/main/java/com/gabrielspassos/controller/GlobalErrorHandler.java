@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller;
 
-import com.gabrielspassos.controller.response.ErrorResponse;
+import com.gabrielspassos.controller.v1.response.ErrorResponse;
 import com.gabrielspassos.exception.HttpException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.gabrielspassos.mapper;
 
-import com.gabrielspassos.controller.response.ItemResponse;
+import com.gabrielspassos.controller.v1.response.ItemResponse;
 import com.gabrielspassos.entity.ItemEntity;
 
 public class ItemMapper {

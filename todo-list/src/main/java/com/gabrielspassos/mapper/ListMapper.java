@@ -1,6 +1,6 @@
 package com.gabrielspassos.mapper;
 
-import com.gabrielspassos.controller.response.ListResponse;
+import com.gabrielspassos.controller.v1.response.ListResponse;
 import com.gabrielspassos.entity.ListEntity;
 
 public class ListMapper {
