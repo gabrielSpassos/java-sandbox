@@ -12,18 +12,14 @@ public class GlobalErrorHandler {
 
     @ExceptionHandler(HttpException.class)
     public ResponseEntity<ErrorResponse> handleHttpException(HttpException httpException) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(httpException.getMessage());
-        errorResponse.setCode(httpException.getCode());
+        ErrorResponse errorResponse = new ErrorResponse(httpException.getMessage(), httpException.getCode());
 
         return ResponseEntity.status(httpException.getHttpStatus()).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Unexpected error");
-        errorResponse.setCode("UNEXPECTED_ERROR");
+        ErrorResponse errorResponse = new ErrorResponse("Unexpected error", "UNEXPECTED_ERROR");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
     }
