@@ -1,7 +1,11 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: debezium-poc
   datasource:
-    url: jdbc:postgresql://localhost:5432/ordersdb
+    url: jdbc:postgresql://localhost:5432/outbox-jdbc
     username: postgres
     password: postgres
+    driver-class-name: org.postgresql.Driver

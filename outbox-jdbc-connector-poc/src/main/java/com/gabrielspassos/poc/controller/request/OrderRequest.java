@@ -1,4 +1,4 @@
-package com.gabrielspassos.debezium.poc.controller.request;
+package com.gabrielspassos.poc.controller.request;
 
 import java.math.BigDecimal;
 

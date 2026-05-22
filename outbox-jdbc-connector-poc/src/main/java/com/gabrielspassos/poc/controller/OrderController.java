@@ -1,8 +1,8 @@
-package com.gabrielspassos.debezium.poc.controller;
+package com.gabrielspassos.poc.controller;
 
-import com.gabrielspassos.debezium.poc.controller.request.OrderRequest;
-import com.gabrielspassos.debezium.poc.entity.OrderEntity;
-import com.gabrielspassos.debezium.poc.service.OrderService;
+import com.gabrielspassos.poc.controller.request.OrderRequest;
+import com.gabrielspassos.poc.entity.OrderEntity;
+import com.gabrielspassos.poc.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

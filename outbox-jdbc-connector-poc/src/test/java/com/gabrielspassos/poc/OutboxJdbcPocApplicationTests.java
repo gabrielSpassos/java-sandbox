@@ -1,10 +1,10 @@
-package com.gabrielspassos.debezium.poc;
+package com.gabrielspassos.poc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DebeziumPocApplicationTests {
+class OutboxJdbcPocApplicationTests {
 
 	@Test
 	void contextLoads() {

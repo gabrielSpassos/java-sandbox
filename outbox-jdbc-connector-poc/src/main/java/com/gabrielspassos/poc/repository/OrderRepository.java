@@ -1,6 +1,6 @@
-package com.gabrielspassos.debezium.poc.repository;
+package com.gabrielspassos.poc.repository;
 
-import com.gabrielspassos.debezium.poc.entity.OrderEntity;
+import com.gabrielspassos.poc.entity.OrderEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.UUID;
