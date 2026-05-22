@@ -57,7 +57,7 @@ This Proof of Concept demonstrates the Outbox Pattern using:
 
 ```bash
 docker compose down -v --remove-orphans
-Docker compose up
+docker compose up
 ```
 
 2. Setup JDBC connector
