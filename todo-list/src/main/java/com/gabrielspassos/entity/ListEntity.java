@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "users")
+@Table(name = "lists")
 public class ListEntity {
 
     @Id
