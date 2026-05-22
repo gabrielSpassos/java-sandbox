@@ -60,39 +60,17 @@ docker compose down -v --remove-orphans
 Docker compose up
 ```
 
-2. Install JDBC connector
-
+2. Setup JDBC connector
 ```bash
-docker exec -it outbox-kafka-connect bash
+./setup-jdbc-connector.sh 
 ```
 
-Inside container:
-
-```bash
-confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:latest
-```
-
-Exit container.
-
-Restart connect:
-
-```bash
-docker restart outbox-kafka-connect
-```
-
-3. Register connector
-```bash
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @jdbc-source.json
-```
-
-4. Run Spring Boot application
+3. Run Spring Boot application
 ```bash
 ./start
 ```
 
-5. Create an order
+4. Create an order
 ```bash
 ./save-order.sh
 ```
