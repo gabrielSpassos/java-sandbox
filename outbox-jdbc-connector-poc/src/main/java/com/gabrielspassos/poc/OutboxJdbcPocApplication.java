@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DebeziumPocApplication {
+public class OutboxJdbcPocApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DebeziumPocApplication.class, args);
+		SpringApplication.run(OutboxJdbcPocApplication.class, args);
 	}
 
 }
