@@ -13,12 +13,11 @@ import java.util.UUID;
 public class OrderEntity {
 
     @Id
+    @Column(value = "id")
     private UUID id;
 
-    @Column(value = "product_name")
-    private String productName;
-
-    private BigDecimal amount;
+    @Column(value = "description")
+    private String description;
 
     @Column(value = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -26,10 +25,9 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(UUID id, String productName, BigDecimal amount, LocalDateTime createdAt) {
+    public OrderEntity(UUID id, String description, LocalDateTime createdAt) {
         this.id = id;
-        this.productName = productName;
-        this.amount = amount;
+        this.description = description;
         this.createdAt = createdAt;
     }
 
@@ -41,20 +39,12 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -69,20 +59,19 @@ public class OrderEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         OrderEntity that = (OrderEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(productName, that.productName) && Objects.equals(amount, that.amount) && Objects.equals(createdAt, that.createdAt);
+        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productName, amount, createdAt);
+        return Objects.hash(id, description, createdAt);
     }
 
     @Override
     public String toString() {
         return "OrderEntity{" +
                 "id=" + id +
-                ", productName='" + productName + '\'' +
-                ", amount=" + amount +
+                ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }
