@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,12 +22,6 @@ public class OrderEntity {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public OrderEntity() {
-    }
-
-    public OrderEntity(UUID id, String description, LocalDateTime createdAt) {
-        this.id = id;
-        this.description = description;
-        this.createdAt = createdAt;
     }
 
     public UUID getId() {
