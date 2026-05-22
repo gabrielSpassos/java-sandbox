@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,7 +26,7 @@ class ListControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void shouldCreateList() throws Exception {
-        String userId = createUser();
+        String userId = createUser("it-test-create-list");
         String path = String.format("/v1/users/%s/lists", userId);
 
         mockMvc.perform(post(path)
@@ -41,14 +43,52 @@ class ListControllerIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.createdAt").isString());
     }
 
-    private String createUser() throws Exception {
-        MvcResult createResult = mockMvc.perform(post("/v1/users")
+    @Test
+    void shouldCreateListWithoutListName() throws Exception {
+        String userId = createUser("it-test-create-list-without-name");
+        String path = String.format("/v1/users/%s/lists", userId);
+
+        mockMvc.perform(post(path)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                    {
-                                        "name":"it-test-list-controller"
-                                    }
-                                """))
+                            {
+                                "name":null
+                            }
+                        """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andExpect(jsonPath("$.userId").value(userId))
+                .andExpect(jsonPath("$.name").value("Untitled"))
+                .andExpect(jsonPath("$.createdAt").isString());
+    }
+
+    @Test
+    void shouldFailToCreateListWithoutValidUser() throws Exception {
+        String userId = UUID.randomUUID().toString();
+        String path = String.format("/v1/users/%s/lists", userId);
+
+        mockMvc.perform(post(path)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"it-test-fail-to-create-list-with-non-existing-user"
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("invalid id"))
+                .andExpect(jsonPath("$.code").value("INVALID_ID"));
+    }
+
+    private String createUser(String name) throws Exception {
+        String jsonBody = """
+        {
+            "name":"%s"
+        }
+        """.formatted(name);
+
+        MvcResult createResult = mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody))
                 .andExpect(status().isCreated())
                 .andReturn();
 
