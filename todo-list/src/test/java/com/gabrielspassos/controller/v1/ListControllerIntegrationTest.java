@@ -63,7 +63,7 @@ class ListControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void shouldFailToCreateListWithoutValidUser() throws Exception {
+    void shouldFailToCreateListWithoutExistingUser() throws Exception {
         String userId = UUID.randomUUID().toString();
         String path = String.format("/v1/users/%s/lists", userId);
 
@@ -72,6 +72,23 @@ class ListControllerIntegrationTest extends BaseIntegrationTest {
                         .content("""
                             {
                                 "name":"it-test-fail-to-create-list-with-non-existing-user"
+                            }
+                        """))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("User not found"))
+                .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));
+    }
+
+    @Test
+    void shouldFailToCreateListWithoutValidUserId() throws Exception {
+        String userId = "invalidUserId";
+        String path = String.format("/v1/users/%s/lists", userId);
+
+        mockMvc.perform(post(path)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"it-test-fail-to-create-list-with-invalid-userId"
                             }
                         """))
                 .andExpect(status().isBadRequest())
