@@ -56,7 +56,7 @@ This Proof of Concept demonstrates the Outbox Pattern using:
 1. Start infrastructure
 
 ```bash
-docker compose down -v
+docker compose down -v --remove-orphans
 Docker compose up
 ```
 
