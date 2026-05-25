@@ -22,11 +22,10 @@ public class ListService {
         // create list for existing user
         var user = userService.findById(userId);
 
-        var userIdAsUUID = UUIDMapper.toUUID(userId);
         var finalName = nonNull(name) ? name : "Untitled";
 
         ListEntity listEntity = new ListEntity();
-        listEntity.setUserId(userIdAsUUID);
+        listEntity.setUserId(user.getId());
         listEntity.setName(finalName);
 
         return listRepository.save(listEntity);
@@ -36,6 +35,13 @@ public class ListService {
         var userIdAsUUID = UUIDMapper.toUUID(userId);
 
         return listRepository.findByUserId(userIdAsUUID)
+                .orElseThrow(() -> new NotFoundException("List not found", "LIST_NOT_FOUND"));
+    }
+
+    public ListEntity findById(String listId) {
+        var listIdAsUUID = UUIDMapper.toUUID(listId);
+
+        return listRepository.findById(listIdAsUUID)
                 .orElseThrow(() -> new NotFoundException("List not found", "LIST_NOT_FOUND"));
     }
 

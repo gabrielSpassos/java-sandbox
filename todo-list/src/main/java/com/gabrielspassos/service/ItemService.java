@@ -4,29 +4,35 @@ import com.gabrielspassos.entity.ItemEntity;
 import com.gabrielspassos.entity.ItemStatus;
 import com.gabrielspassos.exception.BadRequestException;
 import com.gabrielspassos.exception.NotFoundException;
+import com.gabrielspassos.mapper.UUIDMapper;
 import com.gabrielspassos.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ItemService {
 
     @Autowired
+    private ListService listService;
+
+    @Autowired
     private ItemRepository itemRepository;
 
-    public ItemEntity create(UUID listId, String description) {
+    public ItemEntity create(String listId, String description) {
+        // create item for existing list
+        var list = listService.findById(listId);
+
         ItemEntity itemEntity = new ItemEntity();
-        itemEntity.setListId(listId);
+        itemEntity.setListId(list.getId());
         itemEntity.setDescription(description);
         itemEntity.setStatus(ItemStatus.TO_DO);
 
         return itemRepository.save(itemEntity);
     }
 
-    public ItemEntity updateStatus(UUID itemId, String itemStatus) {
+    public ItemEntity updateStatus(String itemId, String itemStatus) {
         ItemStatus status = convertStatus(itemStatus);
 
         ItemEntity itemEntity = findById(itemId);
@@ -35,12 +41,16 @@ public class ItemService {
         return itemRepository.save(itemEntity);
     }
 
-    public List<ItemEntity> findByListId(UUID listId) {
-        return itemRepository.findByListId(listId);
+    public List<ItemEntity> findByListId(String listId) {
+        var listIdAsUUID = UUIDMapper.toUUID(listId);
+
+        return itemRepository.findByListId(listIdAsUUID);
     }
 
-    private ItemEntity findById(UUID itemId) {
-        return itemRepository.findById(itemId)
+    private ItemEntity findById(String itemId) {
+        var itemIdAsUUID = UUIDMapper.toUUID(itemId);
+
+        return itemRepository.findById(itemIdAsUUID)
                 .orElseThrow(() -> new NotFoundException("Item not found", "ITEM_NOT_FOUND"));
     }
 
