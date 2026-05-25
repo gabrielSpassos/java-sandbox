@@ -8,7 +8,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class BaseIntegrationTest {
+public class BaseApplicationTest {
 
     static PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:16")
             .withDatabaseName("todo")

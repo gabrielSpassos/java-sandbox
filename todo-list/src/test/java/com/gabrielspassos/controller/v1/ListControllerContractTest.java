@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller.v1;
 
-import com.gabrielspassos.BaseIntegrationTest;
+import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.entity.ListEntity;
 import com.gabrielspassos.exception.BadRequestException;
 import com.gabrielspassos.exception.NotFoundException;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-class ListControllerContractTest extends BaseIntegrationTest {
+class ListControllerContractTest extends BaseApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;

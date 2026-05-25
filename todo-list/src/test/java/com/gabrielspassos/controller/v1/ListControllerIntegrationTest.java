@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller.v1;
 
-import com.gabrielspassos.BaseIntegrationTest;
+import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.controller.v1.response.ListResponse;
 import com.gabrielspassos.controller.v1.response.UserResponse;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-class ListControllerIntegrationTest extends BaseIntegrationTest {
+class ListControllerIntegrationTest extends BaseApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
