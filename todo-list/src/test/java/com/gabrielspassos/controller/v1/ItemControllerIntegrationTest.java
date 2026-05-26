@@ -187,13 +187,13 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.[0].id").isString())
                 .andExpect(jsonPath("$.[0].listId").value(listId))
                 .andExpect(jsonPath("$.[0].status").value("TO_DO"))
-                .andExpect(jsonPath("$.[0].description").value("it-test-find-one-item1"))
+                .andExpect(jsonPath("$.[0].description").value("it-test-find-multiple-item1"))
                 .andExpect(jsonPath("$.[0].createdAt").isString())
                 .andExpect(jsonPath("$.[0].updatedAt").isString())
                 .andExpect(jsonPath("$.[1].id").isString())
                 .andExpect(jsonPath("$.[1].listId").value(listId))
                 .andExpect(jsonPath("$.[1].status").value("TO_DO"))
-                .andExpect(jsonPath("$.[1].description").value("it-test-find-one-item2"))
+                .andExpect(jsonPath("$.[1].description").value("it-test-find-multiple-item2"))
                 .andExpect(jsonPath("$.[1].createdAt").isString())
                 .andExpect(jsonPath("$.[1].updatedAt").isString());
     }
