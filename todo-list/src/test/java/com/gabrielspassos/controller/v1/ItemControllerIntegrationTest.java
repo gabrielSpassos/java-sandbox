@@ -159,14 +159,14 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
 
     @Test
     void shouldFindMultipleItemsByListId() throws Exception {
-        String userId = createUser("it-test-find-one-item");
-        String listId = createList(userId, "it-test-find-one-item");
+        String userId = createUser("it-test-find-multiple-item");
+        String listId = createList(userId, "it-test-find-multiple-item");
 
         mockMvc.perform(post("/v1/lists/{listId}/items", listId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                             {
-                                "description":"it-test-find-one-item1"
+                                "description":"it-test-find-multiple-item1"
                             }
                         """))
                 .andExpect(status().isCreated());
@@ -175,7 +175,7 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                             {
-                                "description":"it-test-find-one-item2"
+                                "description":"it-test-find-multiple-item2"
                             }
                         """))
                 .andExpect(status().isCreated());
