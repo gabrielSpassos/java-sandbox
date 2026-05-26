@@ -14,9 +14,9 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 class ItemControllerIntegrationTest extends BaseApplicationTest {
@@ -155,6 +155,69 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.[0].description").value("it-test-find-one-item"))
                 .andExpect(jsonPath("$.[0].createdAt").isString())
                 .andExpect(jsonPath("$.[0].updatedAt").isString());
+    }
+
+    @Test
+    void shouldFindMultipleItemsByListId() throws Exception {
+        String userId = createUser("it-test-find-one-item");
+        String listId = createList(userId, "it-test-find-one-item");
+
+        mockMvc.perform(post("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "description":"it-test-find-one-item1"
+                            }
+                        """))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "description":"it-test-find-one-item2"
+                            }
+                        """))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$.[0].id").isString())
+                .andExpect(jsonPath("$.[0].listId").value(listId))
+                .andExpect(jsonPath("$.[0].status").value("TO_DO"))
+                .andExpect(jsonPath("$.[0].description").value("it-test-find-one-item1"))
+                .andExpect(jsonPath("$.[0].createdAt").isString())
+                .andExpect(jsonPath("$.[0].updatedAt").isString())
+                .andExpect(jsonPath("$.[1].id").isString())
+                .andExpect(jsonPath("$.[1].listId").value(listId))
+                .andExpect(jsonPath("$.[1].status").value("TO_DO"))
+                .andExpect(jsonPath("$.[1].description").value("it-test-find-one-item2"))
+                .andExpect(jsonPath("$.[1].createdAt").isString())
+                .andExpect(jsonPath("$.[1].updatedAt").isString());
+    }
+
+    @Test
+    void shouldFindNoneItemByListId() throws Exception {
+        String listId = UUID.randomUUID().toString();
+
+        mockMvc.perform(get("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)))
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void shouldFailToFindItemByListIdWithInvalidId() throws Exception {
+        String listId = "invalidId";
+
+        mockMvc.perform(get("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("invalid id"))
+                .andExpect(jsonPath("$.code").value("INVALID_ID"));
     }
 
     private String createUser(String name) throws Exception {
