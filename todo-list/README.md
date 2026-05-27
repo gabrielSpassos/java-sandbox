@@ -6,8 +6,8 @@
 - [x] add item 
 - [x] remove 
 - [x] mark as done
-- [ ] do
-- [ ] re-do 
+- [x] do
+- [x] re-do 
 - [x] listAll
 
 ## Tests
