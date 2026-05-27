@@ -244,6 +244,27 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void shouldFailToRemoveNonExistingItem() throws Exception {
+        String itemId = UUID.randomUUID().toString();
+
+        mockMvc.perform(delete("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Item not found"))
+                .andExpect(jsonPath("$.code").value("ITEM_NOT_FOUND"));
+    }
+
+    @Test
+    void shouldFailToRemoveWithInvalidItemId() throws Exception {
+        String invalidId = "invalidId";
+
+        mockMvc.perform(delete("/v1/items/{itemId}", invalidId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("invalid id"))
+                .andExpect(jsonPath("$.code").value("INVALID_ID"));
+    }
 
     private String createUser(String name) throws Exception {
         String jsonBody = """
