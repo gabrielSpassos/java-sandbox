@@ -104,4 +104,16 @@ public class ItemControllerContractTest extends BaseApplicationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
     }
+
+    @Test
+    void shouldRemoveItem() throws Exception {
+        String itemId = "36933325-00a5-4cd1-9d3c-8873d4ca9525";
+
+        when(itemService.removeItem(itemId)).thenReturn(true);
+
+        mockMvc.perform(delete("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
 }
