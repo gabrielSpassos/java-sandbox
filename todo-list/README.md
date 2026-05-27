@@ -13,9 +13,10 @@
 ## Tests
 
 ```bash
+[INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 34, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
-[INFO]
+[INFO] 
 ```
