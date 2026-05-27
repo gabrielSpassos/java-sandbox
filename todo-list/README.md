@@ -3,9 +3,19 @@
 ## TODO Application
 
 > Grocery TODO List system 
-* add item
-* remove
-* mark as done
-* do
-* re-do
-* listAll
+- [x] add item 
+- [ ] remove 
+- [x] mark as done
+- [ ] do
+- [ ] re-do 
+- [x] listAll
+
+## Tests
+
+```bash
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO]
+```
