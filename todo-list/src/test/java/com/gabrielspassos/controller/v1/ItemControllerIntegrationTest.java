@@ -220,6 +220,31 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.code").value("INVALID_ID"));
     }
 
+    @Test
+    void shouldRemoveItem() throws Exception {
+        String userId = createUser("it-test-remove-item");
+        String listId = createList(userId, "it-test-remove-item");
+
+        MvcResult createResult = mockMvc.perform(post("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "description":"it-test-remove-item"
+                                    }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andReturn();
+
+        String responseBody = createResult.getResponse().getContentAsString();
+        ItemResponse itemResponse = objectMapper.readValue(responseBody, ItemResponse.class);
+
+        mockMvc.perform(delete("/v1/items/{itemId}", itemResponse.id())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+
     private String createUser(String name) throws Exception {
         String jsonBody = """
         {

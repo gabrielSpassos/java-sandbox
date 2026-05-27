@@ -41,6 +41,13 @@ public class ItemService {
         return itemRepository.save(itemEntity);
     }
 
+    public boolean removeItem(String itemId) {
+        ItemEntity itemEntity = findById(itemId);
+
+        itemRepository.delete(itemEntity);
+        return true;
+    }
+
     public List<ItemEntity> findByListId(String listId) {
         var listIdAsUUID = UUIDMapper.toUUID(listId);
 

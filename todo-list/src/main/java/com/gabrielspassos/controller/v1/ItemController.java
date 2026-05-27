@@ -34,6 +34,12 @@ public class ItemController {
         return ResponseEntity.ok(itemResponse);
     }
 
+    @DeleteMapping("/items/{itemId}")
+    public ResponseEntity deleteItem(@PathVariable String itemId) {
+        itemService.removeItem(itemId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/lists/{listId}/items")
     public ResponseEntity<List<ItemResponse>> findByListId(@PathVariable String listId) {
         var items = itemService.findByListId(listId);

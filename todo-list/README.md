@@ -4,7 +4,7 @@
 
 > Grocery TODO List system 
 - [x] add item 
-- [ ] remove 
+- [x] remove 
 - [x] mark as done
 - [ ] do
 - [ ] re-do 
