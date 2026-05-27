@@ -261,7 +261,7 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
 
         mockMvc.perform(delete("/v1/items/{itemId}", invalidId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("invalid id"))
                 .andExpect(jsonPath("$.code").value("INVALID_ID"));
     }
