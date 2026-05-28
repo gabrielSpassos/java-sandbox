@@ -165,6 +165,61 @@ public class ItemControllerContractTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldListMultipleItems() throws Exception {
+        String expectedResponse = Files.readString(Path.of("src/test/resources/multiple-items-response.json"));
+        String listId = "64442a1d-ac0f-48b7-bb78-7366c96b2499";
+
+        ItemEntity itemEntity1 = new ItemEntity();
+        itemEntity1.setId(UUID.fromString("36933325-00a5-4cd1-9d3c-8873d4ca9525"));
+        itemEntity1.setListId(UUID.fromString(listId));
+        itemEntity1.setStatus(ItemStatus.TO_DO);
+        itemEntity1.setDescription("contract-test-item-a");
+        itemEntity1.setCreatedAt(LocalDateTime.parse("2026-05-21T08:38:25"));
+        itemEntity1.setUpdatedAt(LocalDateTime.parse("2026-05-21T08:38:25"));
+
+        ItemEntity itemEntity2 = new ItemEntity();
+        itemEntity2.setId(UUID.fromString("26a7012f-2203-4c8b-8c48-10da53c95db8"));
+        itemEntity2.setListId(UUID.fromString(listId));
+        itemEntity2.setStatus(ItemStatus.DONE);
+        itemEntity2.setDescription("contract-test-item-b");
+        itemEntity2.setCreatedAt(LocalDateTime.parse("2026-05-21T08:38:25"));
+        itemEntity2.setUpdatedAt(LocalDateTime.parse("2026-05-21T08:38:25"));
+
+        when(itemService.findByListId(listId)).thenReturn(List.of(itemEntity1, itemEntity2));
+
+        mockMvc.perform(get("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
+    void shouldListEmptyItems() throws Exception {
+        String expectedResponse = "[]";
+        String listId = "64442a1d-ac0f-48b7-bb78-7366c96b2499";
+
+        when(itemService.findByListId(listId)).thenReturn(List.of());
+
+        mockMvc.perform(get("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
+    void shouldFailToListItemsWithInvalidId() throws Exception {
+        String expectedResponse = Files.readString(Path.of("src/test/resources/invalid-id-response.json"));
+        String listId = "invalidId";
+
+        when(itemService.findByListId(listId)).thenThrow(new BadRequestException("invalid id", "INVALID_ID"));
+
+        mockMvc.perform(get("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
     void shouldRemoveItem() throws Exception {
         String itemId = "36933325-00a5-4cd1-9d3c-8873d4ca9525";
 

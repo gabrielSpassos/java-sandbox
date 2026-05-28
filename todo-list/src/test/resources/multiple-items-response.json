@@ -1,0 +1,18 @@
+[
+  {
+    "id": "36933325-00a5-4cd1-9d3c-8873d4ca9525",
+    "listId": "64442a1d-ac0f-48b7-bb78-7366c96b2499",
+    "status": "TO_DO",
+    "description": "contract-test-item-a",
+    "createdAt": "2026-05-21T08:38:25",
+    "updatedAt": "2026-05-21T08:38:25"
+  },
+  {
+    "id": "26a7012f-2203-4c8b-8c48-10da53c95db8",
+    "listId": "64442a1d-ac0f-48b7-bb78-7366c96b2499",
+    "status": "DONE",
+    "description": "contract-test-item-b",
+    "createdAt": "2026-05-21T08:38:25",
+    "updatedAt": "2026-05-21T08:38:25"
+  }
+]
