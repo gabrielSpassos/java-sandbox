@@ -125,6 +125,25 @@ public class ItemControllerContractTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldFailToUpdateNonExistingItem() throws Exception {
+        String expectedResponse = Files.readString(Path.of("src/test/resources/item-not-found-response.json"));
+        String itemId = UUID.randomUUID().toString();
+
+        when(itemService.updateStatus(itemId, "DONE"))
+                .thenThrow(new NotFoundException("Item not found", "ITEM_NOT_FOUND"));
+
+        mockMvc.perform(put("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "status":"DONE"
+                            }
+                        """))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
     void shouldListItems() throws Exception {
         String expectedResponse = Files.readString(Path.of("src/test/resources/items-response.json"));
         String listId = "64442a1d-ac0f-48b7-bb78-7366c96b2499";
@@ -155,5 +174,19 @@ public class ItemControllerContractTest extends BaseApplicationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    void shouldFailToRemoveNonExistingItem() throws Exception {
+        String expectedResponse = Files.readString(Path.of("src/test/resources/item-not-found-response.json"));
+        String itemId = UUID.randomUUID().toString();
+
+        when(itemService.removeItem(itemId))
+                .thenThrow(new NotFoundException("Item not found", "ITEM_NOT_FOUND"));
+
+        mockMvc.perform(delete("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
     }
 }
