@@ -101,6 +101,56 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldUpdateItemStatusBackToDo() throws Exception {
+        String userId = createUser("it-test-update-item-to-do");
+        String listId = createList(userId, "it-test-update-item-to-do");
+
+        MvcResult createResult = mockMvc.perform(post("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "description":"it-test-update-item-to-do"
+                                    }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andReturn();
+
+        String responseBody = createResult.getResponse().getContentAsString();
+        ItemResponse itemResponse = objectMapper.readValue(responseBody, ItemResponse.class);
+
+        mockMvc.perform(put("/v1/items/{itemId}", itemResponse.id())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "status":"DONE"
+                            }
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(itemResponse.id()))
+                .andExpect(jsonPath("$.listId").value(listId))
+                .andExpect(jsonPath("$.status").value("DONE"))
+                .andExpect(jsonPath("$.description").value("it-test-update-item-to-do"))
+                .andExpect(jsonPath("$.createdAt").value(itemResponse.createdAt()))
+                .andExpect(jsonPath("$.updatedAt").isString());
+
+        mockMvc.perform(put("/v1/items/{itemId}", itemResponse.id())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "status":"TO_DO"
+                            }
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(itemResponse.id()))
+                .andExpect(jsonPath("$.listId").value(listId))
+                .andExpect(jsonPath("$.status").value("TO_DO"))
+                .andExpect(jsonPath("$.description").value("it-test-update-item-to-do"))
+                .andExpect(jsonPath("$.createdAt").value(itemResponse.createdAt()))
+                .andExpect(jsonPath("$.updatedAt").isString());
+    }
+
+    @Test
     void shouldFailToUpdateItemWithInvalidStatus() throws Exception {
         String itemId = UUID.randomUUID().toString();
 

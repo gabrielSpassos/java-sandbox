@@ -3,6 +3,8 @@ package com.gabrielspassos.controller.v1;
 import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.entity.ItemEntity;
 import com.gabrielspassos.entity.ItemStatus;
+import com.gabrielspassos.exception.BadRequestException;
+import com.gabrielspassos.exception.NotFoundException;
 import com.gabrielspassos.service.ItemService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,25 @@ public class ItemControllerContractTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldFailToCreateItemWithListNonExisting() throws Exception {
+        String expectedResponse = Files.readString(Path.of("src/test/resources/list-not-found-response.json"));
+        String listId = UUID.randomUUID().toString();
+
+        when(itemService.create(listId, "contract-test-item"))
+                .thenThrow(new NotFoundException("List not found", "LIST_NOT_FOUND"));
+
+        mockMvc.perform(post("/v1/lists/{listId}/items", listId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "description":"contract-test-item"
+                            }
+                        """))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
     void shouldUpdateItemStatus() throws Exception {
         String expectedResponse = Files.readString(Path.of("src/test/resources/item-done-response.json"));
         String itemId = "36933325-00a5-4cd1-9d3c-8873d4ca9525";
@@ -81,6 +102,25 @@ public class ItemControllerContractTest extends BaseApplicationTest {
                             }
                         """))
                 .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
+    void shouldFailToUpdateItemWithInvalidStatus() throws Exception {
+        String expectedResponse = Files.readString(Path.of("src/test/resources/invalid-status-response.json"));
+        String itemId = "36933325-00a5-4cd1-9d3c-8873d4ca9525";
+
+        when(itemService.updateStatus(itemId, "DONE"))
+                .thenThrow(new BadRequestException("invalid status", "INVALID_STATUS"));
+
+        mockMvc.perform(put("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "status":"DONE"
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
     }
 
