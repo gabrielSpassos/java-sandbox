@@ -39,6 +39,34 @@ class UserControllerIntegrationTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldFailToCreateUserWithoutName() throws Exception {
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":""
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Field: name invalid. Message: user must have name"))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
+    }
+
+    @Test
+    void shouldFailToCreateUserWithNullName() throws Exception {
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":null
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Field: name invalid. Message: user must have name"))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
+    }
+
+    @Test
     void shouldFindUserByName() throws Exception {
         MvcResult createResult = mockMvc.perform(post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
