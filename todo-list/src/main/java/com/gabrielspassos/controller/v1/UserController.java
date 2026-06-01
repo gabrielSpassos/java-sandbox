@@ -4,6 +4,7 @@ import com.gabrielspassos.controller.v1.request.UserRequest;
 import com.gabrielspassos.controller.v1.response.UserResponse;
 import com.gabrielspassos.mapper.UserMapper;
 import com.gabrielspassos.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
         var user = userService.create(request.name());
         var userResponse = UserMapper.toResponse(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);

@@ -1,4 +1,6 @@
 package com.gabrielspassos.controller.v1.request;
 
-public record UpdateItemRequest(String status) {
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateItemRequest(@NotBlank(message = "should have status to update item") String status) {
 }

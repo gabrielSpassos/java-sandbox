@@ -1,4 +1,6 @@
 package com.gabrielspassos.controller.v1.request;
 
-public record UserRequest(String name) {
+import jakarta.validation.constraints.NotBlank;
+
+public record UserRequest(@NotBlank(message = "user must have name") String name) {
 }

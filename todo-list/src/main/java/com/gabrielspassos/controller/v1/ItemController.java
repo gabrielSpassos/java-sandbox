@@ -29,7 +29,7 @@ public class ItemController {
     }
 
     @PutMapping("/items/{itemId}")
-    public ResponseEntity<ItemResponse> updateItem(@PathVariable String itemId, @RequestBody UpdateItemRequest request) {
+    public ResponseEntity<ItemResponse> updateItem(@PathVariable String itemId, @Valid @RequestBody UpdateItemRequest request) {
         var item = itemService.updateStatus(itemId, request.status());
         var itemResponse = ItemMapper.toResponse(item);
         return ResponseEntity.ok(itemResponse);

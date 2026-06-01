@@ -83,6 +83,23 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldFailToCreateItemWithNullDescription() throws Exception {
+        String listId = UUID.randomUUID().toString();
+        String path = String.format("/v1/lists/%s/items", listId);
+
+        mockMvc.perform(post(path)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "description":null
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Field: description invalid. Message: item must have a description"))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
+    }
+
+    @Test
     void shouldUpdateItemStatus() throws Exception {
         String userId = createUser("it-test-update-item");
         String listId = createList(userId, "it-test-update-item");
@@ -181,6 +198,38 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("invalid status"))
                 .andExpect(jsonPath("$.code").value("INVALID_STATUS"));
+    }
+
+    @Test
+    void shouldFailToUpdateItemWithoutStatus() throws Exception {
+        String itemId = UUID.randomUUID().toString();
+
+        mockMvc.perform(put("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "status":""
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Field: status invalid. Message: should have status to update item"))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
+    }
+
+    @Test
+    void shouldFailToUpdateItemWithNullStatus() throws Exception {
+        String itemId = UUID.randomUUID().toString();
+
+        mockMvc.perform(put("/v1/items/{itemId}", itemId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "status":null
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Field: status invalid. Message: should have status to update item"))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
     }
 
     @Test
