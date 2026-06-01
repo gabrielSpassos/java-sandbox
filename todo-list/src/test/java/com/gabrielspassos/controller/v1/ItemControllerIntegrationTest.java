@@ -66,6 +66,23 @@ class ItemControllerIntegrationTest extends BaseApplicationTest {
     }
 
     @Test
+    void shouldFailToCreateItemWithoutDescription() throws Exception {
+        String listId = UUID.randomUUID().toString();
+        String path = String.format("/v1/lists/%s/items", listId);
+
+        mockMvc.perform(post(path)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "description":""
+                            }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Field: description invalid. Message: item must have a description"))
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
+    }
+
+    @Test
     void shouldUpdateItemStatus() throws Exception {
         String userId = createUser("it-test-update-item");
         String listId = createList(userId, "it-test-update-item");

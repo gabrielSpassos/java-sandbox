@@ -5,6 +5,7 @@ import com.gabrielspassos.controller.v1.request.UpdateItemRequest;
 import com.gabrielspassos.controller.v1.response.ItemResponse;
 import com.gabrielspassos.mapper.ItemMapper;
 import com.gabrielspassos.service.ItemService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping("/lists/{listId}/items")
-    public ResponseEntity<ItemResponse> createItem(@PathVariable String listId, @RequestBody CreateItemRequest request) {
+    public ResponseEntity<ItemResponse> createItem(@PathVariable String listId, @Valid @RequestBody CreateItemRequest request) {
         var item = itemService.create(listId, request.description());
         var itemResponse = ItemMapper.toResponse(item);
         return ResponseEntity.status(HttpStatus.CREATED).body(itemResponse);
