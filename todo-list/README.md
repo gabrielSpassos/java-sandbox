@@ -11,6 +11,11 @@
 - Proofs that the contract (API in this POC) is correct, no change break the contract
 - Use mocks, so is fast
 
+## Mutation
+
+- Tests of Tests
+- `mvn test-compile org.pitest:pitest-maven:mutationCoverage`
+
 ## TODO Application
 
 > Grocery TODO List system 
