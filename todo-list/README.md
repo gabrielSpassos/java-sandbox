@@ -1,4 +1,15 @@
-# Integration Vs Contract Tests POC
+# Unit / Integration / Contract / Mutation Tests POC 
+
+## Integration Test
+
+- Proofs that some functionality works as expected
+- Covers happy and unhappy paths
+- Boots service, so is slower
+
+## Contract 
+
+- Proofs that the contract (API in this POC) is correct, no change break the contract
+- Use mocks, so is fast
 
 ## TODO Application
 
