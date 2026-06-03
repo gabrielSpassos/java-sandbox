@@ -14,7 +14,7 @@
 ## Mutation
 
 - Tests of Tests
-- `mvn test-compile org.pitest:pitest-maven:mutationCoverage`
+- `./test-mutation.sh`
 
 ## TODO Application
 
