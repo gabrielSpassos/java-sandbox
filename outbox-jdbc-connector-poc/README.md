@@ -86,3 +86,6 @@ docker compose up
 | Infrastructure | Kafka Connect           | Kafka Connect + Debezium |
 | CDC            | No                      | Yes                      |
 | Scalability    | Moderate                | High                     |
+
+## Links
+* Kafka UI: http://localhost:8081/
