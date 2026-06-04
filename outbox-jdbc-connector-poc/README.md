@@ -82,6 +82,12 @@ Registering JDBC Source Connector
 ./save-order.sh
 ```
 
+5. Query table
+```bash
+docker exec -it outbox-postgres psql -U postgres -d outbox-jdbc
+outbox-jdbc=# select * from orders;
+```
+
 ## Comparison With Debezium
 
 | Topic          | JDBC Source Connector   | Debezium CDC             |

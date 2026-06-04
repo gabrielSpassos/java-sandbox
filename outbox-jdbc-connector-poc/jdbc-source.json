@@ -4,7 +4,7 @@
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
     "tasks.max": "1",
 
-    "connection.url": "jdbc:postgresql://postgres:5432/outbox",
+    "connection.url": "jdbc:postgresql://postgres:5432/outbox-jdbc",
     "connection.user": "postgres",
     "connection.password": "postgres",
 
@@ -12,7 +12,7 @@
 
     "timestamp.column.name": "created_at",
 
-    "table.whitelist": "outbox",
+    "table.whitelist": "outbox-jdbc",
 
     "topic.prefix": "jdbc-",
 
