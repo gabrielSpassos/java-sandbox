@@ -65,6 +65,13 @@ docker compose up
 ./setup-jdbc-connector.sh 
 ```
 
+```
+======================================
+Registering JDBC Source Connector
+======================================
+{"name":"outbox-source","config":{"connector.class":"io.confluent.connect.jdbc.JdbcSourceConnector","tasks.max":"1","connection.url":"jdbc:postgresql://postgres:5432/outbox","connection.user":"postgres","connection.password":"postgres","mode":"timestamp","timestamp.column.name":"created_at","table.whitelist":"outbox","topic.prefix":"jdbc-","poll.interval.ms":"5000","value.converter":"org.apache.kafka.connect.json.JsonConverter","value.converter.schemas.enable":"false","name":"outbox-source"},"tasks":[],"type":"source"}
+```
+
 3. Run Spring Boot application
 ```bash
 ./start

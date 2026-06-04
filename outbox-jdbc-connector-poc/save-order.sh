@@ -3,5 +3,5 @@
 curl -X POST "http://localhost:8080/v1/orders" \
   -H "Content-Type: application/json" \
   -d '{
-    "description": "test order",
+    "description": "test order"
   }'
