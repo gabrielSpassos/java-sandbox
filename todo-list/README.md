@@ -14,7 +14,20 @@
 ## Mutation
 
 - Tests of Tests
-- `./test-mutation.sh`
+  - `./test-mutation.sh`
+
+- First report failed
+```
+================================================================================
+- Statistics
+  ================================================================================
+>> Line Coverage (for mutated classes only): 167/189 (88%)
+>> 37 tests examined
+>> Generated 97 mutations Killed 64 (66%)
+>> Mutations with no coverage 33. Test strength 100%
+>> Ran 72 tests (0.74 tests per mutation)
+```
+![report-1](resources/report-1.png)
 
 ## TODO Application
 
