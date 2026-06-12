@@ -32,7 +32,14 @@
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 48, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 55, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
 ```
+
+- [x] Unit
+- [x] Integration
+- [x] Contract
+- [x] Mutation
+- [ ] Stress
+- [ ] Chaos
