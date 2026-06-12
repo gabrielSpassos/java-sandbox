@@ -11,3 +11,5 @@ CREATE TABLE IF NOT EXISTS users (
     name text,
     birth_date date
 );
+
+CREATE INDEX IF NOT EXISTS users_name_idx ON users (name);
