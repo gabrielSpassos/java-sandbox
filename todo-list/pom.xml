@@ -88,6 +88,9 @@
                     <targetTests>
                         <param>com.gabrielspassos.*</param>
                     </targetTests>
+					<excludedClasses>
+						<param>*Entity</param>
+					</excludedClasses>
                     <outputFormats>
                         <param>HTML</param>
                     </outputFormats>

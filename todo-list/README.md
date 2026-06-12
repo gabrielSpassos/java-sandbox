@@ -29,6 +29,45 @@
 ```
 ![report-1](resources/report-1.png)
 
+- After tunning
+```xml
+<configuration>
+    <targetClasses>
+        <param>com.gabrielspassos.*</param>
+    </targetClasses>
+    <targetTests>
+        <param>com.gabrielspassos.*</param>
+    </targetTests>
+    <excludedClasses>
+        <param>*Entity</param>
+    </excludedClasses>
+    <outputFormats>
+        <param>HTML</param>
+    </outputFormats>
+    <threads>4</threads>
+    <mutationThreshold>80</mutationThreshold>
+</configuration>
+```
+
+```
+================================================================================
+- Statistics
+================================================================================
+>> Line Coverage (for mutated classes only): 117/124 (94%)
+>> 37 tests examined
+>> Generated 53 mutations Killed 51 (96%)
+>> Mutations with no coverage 2. Test strength 100%
+>> Ran 59 tests (1.11 tests per mutation)
+Enhanced functionality available at https://www.arcmutate.com/
+
+Build messages:- 
+* Project uses Spring, but the Arcmutate Spring plugin is not present. (https://docs.arcmutate.com/docs/spring.html)
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+```
+![report-2](resources/report-2.png)
+
 ## TODO Application
 
 > Grocery TODO List system 
