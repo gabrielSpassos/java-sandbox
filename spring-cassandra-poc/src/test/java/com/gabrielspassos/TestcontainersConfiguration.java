@@ -7,12 +7,13 @@ import org.testcontainers.cassandra.CassandraContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
 	@Bean
 	@ServiceConnection
 	CassandraContainer cassandraContainer() {
-		return new CassandraContainer(DockerImageName.parse("cassandra:latest"));
+		return new CassandraContainer(DockerImageName.parse("cassandra:latest"))
+				.withInitScript("init.cql");
 	}
 
 }
