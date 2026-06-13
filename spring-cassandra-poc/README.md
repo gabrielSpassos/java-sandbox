@@ -1,1 +1,1 @@
-# Java Spring Boot with Apache Cassandra POC
+# Spring Boot Cassandra POC
