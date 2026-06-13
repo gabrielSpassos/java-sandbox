@@ -36,4 +36,9 @@ public class UserService {
         userRepository.deleteById(id);
         return true;
     }
+
+    boolean deleteAll() {
+        userRepository.deleteAll();
+        return true;
+    }
 }
