@@ -11,6 +11,7 @@ import java.time.Instant;
 public record SensorEvent(
 
         @PrimaryKeyColumn(
+                name = "sensor_id",
                 type = PrimaryKeyType.PARTITIONED,
                 ordinal = 0)
         String sensorId,
