@@ -22,9 +22,13 @@ models:
   - name: User
     fields:
       - name: id
-        type: UUID
-      - name: email
+        type: Long
+      - name: name
         type: String
+      - name: birthDate
+        type: LocalDate
+      - name: createdAt
+        type: LocalDateTime
 ```
 
 ### Supported types
@@ -37,3 +41,20 @@ models:
 - `LocalDate`
 - `LocalDateTime`
 - `UUID`
+
+### Output
+
+```java
+package com.gabrielspassos.generated;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public record User(
+        Long id,
+        String name,
+        LocalDate birthDate,
+        LocalDateTime createdAt
+) {
+}
+```
