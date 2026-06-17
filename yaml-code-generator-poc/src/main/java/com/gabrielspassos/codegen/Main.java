@@ -9,7 +9,7 @@ public class Main {
     private static final Path DEFAULT_DEFINITION = Path.of("src/main/resources/definitions/sample-models.yaml");
     private static final Path DEFAULT_OUTPUT = Path.of("target/generated-sources/yaml-codegen");
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Path definitionPath = args.length > 0 ? Path.of(args[0]) : DEFAULT_DEFINITION;
         Path outputDirectory = args.length > 1 ? Path.of(args[1]) : DEFAULT_OUTPUT;
 
