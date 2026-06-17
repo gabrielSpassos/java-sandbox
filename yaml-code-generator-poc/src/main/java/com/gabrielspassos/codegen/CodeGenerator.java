@@ -1,5 +1,8 @@
 package com.gabrielspassos.codegen;
 
+import com.gabrielspassos.codegen.models.Definition;
+import com.gabrielspassos.codegen.models.ModelDefinition;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

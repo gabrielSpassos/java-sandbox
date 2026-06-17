@@ -1,5 +1,8 @@
 package com.gabrielspassos.codegen;
 
+import com.gabrielspassos.codegen.models.FieldDefinition;
+import com.gabrielspassos.codegen.models.ModelDefinition;
+
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;

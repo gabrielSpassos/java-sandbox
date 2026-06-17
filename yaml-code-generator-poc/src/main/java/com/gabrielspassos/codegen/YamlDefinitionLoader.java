@@ -1,5 +1,8 @@
 package com.gabrielspassos.codegen;
 
+import com.gabrielspassos.codegen.models.Definition;
+import com.gabrielspassos.codegen.models.FieldDefinition;
+import com.gabrielspassos.codegen.models.ModelDefinition;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;

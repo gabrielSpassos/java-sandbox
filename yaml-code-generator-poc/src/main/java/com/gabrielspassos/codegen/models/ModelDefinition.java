@@ -1,4 +1,4 @@
-package com.gabrielspassos.codegen;
+package com.gabrielspassos.codegen.models;
 
 import java.util.List;
 

@@ -1,5 +1,7 @@
 package com.gabrielspassos.codegen;
 
+import com.gabrielspassos.codegen.models.Definition;
+
 import java.nio.file.Path;
 
 public class Main {

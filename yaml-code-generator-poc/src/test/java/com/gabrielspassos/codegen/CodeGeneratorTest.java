@@ -1,5 +1,6 @@
 package com.gabrielspassos.codegen;
 
+import com.gabrielspassos.codegen.models.Definition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
