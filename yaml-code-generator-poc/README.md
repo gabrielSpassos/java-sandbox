@@ -11,7 +11,7 @@ mvn clean install
 
 ## Run
 ```shell
-mvn clean exec:java
+mvn clean compile exec:java
 ```
 
 ## YAML shape
@@ -27,7 +27,7 @@ models:
         type: String
 ```
 
-### Suported types
+### Supported types
 - `String`
 - `Integer`
 - `Long`
