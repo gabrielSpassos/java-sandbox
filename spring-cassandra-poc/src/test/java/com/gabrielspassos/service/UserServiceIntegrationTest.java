@@ -2,7 +2,6 @@ package com.gabrielspassos.service;
 
 import com.gabrielspassos.TestcontainersConfiguration;
 import com.gabrielspassos.domain.User;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,6 +73,18 @@ class UserServiceIntegrationTest {
         boolean delete = userService.delete(user.id());
 
         assertTrue(delete);
+    }
+
+    @Test
+    void shouldFindAll() {
+        var user1 = createUser();
+        var user2 = createUser();
+
+        List<User> all = userService.findAll();
+
+        assertNotNull(all);
+        assertFalse(all.isEmpty());
+        assertEquals(2, all.size());
     }
 
     private User createUser() {
