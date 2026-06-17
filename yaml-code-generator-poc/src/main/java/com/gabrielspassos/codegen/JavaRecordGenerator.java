@@ -3,7 +3,6 @@ package com.gabrielspassos.codegen;
 import com.gabrielspassos.codegen.models.FieldDefinition;
 import com.gabrielspassos.codegen.models.ModelDefinition;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -51,7 +50,7 @@ public class JavaRecordGenerator {
                 .filter(type -> !JAVA_LANG_TYPES.contains(type))
                 .map(type -> TYPE_IMPORTS.getOrDefault(type, type))
                 .filter(type -> type.contains("."))
-                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.naturalOrder())));
+                .collect(Collectors.toCollection(TreeSet::new));
 
         return imports.stream()
                 .map(type -> "import " + type + ";")

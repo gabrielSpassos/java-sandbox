@@ -24,15 +24,19 @@ class CodeGeneratorTest {
                 .generate(definition, outputDirectory);
 
         Path generatedUser = outputDirectory.resolve("com/gabrielspassos/generated/User.java");
+        Path generatedOrder = outputDirectory.resolve("com/gabrielspassos/generated/Order.java");
         String userContent = Files.readString(generatedUser);
+        String orderContent = Files.readString(generatedOrder);
 
         assertEquals(2, generatedFiles);
-        assertTrue(Files.exists(outputDirectory.resolve("com/gabrielspassos/generated/Order.java")));
+        assertTrue(Files.exists(generatedOrder));
         assertTrue(userContent.contains("package com.gabrielspassos.generated;"));
+        assertTrue(userContent.contains("import java.time.LocalDate;"));
         assertTrue(userContent.contains("import java.time.LocalDateTime;"));
-        assertTrue(userContent.contains("import java.util.UUID;"));
         assertTrue(userContent.contains("public record User("));
-        assertTrue(userContent.contains("UUID id"));
+        assertTrue(userContent.contains("Long id"));
         assertTrue(userContent.contains("LocalDateTime createdAt"));
+        assertTrue(orderContent.contains("import java.util.UUID;"));
+        assertTrue(orderContent.contains("UUID id"));
     }
 }
