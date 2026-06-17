@@ -32,8 +32,10 @@ class SensorServiceIntegrationTest {
             var event = createEvent(i);
             sensorService.save(event);
         }
-        long timeTaken = System.currentTimeMillis() - start;
-        IO.println("Total time take: " + timeTaken);
+        long timeTakenInMs = System.currentTimeMillis() - start;
+        double timeTakenInS = timeTakenInMs / 1000.0;
+
+        IO.println("Total time taken: %.3f s".formatted(timeTakenInS));
     }
 
     private SensorEvent createEvent(int i) {
