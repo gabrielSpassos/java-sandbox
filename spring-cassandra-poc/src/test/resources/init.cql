@@ -13,3 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE INDEX IF NOT EXISTS users_name_idx ON users (name);
+
+CREATE TABLE IF NOT EXISTS sensor_events (
+    sensor_id text,
+    timestamp timestamp,
+    value double,
+    PRIMARY KEY (sensor_id, timestamp)
+);

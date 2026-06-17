@@ -1,5 +1,10 @@
 # Spring Boot Cassandra POC
 
+### Output
+* 100k insert
+```
+```
+
 ### Tests
 ```
 [INFO] 
