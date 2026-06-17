@@ -3,6 +3,7 @@
 ### Output
 * 100k insert
 ```
+Total time taken: 134,454 s
 ```
 
 ### Tests
