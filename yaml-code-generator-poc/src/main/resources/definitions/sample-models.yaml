@@ -3,11 +3,11 @@ models:
   - name: User
     fields:
       - name: id
-        type: UUID
+        type: Long
       - name: name
         type: String
-      - name: email
-        type: String
+      - name: birthDate
+        type: LocalDate
       - name: createdAt
         type: LocalDateTime
 
@@ -15,9 +15,13 @@ models:
     fields:
       - name: id
         type: UUID
-      - name: userId
-        type: UUID
+      - name: quantity
+        type: Integer
+      - name: price
+        type: Double
       - name: total
         type: BigDecimal
       - name: status
         type: String
+      - name: active
+        type: Boolean
