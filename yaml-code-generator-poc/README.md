@@ -42,7 +42,7 @@ models:
 - `LocalDateTime`
 - `UUID`
 
-### Output
+## Output
 
 ```java
 package com.gabrielspassos.generated;
