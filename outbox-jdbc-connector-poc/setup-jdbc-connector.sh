@@ -41,8 +41,17 @@ echo "======================================"
 echo "Deleting old connector if exists"
 echo "======================================"
 
-curl -s -X DELETE \
-  $CONNECT_URL/connectors/outbox-source || true
+delete_status=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE \
+  $CONNECT_URL/connectors/outbox-source)
+
+if [ "$delete_status" = "204" ]; then
+  echo "Old connector deleted"
+elif [ "$delete_status" = "404" ]; then
+  echo "No existing connector found"
+else
+  echo "Failed to delete existing connector. HTTP status: $delete_status"
+  exit 1
+fi
 
 echo "======================================"
 echo "Registering JDBC Source Connector"
