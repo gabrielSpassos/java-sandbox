@@ -89,6 +89,22 @@ outbox-jdbc=# select * from orders;
 outbox-jdbc=# select * from outbox;
 ```
 
+## Output
+
+* ![topics](resources/topics.png)
+* ![jdbc-topic](resources/jdbc-topic.png)
+* `jdbc-outbox` topic message value:
+```json
+{
+	"id": "b22eb738-dbfe-4e6a-9daf-1689cfe47cb2",
+	"aggregate_type": "ORDER",
+	"aggregate_id": "e08e42dd-d227-45cf-b85d-c0c350f815a3",
+	"event_type": "ORDER_CREATED",
+	"payload": "{\"orderId\": \"e08e42dd-d227-45cf-b85d-c0c350f815a3\", \"description\": \"test order\"}",
+	"created_at": 1781733691381
+}
+```
+
 ## Comparison With Debezium
 
 | Topic          | JDBC Source Connector   | Debezium CDC             |
