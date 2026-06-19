@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import com.gabrielspassos.poc.entity.value.JsonbPayload;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -25,7 +27,7 @@ public class OutboxEntity {
     private String eventType;
 
     @Column(value = "payload")
-    private String payload;
+    private JsonbPayload payload;
 
     @Column(value = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -65,11 +67,11 @@ public class OutboxEntity {
         this.eventType = eventType;
     }
 
-    public String getPayload() {
+    public JsonbPayload getPayload() {
         return payload;
     }
 
-    public void setPayload(String payload) {
+    public void setPayload(JsonbPayload payload) {
         this.payload = payload;
     }
 

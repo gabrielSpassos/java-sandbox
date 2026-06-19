@@ -86,6 +86,7 @@ Registering JDBC Source Connector
 ```bash
 docker exec -it outbox-postgres psql -U postgres -d outbox-jdbc
 outbox-jdbc=# select * from orders;
+outbox-jdbc=# select * from outbox;
 ```
 
 ## Comparison With Debezium

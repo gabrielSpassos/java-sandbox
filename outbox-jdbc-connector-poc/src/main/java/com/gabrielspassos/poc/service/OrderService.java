@@ -3,6 +3,7 @@ package com.gabrielspassos.poc.service;
 import com.gabrielspassos.poc.controller.request.OrderRequest;
 import com.gabrielspassos.poc.entity.OrderEntity;
 import com.gabrielspassos.poc.entity.OutboxEntity;
+import com.gabrielspassos.poc.entity.value.JsonbPayload;
 import com.gabrielspassos.poc.repository.OrderRepository;
 import com.gabrielspassos.poc.repository.OutboxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class OrderService {
         outboxEntity.setAggregateType("ORDER");
         outboxEntity.setAggregateId(savedOrder.getId());
         outboxEntity.setEventType("ORDER_CREATED");
-        outboxEntity.setPayload(payload);
+        outboxEntity.setPayload(new JsonbPayload(payload));
         outboxRepository.save(outboxEntity);
 
         return savedOrder;
