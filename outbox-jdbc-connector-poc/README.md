@@ -107,15 +107,17 @@ outbox-jdbc=# select * from outbox;
 
 ## Comparison With Debezium
 
-| Topic          | JDBC Source Connector   | Debezium CDC             |
-| -------------- | ----------------------- | ------------------------ |
-| Mechanism      | Polling                 | WAL/binlog streaming     |
-| Complexity     | Medium                  | High                     |
-| Delay          | Poll interval dependent | Near real-time           |
-| DB Load        | Polling queries         | Low                      |
-| Infrastructure | Kafka Connect           | Kafka Connect + Debezium |
-| CDC            | No                      | Yes                      |
-| Scalability    | Moderate                | High                     |
+The JDBC Source Connector polls a table and publishes rows based on query state.
+Debezium streams committed database changes from the transaction log, so it behaves like true CDC.
+
+| Topic             | JDBC Source Connector             | Debezium CDC                         |
+| ----------------- | --------------------------------- | ------------------------------------ |
+| Capture mechanism | SQL polling                       | WAL/binlog streaming                 |
+| Change fidelity   | Current row state only            | Insert, update, delete events        |
+| Latency           | Poll interval dependent           | Near real-time                       |
+| Database load     | Repeated polling queries          | Reads transaction log                |
+| Ordering          | Based on selected columns/query   | Based on database commit log         |
+| Deletes           | Not captured from source table    | Captured when configured             |
 
 ## Links
 * Kafka UI: http://localhost:8081/
