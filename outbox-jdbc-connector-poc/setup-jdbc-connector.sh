@@ -48,7 +48,7 @@ echo "======================================"
 echo "Registering JDBC Source Connector"
 echo "======================================"
 
-curl -X POST $CONNECT_URL/connectors \
+curl -sS --fail-with-body -X POST $CONNECT_URL/connectors \
   -H "Content-Type: application/json" \
   -d @jdbc-source.json
 

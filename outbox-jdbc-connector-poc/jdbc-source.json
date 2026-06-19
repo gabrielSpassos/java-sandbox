@@ -12,7 +12,7 @@
 
     "timestamp.column.name": "created_at",
 
-    "table.whitelist": "outbox-jdbc",
+    "table.whitelist": "outbox",
 
     "topic.prefix": "jdbc-",
 
