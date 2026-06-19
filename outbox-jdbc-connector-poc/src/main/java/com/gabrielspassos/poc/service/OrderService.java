@@ -39,6 +39,8 @@ public class OrderService {
         outboxEntity.setAggregateId(savedOrder.getId());
         outboxEntity.setEventType("ORDER_CREATED");
         outboxEntity.setPayload(payload);
+        outboxRepository.save(outboxEntity);
+
         return savedOrder;
     }
 }
