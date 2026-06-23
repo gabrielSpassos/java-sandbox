@@ -18,15 +18,13 @@ Bob   --LIVES_IN--> New York
 Charlie --LIVES_IN--> Boston
 ```
 
-## Output
-
 ## Tests
 
 ```bash
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
 [INFO] --- jar:3.5.0:jar (default-jar) @ spring-graphdb ---
@@ -42,7 +40,7 @@ Charlie --LIVES_IN--> Boston
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  01:01 min
-[INFO] Finished at: 2026-06-18T22:37:59-03:00
+[INFO] Total time:  54.423 s
+[INFO] Finished at: 2026-06-18T23:25:55-03:00
 [INFO] ------------------------------------------------------------------------
 ```
