@@ -12,7 +12,7 @@ public class TestcontainersConfiguration {
 	@Bean
 	@ServiceConnection
 	Neo4jContainer neo4jContainer() {
-		return new Neo4jContainer(DockerImageName.parse("neo4j:5.28-alpine")).withReuse(true);
+		return new Neo4jContainer(DockerImageName.parse("neo4j:5.26.27-ubi10")).withReuse(true);
 	}
 
 }
