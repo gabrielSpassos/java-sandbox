@@ -1,5 +1,23 @@
 # Spring Boot Graph DB POC
 
+## Graph
+```
+Alice ----KNOWS----> Bob ----KNOWS----> Charlie
+   |                    |
+   |                    |
+WORKS_AT             WORKS_AT
+   |                    |
+Acme Inc.           Acme Inc.
+        |
+   LOCATED_IN
+        |
+    San Francisco
+
+Alice --LIVES_IN--> San Francisco
+Bob   --LIVES_IN--> New York
+Charlie --LIVES_IN--> Boston
+```
+
 ## Output
 
 ## Tests
