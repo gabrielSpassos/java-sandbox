@@ -70,7 +70,7 @@ class GraphControllerIntegrationTest {
 
     @Test
     void shouldReturn404WhenPersonDoesNotExist() throws Exception {
-        mockMvc.perform(get("/graph/people/John"))
+        mockMvc.perform(get("/v1/graph/people/John"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Person not found: John"))
                 .andExpect(jsonPath("$.code").value("PERSON_NOT_FOUND"));
