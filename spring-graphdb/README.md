@@ -7,11 +7,17 @@ Alice ----KNOWS----> Bob ----KNOWS----> Charlie
    |                    |
 WORKS_AT             WORKS_AT
    |                    |
-Acme Inc.           Acme Inc.
-        |
-   LOCATED_IN
-        |
-    San Francisco
+TechCorp           TechCorp
+    |
+LOCATED_IN
+    |
+San Francisco
+    
+BigTechCorp           
+    |
+LOCATED_IN
+    |
+San Francisco
 
 Alice --LIVES_IN--> San Francisco
 Bob   --LIVES_IN--> New York
@@ -24,7 +30,7 @@ Charlie --LIVES_IN--> Boston
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
 [INFO] --- jar:3.5.0:jar (default-jar) @ spring-graphdb ---
@@ -40,7 +46,7 @@ Charlie --LIVES_IN--> Boston
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  54.423 s
-[INFO] Finished at: 2026-06-18T23:25:55-03:00
+[INFO] Total time:  01:29 min
+[INFO] Finished at: 2026-06-23T23:35:29-03:00
 [INFO] ------------------------------------------------------------------------
 ```
