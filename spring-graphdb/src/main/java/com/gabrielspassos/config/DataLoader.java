@@ -36,8 +36,11 @@ public class DataLoader implements CommandLineRunner {
 
         Company techCorp = new Company("TechCorp");
         techCorp.setCity(sf);
-
         techCorp = companyRepository.save(techCorp);
+
+        Company bigTechCorp = new Company("BigTechCorp");
+        bigTechCorp.setCity(sf);
+        companyRepository.save(techCorp);
 
         Person alice = new Person("Alice", 30);
         Person bob = new Person("Bob", 28);

@@ -64,8 +64,25 @@ class GraphControllerIntegrationTest {
     void shouldReturnEmployees() throws Exception {
         mockMvc.perform(get("/v1/graph/companies/TechCorp/employees"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name").value("Alice"))
+                .andExpect(jsonPath("$[1].name").value("Bob"));
+    }
 
+    @Test
+    void shouldReturnCompanies() throws Exception {
+        mockMvc.perform(get("/v1/graph/cities/Sao Francisco/companies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name").value("TechCorp"))
+                .andExpect(jsonPath("$[1].name").value("BigTechCorp"));
+    }
+
+    @Test
+    void shouldReturnEmptyCompanies() throws Exception {
+        mockMvc.perform(get("/v1/graph/cities/New York/companies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test

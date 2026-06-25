@@ -1,7 +1,9 @@
 package com.gabrielspassos.service;
 
+import com.gabrielspassos.domain.Company;
 import com.gabrielspassos.domain.Person;
 import com.gabrielspassos.exception.NotFoundException;
+import com.gabrielspassos.repository.CompanyRepository;
 import com.gabrielspassos.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,11 @@ import java.util.List;
 public class GraphService {
 
     private final PersonRepository personRepository;
+    private final CompanyRepository companyRepository;
 
-    public GraphService(PersonRepository personRepository) {
+    public GraphService(PersonRepository personRepository, CompanyRepository companyRepository) {
         this.personRepository = personRepository;
-    }
-
-    public Person save(Person person) {
-        return personRepository.save(person);
+        this.companyRepository = companyRepository;
     }
 
     public List<Person> findAllPeople() {
@@ -39,6 +39,10 @@ public class GraphService {
 
     public List<Person> findEmployees(String company) {
         return personRepository.findEmployees(company);
+    }
+
+    public List<Company> findCompaniesByCityName(String cityName) {
+        return companyRepository.findCompaniesByCityName(cityName);
     }
 
 }

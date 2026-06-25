@@ -1,5 +1,7 @@
 package com.gabrielspassos.controller;
 
+import com.gabrielspassos.dto.CompanyDto;
+import com.gabrielspassos.dto.CompanyMapper;
 import com.gabrielspassos.dto.PersonDto;
 import com.gabrielspassos.dto.PersonMapper;
 import com.gabrielspassos.service.GraphService;
@@ -54,6 +56,14 @@ public class GraphController {
         return graphService.findEmployees(company)
                 .stream()
                 .map(PersonMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/cities/{cityName}/companies")
+    public List<CompanyDto> companiesByCityName(@PathVariable String cityName) {
+        return graphService.findCompaniesByCityName(cityName)
+                .stream()
+                .map(CompanyMapper::toDto)
                 .toList();
     }
 }
