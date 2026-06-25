@@ -74,8 +74,8 @@ class GraphControllerIntegrationTest {
         mockMvc.perform(get("/v1/graph/cities/Sao Francisco/companies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name").value("TechCorp"))
-                .andExpect(jsonPath("$[1].name").value("BigTechCorp"));
+                .andExpect(jsonPath("$[0].name").value("BigTechCorp"))
+                .andExpect(jsonPath("$[1].name").value("TechCorp"));
     }
 
     @Test

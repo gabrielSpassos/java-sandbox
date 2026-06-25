@@ -12,6 +12,7 @@ public interface CompanyRepository extends Neo4jRepository<Company, Long> {
                 MATCH (company:Company)-[:LOCATED_IN]->(city:City)
                 WHERE city.name = $name
                 RETURN company
+                ORDER BY company.name
             """)
     List<Company> findCompaniesByCityName(String name);
 
