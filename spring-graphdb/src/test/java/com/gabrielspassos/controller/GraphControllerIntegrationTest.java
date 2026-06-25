@@ -71,7 +71,7 @@ class GraphControllerIntegrationTest {
 
     @Test
     void shouldReturnCompanies() throws Exception {
-        mockMvc.perform(get("/v1/graph/cities/Sao Francisco/companies"))
+        mockMvc.perform(get("/v1/graph/cities/San Francisco/companies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name").value("BigTechCorp"))
