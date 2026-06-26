@@ -11,7 +11,6 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.toxiproxy.ToxiproxyContainer;
-import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 
@@ -81,5 +80,9 @@ public class BaseApplicationTest {
                         throw new RuntimeException(e);
                     }
                 });
+    }
+
+    public Proxy getDbProxy() {
+        return dbProxy;
     }
 }
