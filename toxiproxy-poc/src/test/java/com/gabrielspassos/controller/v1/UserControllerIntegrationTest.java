@@ -1,12 +1,10 @@
 package com.gabrielspassos.controller.v1;
 
-import com.gabrielspassos.TestcontainersConfiguration;
+import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.controller.v1.response.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -18,9 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerIntegrationTest {
+class UserControllerIntegrationTest extends BaseApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
