@@ -4,6 +4,7 @@ import com.gabrielspassos.BaseApplicationTest;
 import eu.rekawek.toxiproxy.model.ToxicDirection;
 import eu.rekawek.toxiproxy.model.toxic.Bandwidth;
 import eu.rekawek.toxiproxy.model.toxic.Latency;
+import eu.rekawek.toxiproxy.model.toxic.Timeout;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -124,6 +125,36 @@ class UserControllerChaosTest extends BaseApplicationTest {
         long withoutSlownessTimeTaken = System.currentTimeMillis() - startWithoutLatency;
 
         assertTrue(withSlownessTimeTaken > withoutSlownessTimeTaken);
+    }
+
+    @Test
+    void shouldFailToCreateUserWithConnectionTimeout() throws Exception {
+        Timeout timeout = getDbProxy().toxics().timeout("timeout", ToxicDirection.DOWNSTREAM, 3000);
+
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"chaos-test-user-with-connection-timeout"
+                            }
+                        """))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Unexpected error"))
+                .andExpect(jsonPath("$.code").value("UNEXPECTED_ERROR"));
+
+        timeout.remove();
+
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"chaos-test-user-without-connection-timeout"
+                            }
+                        """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andExpect(jsonPath("$.name").value("chaos-test-user-without-connection-timeout"))
+                .andExpect(jsonPath("$.createdAt").isString());
     }
 
 }
