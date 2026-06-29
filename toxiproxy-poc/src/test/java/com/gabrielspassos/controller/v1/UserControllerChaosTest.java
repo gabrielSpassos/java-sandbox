@@ -2,6 +2,7 @@ package com.gabrielspassos.controller.v1;
 
 import com.gabrielspassos.BaseApplicationTest;
 import eu.rekawek.toxiproxy.model.ToxicDirection;
+import eu.rekawek.toxiproxy.model.toxic.Bandwidth;
 import eu.rekawek.toxiproxy.model.toxic.Latency;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,44 @@ class UserControllerChaosTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.id").isString())
                 .andExpect(jsonPath("$.name").value("chaos-test-user-with-connection-enabled"))
                 .andExpect(jsonPath("$.createdAt").isString());
+    }
+
+    @Test
+    void shouldCreateUserWithSlownessAtNetwork() throws Exception {
+        Bandwidth bandwidth = getDbProxy().toxics()
+                .bandwidth("slow-network", ToxicDirection.DOWNSTREAM, 100);//100 kb/s
+
+        long start = System.currentTimeMillis();
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"chaos-test-user-with-slow-network"
+                            }
+                        """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andExpect(jsonPath("$.name").value("chaos-test-user-with-slow-network"))
+                .andExpect(jsonPath("$.createdAt").isString());
+        long withSlownessTimeTaken = System.currentTimeMillis() - start;
+
+        bandwidth.remove();
+
+        long startWithoutLatency = System.currentTimeMillis();
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"chaos-test-user-without-slow-network"
+                            }
+                        """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andExpect(jsonPath("$.name").value("chaos-test-user-without-slow-network"))
+                .andExpect(jsonPath("$.createdAt").isString());
+        long withoutSlownessTimeTaken = System.currentTimeMillis() - startWithoutLatency;
+
+        assertTrue(withSlownessTimeTaken > withoutSlownessTimeTaken);
     }
 
 }
