@@ -10,13 +10,22 @@ Toxiproxy
 PostgreSQL
 ```
 
+## Reasoning
+
+1. Create some statement about how the application should handle on some chaos scenario. eg. "When the db connection is down should fail to persist data"
+2. Check if the system operates on good state
+3. Induce the chaos
+4. Validate hypothesis
+5. Remove chaos
+6. Check if the system comes back to proper operation state
+
 ## Tests
 
 ```
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
 [INFO] --- jar:3.5.0:jar (default-jar) @ toxiproxy-poc ---
@@ -32,7 +41,7 @@ PostgreSQL
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  25.213 s
-[INFO] Finished at: 2026-06-26T09:12:22-03:00
+[INFO] Total time:  31.251 s
+[INFO] Finished at: 2026-06-28T11:32:30-03:00
 [INFO] ------------------------------------------------------------------------
 ```

@@ -11,6 +11,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,7 +26,10 @@ class UserControllerChaosTest extends BaseApplicationTest {
 
     @Test
     void shouldCreateUserEvenWithDbLatency() throws Exception {
-        Latency latency = getDbProxy().toxics().latency("db-latency", ToxicDirection.DOWNSTREAM, 5000);
+        checkSystemIsOperatingCorrectly();
+
+        Latency latency = getDbProxy().toxics()
+                .latency("db-latency", ToxicDirection.DOWNSTREAM, 5000); // 5s
 
         long start = System.currentTimeMillis();
         mockMvc.perform(post("/v1/users")
@@ -61,6 +66,8 @@ class UserControllerChaosTest extends BaseApplicationTest {
 
     @Test
     void shouldFailToCreateUserWithConnectionFailure() throws Exception {
+        checkSystemIsOperatingCorrectly();
+
         getDbProxy().disable();
 
         mockMvc.perform(post("/v1/users")
@@ -91,8 +98,10 @@ class UserControllerChaosTest extends BaseApplicationTest {
 
     @Test
     void shouldCreateUserWithSlownessAtNetwork() throws Exception {
+        checkSystemIsOperatingCorrectly();
+
         Bandwidth bandwidth = getDbProxy().toxics()
-                .bandwidth("slow-network", ToxicDirection.DOWNSTREAM, 100);//100 kb/s
+                .bandwidth("slow-network", ToxicDirection.DOWNSTREAM, 100); //100 kb/s
 
         long start = System.currentTimeMillis();
         mockMvc.perform(post("/v1/users")
@@ -129,6 +138,8 @@ class UserControllerChaosTest extends BaseApplicationTest {
 
     @Test
     void shouldFailToCreateUserWithConnectionTimeout() throws Exception {
+        checkSystemIsOperatingCorrectly();
+
         Timeout timeout = getDbProxy().toxics().timeout("timeout", ToxicDirection.DOWNSTREAM, 3000);
 
         mockMvc.perform(post("/v1/users")
@@ -154,6 +165,22 @@ class UserControllerChaosTest extends BaseApplicationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isString())
                 .andExpect(jsonPath("$.name").value("chaos-test-user-without-connection-timeout"))
+                .andExpect(jsonPath("$.createdAt").isString());
+    }
+
+    private void checkSystemIsOperatingCorrectly() throws Exception {
+        var name = UUID.randomUUID();
+
+        mockMvc.perform(post("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name":"%s"
+                            }
+                        """.formatted(name)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isString())
+                .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.createdAt").isString());
     }
 

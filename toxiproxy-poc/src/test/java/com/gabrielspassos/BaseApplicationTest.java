@@ -41,9 +41,11 @@ public class BaseApplicationTest {
 
     @BeforeAll
     static void setupProxy() throws IOException {
-        final ToxiproxyClient toxiproxyClient
-                = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
-        dbProxy = toxiproxyClient.createProxy("postgres", "0.0.0.0:8666", "postgres:5432");
+        if (null == dbProxy) {
+            final ToxiproxyClient toxiproxyClient
+                    = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
+            dbProxy = toxiproxyClient.createProxy("postgres", "0.0.0.0:8666", "postgres:5432");
+        }
     }
 
     @DynamicPropertySource
