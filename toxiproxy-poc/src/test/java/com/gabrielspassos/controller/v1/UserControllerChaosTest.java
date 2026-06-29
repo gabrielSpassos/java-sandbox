@@ -169,7 +169,7 @@ class UserControllerChaosTest extends BaseApplicationTest {
     }
 
     private void checkSystemIsOperatingCorrectly() throws Exception {
-        var name = UUID.randomUUID();
+        var name = UUID.randomUUID().toString();
 
         mockMvc.perform(post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
