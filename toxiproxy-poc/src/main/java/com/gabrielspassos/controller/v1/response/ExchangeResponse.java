@@ -1,7 +1,10 @@
 package com.gabrielspassos.controller.v1.response;
 
+import java.math.BigDecimal;
+
 public record ExchangeResponse(
         String date,
-        ExchangeRatesResponse usd
+        BigDecimal usd,
+        BigDecimal brl
 ) {
 }

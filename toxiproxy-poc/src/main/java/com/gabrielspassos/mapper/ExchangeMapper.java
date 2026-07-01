@@ -1,9 +1,9 @@
 package com.gabrielspassos.mapper;
 
-import com.gabrielspassos.client.response.UsdRates;
 import com.gabrielspassos.client.response.UsdResponse;
-import com.gabrielspassos.controller.v1.response.ExchangeRatesResponse;
 import com.gabrielspassos.controller.v1.response.ExchangeResponse;
+
+import java.math.BigDecimal;
 
 public final class ExchangeMapper {
 
@@ -11,12 +11,7 @@ public final class ExchangeMapper {
     }
 
     public static ExchangeResponse toResponse(UsdResponse usdResponse) {
-        var rates = toResponse(usdResponse.usd());
-
-        return new ExchangeResponse(usdResponse.date(), rates);
+        return new ExchangeResponse(usdResponse.date(), BigDecimal.ONE, usdResponse.usd().brl());
     }
 
-    private static ExchangeRatesResponse toResponse(UsdRates usdRates) {
-        return new ExchangeRatesResponse(usdRates.brl());
-    }
 }
