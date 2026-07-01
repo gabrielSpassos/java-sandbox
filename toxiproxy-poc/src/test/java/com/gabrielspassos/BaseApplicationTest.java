@@ -34,7 +34,7 @@ public class BaseApplicationTest {
     private static final ToxiproxyContainer toxiproxyContainer = new ToxiproxyContainer("ghcr.io/shopify/toxiproxy:2.12.0")
             .withNetwork(network);
 
-    private static final MockWebServer mockWebServer = new MockWebServer();
+    private static MockWebServer mockWebServer;
 
     private static Proxy dbProxy;
     private static Proxy exchangeApiProxy;
@@ -46,6 +46,7 @@ public class BaseApplicationTest {
 
     @BeforeAll
     static void setupProxy() throws IOException {
+        mockWebServer = new MockWebServer();
         mockWebServer.start();
         final ToxiproxyClient toxiproxyClient
                 = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
