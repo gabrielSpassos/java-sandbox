@@ -19,8 +19,8 @@ public class ExchangeClient {
         this.restClient = restClient;
     }
 
-    @Retry(name = "currency-api")
-    @CircuitBreaker(name = "currency-api", fallbackMethod = "fallbackRate")
+    @Retry(name = "exchange-api")
+    @CircuitBreaker(name = "exchange-api", fallbackMethod = "fallbackRate")
     public UsdResponse getUsdToBrl() {
         UsdResponse response = restClient.get()
                 .uri("/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json")

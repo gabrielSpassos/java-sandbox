@@ -18,7 +18,7 @@ public class ExchangeClientConfig {
     }
 
     @Bean
-    RestClient currencyRestClient(RestClient.Builder builder, @Value("${currency.api.url}") String url) {
+    RestClient exchangeRestClient(RestClient.Builder builder, @Value("${exchange.api.url}") String url) {
         HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
         JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
         requestFactory.setReadTimeout(Duration.ofSeconds(2));

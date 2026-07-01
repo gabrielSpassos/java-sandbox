@@ -2,6 +2,8 @@ package com.gabrielspassos;
 
 import eu.rekawek.toxiproxy.Proxy;
 import eu.rekawek.toxiproxy.ToxiproxyClient;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,9 +34,10 @@ public class BaseApplicationTest {
     private static final ToxiproxyContainer toxiproxyContainer = new ToxiproxyContainer("ghcr.io/shopify/toxiproxy:2.12.0")
             .withNetwork(network);
 
-    //private static MockWebServer mockWebServer;
+    private static final MockWebServer mockWebServer = new MockWebServer();
 
     private static Proxy dbProxy;
+    private static Proxy exchangeApiProxy;
 
     static {
         postgresContainer.start();
@@ -43,15 +46,44 @@ public class BaseApplicationTest {
 
     @BeforeAll
     static void setupProxy() throws IOException {
+        mockWebServer.start();
+        final ToxiproxyClient toxiproxyClient
+                = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
+
         if (null == dbProxy) {
-            final ToxiproxyClient toxiproxyClient
-                    = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
             dbProxy = toxiproxyClient.createProxy("postgres", "0.0.0.0:8666", "postgres:5432");
+        }
+
+        if (null == exchangeApiProxy) {
+            exchangeApiProxy = toxiproxyClient.createProxy(
+                            "exchange-api",
+                            "0.0.0.0:8667",
+                            "host.testcontainers.internal:" + mockWebServer.getPort());
         }
     }
 
+    @AfterEach
+    void cleanup() throws IOException {
+        dbProxy.toxics()
+                .getAll()
+                .forEach(toxic -> {
+                    try {
+                        toxic.remove();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    @AfterAll
+    static void shutdown() throws IOException {
+        postgresContainer.stop();
+        toxiproxyContainer.stop();
+        mockWebServer.shutdown();
+    }
+
     @DynamicPropertySource
-    static void overrideProps(DynamicPropertyRegistry registry) throws IOException {
+    static void overrideProps(DynamicPropertyRegistry registry) {
         registry.add(
                 "spring.datasource.url",
                 () -> String.format(
@@ -71,19 +103,13 @@ public class BaseApplicationTest {
                 "spring.datasource.password",
                 postgresContainer::getPassword
         );
-    }
 
-    @AfterEach
-    void cleanup() throws IOException {
-        dbProxy.toxics()
-                .getAll()
-                .forEach(toxic -> {
-                    try {
-                        toxic.remove();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        registry.add(
+                "exchange.api.url",
+                () -> "http://" +
+                        toxiproxyContainer.getHost() +
+                        ":" +
+                        toxiproxyContainer.getMappedPort(8667));
     }
 
     public Proxy getDbProxy() {
