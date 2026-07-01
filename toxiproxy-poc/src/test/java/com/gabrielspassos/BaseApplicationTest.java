@@ -35,7 +35,7 @@ public class BaseApplicationTest {
             .withNetwork(network);
 
     private static MockWebServer mockWebServer;
-
+    private static ToxiproxyClient toxiproxyClient;
     private static Proxy dbProxy;
     private static Proxy exchangeApiProxy;
 
@@ -48,8 +48,10 @@ public class BaseApplicationTest {
     static void setupProxy() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
-        final ToxiproxyClient toxiproxyClient
-                = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
+
+        if (null == toxiproxyClient) {
+            toxiproxyClient = new ToxiproxyClient(toxiproxyContainer.getHost(), toxiproxyContainer.getControlPort());
+        }
 
         if (null == dbProxy) {
             dbProxy = toxiproxyClient.createProxy("postgres", "0.0.0.0:8666", "postgres:5432");
@@ -76,13 +78,6 @@ public class BaseApplicationTest {
                 });
     }
 
-    @AfterAll
-    static void shutdown() throws IOException {
-        postgresContainer.stop();
-        toxiproxyContainer.stop();
-        mockWebServer.shutdown();
-    }
-
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
         registry.add(
@@ -104,16 +99,13 @@ public class BaseApplicationTest {
                 "spring.datasource.password",
                 postgresContainer::getPassword
         );
-
-        registry.add(
-                "exchange.api.url",
-                () -> "http://" +
-                        toxiproxyContainer.getHost() +
-                        ":" +
-                        toxiproxyContainer.getMappedPort(8667));
     }
 
     public Proxy getDbProxy() {
         return dbProxy;
+    }
+
+    public static String getExchangeApiUrl() {
+        return "http://" + toxiproxyContainer.getHost() + ":" + toxiproxyContainer.getMappedPort(8667);
     }
 }
