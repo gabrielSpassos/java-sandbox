@@ -4,7 +4,10 @@ import com.gabrielspassos.exception.BadRequestException;
 
 import java.util.UUID;
 
-public class UUIDMapper {
+public final class UUIDMapper {
+
+    private UUIDMapper() {
+    }
 
     public static UUID toUUID(String uuidAsString) {
         try {
