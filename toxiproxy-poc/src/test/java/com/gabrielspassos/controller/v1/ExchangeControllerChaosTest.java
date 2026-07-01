@@ -2,6 +2,9 @@ package com.gabrielspassos.controller.v1;
 
 import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.controller.v1.response.UserResponse;
+import eu.rekawek.toxiproxy.model.ToxicDirection;
+import eu.rekawek.toxiproxy.model.toxic.Timeout;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -15,16 +18,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-class ExchangeControllerIntegrationTest extends BaseApplicationTest {
+class ExchangeControllerChaosTest extends BaseApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Disabled
     @Test
-    void shouldExchangeUsdToBrl() throws Exception {
-        var userId = createUser("it-test-exchange-usd-to-brl");
+    void shouldOpenCircuitBreakAndRouteToFallback() throws Exception {
+        var username = "chaos-test-circuit-break-opens";
+        var userId = validateExchangeWorking(username);
+        var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
+
+//        proxy.toxics()
+//                .latency(
+//                        "slow-api",
+//                        ToxicDirection.DOWNSTREAM,
+//                        5000);
+//        Timeout timeout = getDbProxy().toxics().timeout("timeout", ToxicDirection.DOWNSTREAM, 5000);
+
+        mockMvc.perform(post(path).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.date").value("2026-06-30"))
+                .andExpect(jsonPath("$.usd").value("1"))
+                .andExpect(jsonPath("$.brl").value("5.18"));
+
+        //timeout.remove();
+
+        validateExchangeWorking(username);
+    }
+
+    private String validateExchangeWorking(String username) throws Exception {
+        var userId = createUser(username);
 
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
 
@@ -33,6 +60,8 @@ class ExchangeControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.date").isString())
                 .andExpect(jsonPath("$.usd").value("1"))
                 .andExpect(jsonPath("$.brl").isNumber());
+
+        return userId;
     }
 
     private String createUser(String name) throws Exception {

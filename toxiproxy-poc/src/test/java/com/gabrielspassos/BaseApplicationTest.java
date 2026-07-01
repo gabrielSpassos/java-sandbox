@@ -20,7 +20,7 @@ public class BaseApplicationTest {
 
     private static final Network network = Network.newNetwork();
 
-    static PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:18-alpine")
+    private static final PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:18-alpine")
             .withDatabaseName("chaos")
             .withUsername("user")
             .withPassword("pass")
@@ -29,8 +29,10 @@ public class BaseApplicationTest {
             .withNetworkAliases("postgres")
             .withExposedPorts(5432);
 
-    static ToxiproxyContainer toxiproxyContainer = new ToxiproxyContainer("ghcr.io/shopify/toxiproxy:2.12.0")
+    private static final ToxiproxyContainer toxiproxyContainer = new ToxiproxyContainer("ghcr.io/shopify/toxiproxy:2.12.0")
             .withNetwork(network);
+
+    //private static MockWebServer mockWebServer;
 
     private static Proxy dbProxy;
 
