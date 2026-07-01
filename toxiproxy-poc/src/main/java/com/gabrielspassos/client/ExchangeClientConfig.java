@@ -8,6 +8,11 @@ import org.springframework.web.client.RestClient;
 public class ExchangeClientConfig {
 
     @Bean
+    RestClient.Builder restClientBuilder() {
+        return RestClient.builder();
+    }
+
+    @Bean
     RestClient currencyRestClient(RestClient.Builder builder) {
         return builder
                 .baseUrl("https://cdn.jsdelivr.net")
