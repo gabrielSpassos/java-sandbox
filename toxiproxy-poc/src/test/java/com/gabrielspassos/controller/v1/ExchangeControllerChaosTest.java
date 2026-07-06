@@ -4,6 +4,7 @@ import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.controller.v1.response.UserResponse;
 import eu.rekawek.toxiproxy.model.ToxicDirection;
 import eu.rekawek.toxiproxy.model.toxic.Timeout;
+import okhttp3.mockwebserver.MockResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,20 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
         registry.add("exchange.api.url", BaseApplicationTest::getExchangeApiUrl);
     }
 
-    @Disabled
     @Test
     void shouldOpenCircuitBreakAndRouteToFallback() throws Exception {
+        getMockServer().enqueue(new MockResponse()
+                        .setBody("""
+                        {
+                          "date":"2026-06-30",
+                          "usd":{
+                             "brl":5.18
+                          }
+                        }
+                        """)
+                        .addHeader("Content-Type", "application/json")
+        );
+
         var username = "chaos-test-circuit-break-opens";
         var userId = validateExchangeWorking(username);
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);

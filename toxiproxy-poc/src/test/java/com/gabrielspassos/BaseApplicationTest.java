@@ -105,6 +105,10 @@ public class BaseApplicationTest {
         return dbProxy;
     }
 
+    public MockWebServer getMockServer() {
+        return mockWebServer;
+    }
+
     public static String getExchangeApiUrl() {
         return "http://" + toxiproxyContainer.getHost() + ":" + toxiproxyContainer.getMappedPort(8667);
     }
