@@ -61,7 +61,7 @@ public class BaseApplicationTest {
             exchangeApiProxy = toxiproxyClient.createProxy(
                             "exchange-api",
                             "0.0.0.0:8667",
-                            "host.testcontainers.internal:" + mockWebServer.getPort());
+                            "host.docker.internal:" + mockWebServer.getPort());
         }
     }
 
