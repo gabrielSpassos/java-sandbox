@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,17 +36,25 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
     @Test
     void shouldOpenCircuitBreakAndRouteToFallback() throws Exception {
         var username = "chaos-test-circuit-break-opens";
-        var userId = validateExchangeWorking(username);
+        var userId = createUser(username);
+        validateExchangeWorking(username);
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
 
-        enqueueExchangeResponse();
-
-//        proxy.toxics()
-//                .latency(
-//                        "slow-api",
-//                        ToxicDirection.DOWNSTREAM,
-//                        5000);
-//        Timeout timeout = getDbProxy().toxics().timeout("timeout", ToxicDirection.DOWNSTREAM, 5000);
+        var mockResponse = new MockResponse()
+                .setBodyDelay(6, TimeUnit.SECONDS)
+                .setBody("""
+                        {
+                          "date":"2026-07-07",
+                          "usd":{
+                             "brl":5.20
+                          }
+                        }
+                        """)
+                .addHeader("Content-Type", "application/json");
+        getMockServer().enqueue(mockResponse);
+        getMockServer().enqueue(mockResponse);
+        getMockServer().enqueue(mockResponse);
+        getMockServer().enqueue(mockResponse);
 
         mockMvc.perform(post(path).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -53,15 +62,10 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.usd").value("1"))
                 .andExpect(jsonPath("$.brl").value("5.18"));
 
-        //timeout.remove();
-
-        enqueueExchangeResponse();
-        validateExchangeWorking(username);
+        validateExchangeWorking(userId);
     }
 
-    private String validateExchangeWorking(String username) throws Exception {
-        var userId = createUser(username + "-" + UUID.randomUUID());
-
+    private void validateExchangeWorking(String userId) throws Exception {
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
 
         enqueueExchangeResponse();
@@ -70,8 +74,6 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.date").isString())
                 .andExpect(jsonPath("$.usd").value("1"))
                 .andExpect(jsonPath("$.brl").isNumber());
-
-        return userId;
     }
 
     private void enqueueExchangeResponse() {
