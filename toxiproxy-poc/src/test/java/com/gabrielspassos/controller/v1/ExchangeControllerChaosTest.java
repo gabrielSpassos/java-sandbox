@@ -2,10 +2,7 @@ package com.gabrielspassos.controller.v1;
 
 import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.controller.v1.response.UserResponse;
-import eu.rekawek.toxiproxy.model.ToxicDirection;
-import eu.rekawek.toxiproxy.model.toxic.Timeout;
 import okhttp3.mockwebserver.MockResponse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -15,6 +12,8 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,26 +29,16 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
-        registry.add("exchange.api.url", BaseApplicationTest::getExchangeApiUrl);
+        registry.add("exchange.api.url", ExchangeControllerChaosTest::getExchangeApiUrl);
     }
 
     @Test
     void shouldOpenCircuitBreakAndRouteToFallback() throws Exception {
-        getMockServer().enqueue(new MockResponse()
-                        .setBody("""
-                        {
-                          "date":"2026-06-30",
-                          "usd":{
-                             "brl":5.18
-                          }
-                        }
-                        """)
-                        .addHeader("Content-Type", "application/json")
-        );
-
         var username = "chaos-test-circuit-break-opens";
         var userId = validateExchangeWorking(username);
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
+
+        enqueueExchangeResponse();
 
 //        proxy.toxics()
 //                .latency(
@@ -66,14 +55,16 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
 
         //timeout.remove();
 
+        enqueueExchangeResponse();
         validateExchangeWorking(username);
     }
 
     private String validateExchangeWorking(String username) throws Exception {
-        var userId = createUser(username);
+        var userId = createUser(username + "-" + UUID.randomUUID());
 
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
 
+        enqueueExchangeResponse();
         mockMvc.perform(post(path).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.date").isString())
@@ -81,6 +72,20 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.brl").isNumber());
 
         return userId;
+    }
+
+    private void enqueueExchangeResponse() {
+        getMockServer().enqueue(new MockResponse()
+                .setBody("""
+                        {
+                          "date":"2026-06-30",
+                          "usd":{
+                             "brl":5.18
+                          }
+                        }
+                        """)
+                .addHeader("Content-Type", "application/json")
+        );
     }
 
     private String createUser(String name) throws Exception {
@@ -98,6 +103,10 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
         UserResponse response = objectMapper.readValue(responseBody, UserResponse.class);
 
         return response.id();
+    }
+
+    public static String getExchangeApiUrl() {
+        return "http://" + getMockServer().getHostName() + ":" + getMockServer().getPort();
     }
 
 }

@@ -3,7 +3,6 @@ package com.gabrielspassos;
 import eu.rekawek.toxiproxy.Proxy;
 import eu.rekawek.toxiproxy.ToxiproxyClient;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +36,6 @@ public class BaseApplicationTest {
     private static MockWebServer mockWebServer;
     private static ToxiproxyClient toxiproxyClient;
     private static Proxy dbProxy;
-    private static Proxy exchangeApiProxy;
 
     static {
         postgresContainer.start();
@@ -55,13 +53,6 @@ public class BaseApplicationTest {
 
         if (null == dbProxy) {
             dbProxy = toxiproxyClient.createProxy("postgres", "0.0.0.0:8666", "postgres:5432");
-        }
-
-        if (null == exchangeApiProxy) {
-            exchangeApiProxy = toxiproxyClient.createProxy(
-                            "exchange-api",
-                            "0.0.0.0:8667",
-                            "host.docker.internal:" + mockWebServer.getPort());
         }
     }
 
@@ -105,11 +96,8 @@ public class BaseApplicationTest {
         return dbProxy;
     }
 
-    public MockWebServer getMockServer() {
+    public static MockWebServer getMockServer() {
         return mockWebServer;
     }
 
-    public static String getExchangeApiUrl() {
-        return "http://" + toxiproxyContainer.getHost() + ":" + toxiproxyContainer.getMappedPort(8667);
-    }
 }
