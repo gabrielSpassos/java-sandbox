@@ -37,7 +37,7 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
     void shouldOpenCircuitBreakAndRouteToFallback() throws Exception {
         var username = "chaos-test-circuit-break-opens";
         var userId = createUser(username);
-        validateExchangeWorking(username);
+        validateExchangeWorking(userId);
         var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
 
         var mockResponse = new MockResponse()
@@ -51,6 +51,7 @@ class ExchangeControllerChaosTest extends BaseApplicationTest {
                         }
                         """)
                 .addHeader("Content-Type", "application/json");
+        getMockServer().enqueue(mockResponse);
         getMockServer().enqueue(mockResponse);
         getMockServer().enqueue(mockResponse);
         getMockServer().enqueue(mockResponse);

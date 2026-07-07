@@ -22,16 +22,21 @@ public class ExchangeClient {
     @Retry(name = "exchange-api")
     @CircuitBreaker(name = "exchange-api", fallbackMethod = "fallbackRate")
     public UsdResponse getUsdToBrl() {
-        UsdResponse response = restClient.get()
-                .uri("/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json")
-                .retrieve()
-                .body(UsdResponse.class);
+        try {
+            UsdResponse response = restClient.get()
+                    .uri("/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json")
+                    .retrieve()
+                    .body(UsdResponse.class);
 
-        if (response == null || response.usd() == null) {
-            throw new NotFoundException("Could not retrieve exchange rate", "NOT_FOUND_EXCHANGE");
+            if (response == null || response.usd() == null) {
+                throw new NotFoundException("Could not retrieve exchange rate", "NOT_FOUND_EXCHANGE");
+            }
+
+            return response;
+        } catch (Exception e) {
+            IO.println("Error " + e);
+            throw e;
         }
-
-        return response;
     }
 
     public UsdResponse fallbackRate(Throwable t) {
