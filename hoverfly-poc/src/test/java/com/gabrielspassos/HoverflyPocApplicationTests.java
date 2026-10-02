@@ -2,7 +2,7 @@ package com.gabrielspassos;
 
 import org.junit.jupiter.api.Test;
 
-class ToxiproxyPocApplicationTests extends BaseApplicationTest {
+class HoverflyPocApplicationTests extends BaseApplicationTest {
 
 	@Test
 	void contextLoads() {
