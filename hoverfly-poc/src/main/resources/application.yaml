@@ -1,21 +1,6 @@
 spring:
   application:
-    name: toxiproxy-poc
-
-resilience4j:
-  retry:
-    instances:
-      exchange-api:
-        max-attempts: 3
-        wait-duration: 100ms
-
-  circuitbreaker:
-    instances:
-      exchange-api:
-        sliding-window-size: 4
-        minimum-number-of-calls: 4
-        failure-rate-threshold: 50
-        wait-duration-in-open-state: 30s
+    name: hoverfly-poc
 
 exchange:
   api:
