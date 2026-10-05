@@ -55,6 +55,32 @@ class ExchangeControllerIntegrationTest extends BaseApplicationTest {
                 .andExpect(jsonPath("$.brl").value("5.0"));
     }
 
+    @Test
+    void shouldFetchExchangeWithoutBrlValue(Hoverfly hoverfly) throws Exception {
+        hoverfly.simulate(
+                dsl(
+                        service("cdn.jsdelivr.net")
+                                .get("/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json")
+                                .willReturn(
+                                        success(
+                                                "{ \"date\": \"2026-10-05\", \"usd\": { \"eur\": 0.89417363 } }",
+                                                "application/json"
+                                        )
+                                )
+                )
+        );
+
+        var userId = createUser("it-test-fetch-exchange-without-brl-value");
+
+        var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
+
+        mockMvc.perform(post(path).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.date").value("2026-10-05"))
+                .andExpect(jsonPath("$.usd").value("1"))
+                .andExpect(jsonPath("$.brl").isEmpty());
+    }
+
     private String createUser(String name) throws Exception {
         MvcResult createResult = mockMvc.perform(post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
