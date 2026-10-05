@@ -14,7 +14,7 @@ public class BaseApplicationTest {
     private static final Network network = Network.newNetwork();
 
     private static final PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:18-alpine")
-            .withDatabaseName("chaos")
+            .withDatabaseName("hoverfly")
             .withUsername("user")
             .withPassword("pass")
             .withInitScript("schema.sql")
