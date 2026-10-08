@@ -30,7 +30,7 @@ def main():
     json_body = json.loads(body)
 
     # Modify ONLY the field you want.
-    json_body["usd"]["brl"] = 10.00
+    json_body["usd"]["brl"] = 10.153475
 
     # Serialize it back to JSON.
     body = json.dumps(json_body, separators=(",", ":")).encode("utf-8")
