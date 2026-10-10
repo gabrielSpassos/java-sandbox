@@ -5,3 +5,12 @@ spring:
 exchange:
   api:
     url: https://cdn.jsdelivr.net
+  notification:
+    threshold:
+      lower: 3.00
+      upper: 6.00
+
+notification:
+  api:
+    url: http://localhost:9090
+

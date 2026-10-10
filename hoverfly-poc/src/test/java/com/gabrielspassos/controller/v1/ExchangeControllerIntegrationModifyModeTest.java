@@ -17,7 +17,10 @@ import java.time.LocalDate;
 
 import static io.specto.hoverfly.junit.core.HoverflyConfig.localConfigs;
 import static io.specto.hoverfly.junit.core.HoverflyMode.MODIFY;
-
+import static io.specto.hoverfly.junit.core.HoverflyMode.SIMULATE;
+import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
+import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
+import static io.specto.hoverfly.junit.dsl.ResponseCreators.noContent;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,20 +35,34 @@ class ExchangeControllerIntegrationModifyModeTest extends BaseApplicationTest {
 
     @Test
     void shouldFetchExchangeWithSimulateHoverfly() throws Exception {
-        LocalHoverflyConfig config = localConfigs()
-                .localMiddleware(
-                        "python3",
-                        "modify_response.py"
-                );
+        LocalHoverflyConfig modifyConfig = (LocalHoverflyConfig) localConfigs().proxyPort(8500);
+        modifyConfig.localMiddleware(
+                "python3",
+                "modify_response.py"
+        );
 
-        try (Hoverfly hoverfly = new Hoverfly(config, MODIFY)) {
+        LocalHoverflyConfig simulateConfig = (LocalHoverflyConfig) localConfigs().proxyPort(8501);
 
-            hoverfly.start();
+        try (Hoverfly modifyHoverfly = new Hoverfly(modifyConfig, MODIFY);
+             Hoverfly simulateHoverfly = new Hoverfly(simulateConfig, SIMULATE)) {
+
+            modifyHoverfly.start();
+            simulateHoverfly.start();
 
             var userId = createUser("it-test-fetch-exchange-with-modify-mode");
+            var notificationRequestBody =
+                    "{\"userId\":\"%s\",\"eventType\":\"SELL\",\"exchangeValue\":10.15}".formatted(userId);
+
+            simulateHoverfly.simulate(
+                    dsl(
+                            service("http://localhost:9090")
+                                    .post("/v1/notify")
+                                    .body(notificationRequestBody)
+                                    .willReturn(noContent())
+                    )
+            );
 
             var path = "/v1/users/%s/exchanges/usd/brl".formatted(userId);
-
             var today = LocalDate.now().toString();
 
             mockMvc.perform(post(path).contentType(MediaType.APPLICATION_JSON))

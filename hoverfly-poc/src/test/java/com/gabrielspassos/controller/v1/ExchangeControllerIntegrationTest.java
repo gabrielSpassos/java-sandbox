@@ -3,7 +3,10 @@ package com.gabrielspassos.controller.v1;
 import com.gabrielspassos.BaseApplicationTest;
 import com.gabrielspassos.controller.v1.response.UserResponse;
 import io.specto.hoverfly.junit.core.Hoverfly;
+import io.specto.hoverfly.junit.core.HoverflyMode;
 import io.specto.hoverfly.junit5.HoverflyExtension;
+import io.specto.hoverfly.junit5.api.HoverflyConfig;
+import io.specto.hoverfly.junit5.api.HoverflyCore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
+@HoverflyCore(
+        mode = HoverflyMode.SIMULATE,
+        config = @HoverflyConfig(proxyPort = 8500)
+)
 @ExtendWith(HoverflyExtension.class)
 class ExchangeControllerIntegrationTest extends BaseApplicationTest {
 
